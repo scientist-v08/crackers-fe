@@ -1,0 +1,34 @@
+<div
+  class="flex items-center justify-center flex-col md:flex-row md:justify-between mb-2"
+>
+  <app-add-expense
+    (errToast)="errToast($event)"
+    (successToast)="successToast()"
+  />
+  <h2 class="text-3xl font-semibold text-indigo-900 dark:text-amber-300 mb-4">
+    Total expenses incurred: ₹{{ totalExpenses() }}
+  </h2>
+</div>
+@if (!loadingData()) {
+<div class="mb-2 rounded-lg grid md:grid-cols-3 gap-4">
+  @for (item of allExpenses(); track item.ID) {
+  <p-card header="Expense #{{ item.ID }}">
+    <div class="m-0 flex flex-col gap-2">
+      <div class="flex justify-between items-center">
+        <div>Reason for expense:</div>
+        <div>{{ item.ReasonForExpense }}</div>
+      </div>
+      <div class="flex justify-between items-center">
+        <div>Amount spent:</div>
+        <div>₹{{ item.Amount }}</div>
+      </div>
+    </div>
+  </p-card>
+  }
+</div>
+} @else {
+<app-spinner class="flex items-center justify-center" />
+} @if (allExpenses().length === 0 && !loadingData()) {
+<div class="text-black dark:text-white text-3xl">No data</div>
+}
+<p-toast position="bottom-right" key="br" />

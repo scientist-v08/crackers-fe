@@ -1,0 +1,24 @@
+<p-tabs value="0">
+  <p-tablist>
+    <p-tab (mousedown)="tabClicked(ordered)" value="0">Ordered</p-tab>
+    <p-tab (mousedown)="tabClicked(received)" value="1">Received</p-tab>
+    <p-tab (mousedown)="tabClicked(unpacked)" value="2">Unpacked</p-tab>
+  </p-tablist>
+  <p-tabpanels>
+    <p-tabpanel value="0">
+      @if (serviceState() === ordered) {
+      <app-items />
+      }
+    </p-tabpanel>
+    <p-tabpanel value="1">
+      @if(serviceState() === received) {
+      <app-items />
+      }
+    </p-tabpanel>
+    <p-tabpanel value="2">
+      @if(serviceState() === unpacked) {
+      <app-items />
+      }
+    </p-tabpanel>
+  </p-tabpanels>
+</p-tabs>
