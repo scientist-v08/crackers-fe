@@ -16,17 +16,17 @@ import { ButtonComponent } from './button.component';
             <div class="two">
                 <p>Discount: {{ allBillComparisons()[1].discount }}</p>
                 <p>Grand Total: {{ allBillComparisons()[1].total }}</p>
-                <app-button (buttonClicked)="finalize.emit(0.24)">Finalize this</app-button>
+                <!-- <app-button (buttonClicked)="finalize.emit(0.24)">Finalize this</app-button> -->
             </div>
             <div class="three">
                 <p>Discount: {{ allBillComparisons()[2].discount }}</p>
                 <p>Grand Total: {{ allBillComparisons()[2].total }}</p>
-                <app-button (buttonClicked)="finalize.emit(0.23)">Finalize this</app-button>
+                <!-- <app-button (buttonClicked)="finalize.emit(0.23)">Finalize this</app-button> -->
             </div>
             <div class="four">
                 <p>Discount: {{ allBillComparisons()[3].discount }}</p>
                 <p>Grand Total: {{ allBillComparisons()[3].total }}</p>
-                <app-button (buttonClicked)="finalize.emit(0.2)">Finalize this</app-button>
+                <!-- <app-button (buttonClicked)="finalize.emit(0.2)">Finalize this</app-button> -->
             </div>
         </div>
         <form

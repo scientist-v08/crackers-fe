@@ -271,8 +271,8 @@ export class ItemsComponent implements OnInit, OnDestroy {
             life: 3000,
         });
         if (event.type === 'success') {
-            this.allItems.update(item => {
-                const updatedItems = item.map(itemToUpdate => {
+            this.allItems.update((item) => {
+                const updatedItems = item.map((itemToUpdate) => {
                     if (itemToUpdate.ID === event.id) {
                         return {
                             ...itemToUpdate,
@@ -313,7 +313,7 @@ export class ItemsComponent implements OnInit, OnDestroy {
                             this.loadingData.set(false);
                             this.allItems.set(res.inventoryItems);
                             this.total.set(res.total);
-                            this.totalElements.update(value => value - 1);
+                            this.totalElements.update((value) => value - 1);
                         },
                         error: (err: HttpErrorResponse) => {
                             this.loadingData.set(false);

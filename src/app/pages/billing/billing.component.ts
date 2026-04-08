@@ -101,7 +101,7 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
     addItem(): void {
         if (this.billingForm.valid) {
             this.showTotal.set(false);
-            this.slNo.update(num => num + 1);
+            this.slNo.update((num) => num + 1);
             const obtainedDiscount = Number(this.billingForm.controls.discount.getRawValue()) ?? 0;
             const actualDiscount = 100 - obtainedDiscount * 100;
             const newItem: ItemsInterface = this.#billingService.addNewItemToBill(
@@ -113,7 +113,7 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
                 actualDiscount,
                 obtainedDiscount,
             );
-            this.items.update(currentItems => [...currentItems, newItem]);
+            this.items.update((currentItems) => [...currentItems, newItem]);
             if (!this.showItems()) {
                 this.showItems.set(true);
             }
@@ -170,8 +170,8 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
             updatedItem.quantity,
             updatedItem.mrpOrNet,
         );
-        this.items.update(currentItems =>
-            currentItems.map(item => (item.slNo === updatedItem.slNo ? updatedItem : item)),
+        this.items.update((currentItems) =>
+            currentItems.map((item) => (item.slNo === updatedItem.slNo ? updatedItem : item)),
         );
         this.billComparison.set([]);
         this.showComparisons.set(false);
@@ -180,14 +180,14 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
 
     deleteItem(index: number): void {
         const actualIndex = index - 1;
-        this.items.update(current => {
+        this.items.update((current) => {
             const next = current.filter((_, i) => i !== actualIndex);
             return next.map((it, i) => ({
                 ...it,
                 slNo: i + 1,
             }));
         });
-        this.slNo.update(current => current - 1);
+        this.slNo.update((current) => current - 1);
         this.billComparison.set([]);
         this.showComparisons.set(false);
         this.calculateTotal();
@@ -285,7 +285,7 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
                         'https://wa.me/91' + (this.billingForm.controls.number.getRawValue() ?? '');
                     window.open(whatsappTab, '_blank');
                 },
-                error: err => {
+                error: (err) => {
                     this.#messageService.add({
                         severity: 'error',
                         summary: 'Error',
@@ -299,7 +299,7 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
 
     comparePrices(): void {
         const discountRates = [0.25, 0.24, 0.23, 0.2] as const;
-        const comparisons = discountRates.map(rate =>
+        const comparisons = discountRates.map((rate) =>
             this.#billingService.billComparison(this.items(), rate),
         );
         this.billComparison.set(comparisons);

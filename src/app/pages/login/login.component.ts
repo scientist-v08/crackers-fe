@@ -214,7 +214,7 @@ export default class LoginComponent implements OnDestroy {
     incorrectPassword = signal<boolean>(false);
 
     togglePasswordVisibility() {
-        this.passwordType.update(type => (type === 'password' ? 'text' : 'password'));
+        this.passwordType.update((type) => (type === 'password' ? 'text' : 'password'));
     }
 
     loginSubmission(): void {

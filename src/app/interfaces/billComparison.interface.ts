@@ -1,4 +1,4 @@
 export interface BillComparisonInterface {
-  discount: string;
-  total: number;
+    discount: string;
+    total: number;
 }

@@ -3,17 +3,17 @@
 @import 'tailwindcss';
 
 .p-card {
-  @apply !bg-white dark:!bg-slate-700;
+    @apply !bg-white dark:!bg-slate-700;
 }
 
 .p-tabpanels {
-  @apply !bg-transparent dark:!bg-transparent;
+    @apply !bg-transparent dark:!bg-transparent;
 }
 
 .p-tablist {
-  @apply !bg-transparent dark:!bg-transparent;
+    @apply !bg-transparent dark:!bg-transparent;
 }
 
 .p-paginator {
-  @apply !bg-transparent;
+    @apply !bg-transparent;
 }
