@@ -1,8 +1,8 @@
 export interface SuccessInterface {
-  Success: string;
+    Success: string;
 }
 
 export interface UpdateInventorySuccessInterface {
-  message: string;
-  updated_existing: boolean;
+    message: string;
+    updated_existing: boolean;
 }

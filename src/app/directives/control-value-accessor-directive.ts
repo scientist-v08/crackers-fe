@@ -65,7 +65,7 @@ export class ControlValueAccessorDirective<T> implements ControlValueAccessor, O
                 takeUntil(this._destroy$),
                 startWith(this.control.value),
                 distinctUntilChanged(),
-                tap(val => {
+                tap((val) => {
                     if (val !== this.control.value) {
                         fn(val);
                     }
