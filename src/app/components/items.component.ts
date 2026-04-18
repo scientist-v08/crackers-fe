@@ -9,43 +9,90 @@ import { ButtonComponent } from './button.component';
     imports: [ButtonComponent, ReactiveFormsModule],
     template: `
         <div class="grid__container">
-            <div class="one">#{{ item().slNo }}</div>
-            <div class="two">{{ item().item }}</div>
+            <div class="one">
+                <div
+                    class="flex w-full md:w-auto flex-row md:flex-col justify-between md:justify-center items-center"
+                >
+                    <strong>Sl.No</strong>
+                    <p>#{{ item().slNo }}</p>
+                </div>
+            </div>
+            <div class="two">
+                <div
+                    class="flex w-full md:w-auto flex-row md:flex-col justify-between md:justify-center items-center"
+                >
+                    <strong>Item</strong>
+                    <p>{{ item().item }}</p>
+                </div>
+            </div>
             <div class="three">
-                @if (editMode()) {
-                    <input
-                        class="w-full dark:bg-transparent dark:text-amber-300 mb-4 p-2 border border-indigo-200 dark:border-amber-200 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:focus:ring-amber-400"
-                        id="mrpInputBox"
-                        [formControl]="itemForm.controls.mrpOrNet"
-                        type="number"
-                    />
-                } @else {
-                    {{ item().mrpOrNet }}
-                }
+                <div
+                    class="flex w-full md:w-auto flex-row md:flex-col justify-between md:justify-center items-center"
+                >
+                    <strong>MRP/NET</strong>
+                    <div>
+                        @if (editMode()) {
+                            <input
+                                class="w-full dark:bg-transparent dark:text-amber-300 mb-4 p-2 border border-indigo-200 dark:border-amber-200 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:focus:ring-amber-400"
+                                id="mrpInputBox"
+                                [formControl]="itemForm.controls.mrpOrNet"
+                                type="number"
+                            />
+                        } @else {
+                            {{ item().mrpOrNet }}
+                        }
+                    </div>
+                </div>
             </div>
-            <div class="four">{{ item().discount }}</div>
+            <div class="four">
+                <div
+                    class="flex w-full md:w-auto flex-row md:flex-col justify-between md:justify-center items-center"
+                >
+                    <strong>Discount</strong>
+                    <p>{{ item().discount }}</p>
+                </div>
+            </div>
             <div class="five">
-                @if (editMode()) {
-                    <input
-                        class="w-full dark:bg-transparent dark:text-amber-300 mb-4 p-2 border border-indigo-200 dark:border-amber-200 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:focus:ring-amber-400"
-                        id="quantityInputBox"
-                        [formControl]="itemForm.controls.quantity"
-                        type="number"
-                    />
-                } @else {
-                    {{ item().quantity }}
-                }
+                <div
+                    class="flex w-full md:w-auto flex-row md:flex-col justify-between md:justify-center items-center"
+                >
+                    <strong>Quantity</strong>
+                    <div>
+                        @if (editMode()) {
+                            <input
+                                class="w-full dark:bg-transparent dark:text-amber-300 mb-4 p-2 border border-indigo-200 dark:border-amber-200 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:focus:ring-amber-400"
+                                id="quantityInputBox"
+                                [formControl]="itemForm.controls.quantity"
+                                type="number"
+                            />
+                        } @else {
+                            {{ item().quantity }}
+                        }
+                    </div>
+                </div>
             </div>
-            <div class="six">{{ item().subTotal }}</div>
+            <div class="six">
+                <div
+                    class="flex w-full md:w-auto flex-row md:flex-col justify-between md:justify-center items-center"
+                >
+                    <strong>Sub-Total</strong>
+                    <p>{{ item().subTotal }}</p>
+                </div>
+            </div>
             <div class="seven">
-                <app-button (buttonClicked)="editClicked()">
-                    @if (editMode()) {
-                        Done Editing
-                    } @else {
-                        Edit
-                    }
-                </app-button>
-                <app-button (buttonClicked)="deleteClicked(item().slNo)">Delete</app-button>
+                <div class="flex w-full md:w-auto flex-row md:flex-col justify-center items-center">
+                    <strong class="hidden md:block">Actions</strong>
+                    <div class="flex flex-col gap-2 items-center justify-center">
+                        <app-button (buttonClicked)="editClicked()">
+                            @if (editMode()) {
+                                Done Editing
+                            } @else {
+                                Edit
+                            }
+                        </app-button>
+                        <app-button (buttonClicked)="deleteClicked(item().slNo)">Delete</app-button>
+                    </div>
+                </div>
             </div>
         </div>
     `,
@@ -103,6 +150,7 @@ import { ButtonComponent } from './button.component';
             @media (max-width: 768px) {
                 .grid__container {
                     grid-template-columns: 1fr;
+                    gap: 0.5rem;
                     grid-template-areas:
                         'one'
                         'two'

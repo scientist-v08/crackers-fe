@@ -31,6 +31,7 @@ import { DiscountDropdownInterface } from '../../interfaces/discountDropdown.int
 import { DropdownInterface } from '../../interfaces/dropdown.interface';
 import { ItemsInterface } from '../../interfaces/items.interface';
 import { BillingService } from '../../services/billing.service';
+import { ItemsTableComponent } from '../../components/items-table.component';
 
 @Component({
     selector: 'app-billing',
@@ -44,6 +45,7 @@ import { BillingService } from '../../services/billing.service';
         Dialog,
         SpinnerComponent,
         Toast,
+        ItemsTableComponent,
     ],
     templateUrl: './billing.component.html',
     providers: [MessageService],

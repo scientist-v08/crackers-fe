@@ -335,9 +335,15 @@
 
     <!-- Display Items Section -->
     @if (showItems()) {
+        <app-items-table
+            class="hidden md:block bg-white dark:bg-gray-700 rounded-xl shadow-md p-4 mt-8 max-w-6xl mx-auto"
+            [items]="items()"
+            (toEdit)="onEdited($event)"
+            (toDelete)="deleteItem($event)"
+        />
         @for (item of items(); track item.slNo) {
             <app-items
-                class="block bg-white dark:bg-gray-700 rounded-xl shadow-md p-4 mt-8 max-w-6xl mx-auto"
+                class="block bg-white dark:bg-gray-700 rounded-xl shadow-md p-4 mt-8 max-w-6xl mx-auto md:hidden"
                 [item]="item"
                 (toEdit)="onEdited($event)"
                 (toDelete)="deleteItem($event)"
