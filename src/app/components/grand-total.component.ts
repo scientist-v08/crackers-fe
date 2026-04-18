@@ -8,9 +8,13 @@ import { ButtonComponent } from './button.component';
     template: `
         <div class="grid__container">
             <div class="one">
-                <h1>{{ finalizedAmt() > 0 ? 'Finalized Amount:' : 'Grand Total:' }}</h1>
+                <h1 class="font-black">
+                    {{ finalizedAmt() > 0 ? 'Finalized Amount:' : 'Grand Total:' }}
+                </h1>
             </div>
-            <div class="two">{{ finalizedAmt() > 0 ? finalizedAmt() : grandTotal() }}</div>
+            <div class="two font-black">
+                {{ finalizedAmt() > 0 ? finalizedAmt() : grandTotal() }}
+            </div>
             <div class="three">
                 <app-button (buttonClicked)="generateBill.emit()">Generate Bill</app-button>
                 <app-button (buttonClicked)="previewBill.emit()">Preview Bill</app-button>
