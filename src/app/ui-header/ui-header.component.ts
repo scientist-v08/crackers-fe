@@ -1,64 +1,67 @@
-import { Component, computed, input, output, signal } from '@angular/core';
+import { Component, computed, inject, input, output, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HideNavDirective } from '../directives/hideNav-directive';
 import { OnClickedDirective } from '../directives/onClicked-directive';
 import { ShowNavDirective } from '../directives/showNav-directive';
 import { HeaderRouterInterface } from '../interfaces/header-router.interface';
+import { MenubarModule } from 'primeng/menubar';
+import { MenuItem } from 'primeng/api';
+import { LoginService } from '../services/login.service';
 
 @Component({
     selector: 'lib-shared-ui-header',
     standalone: true,
-    imports: [HideNavDirective, OnClickedDirective, ShowNavDirective, RouterLink],
+    imports: [MenubarModule],
     template: `
-        <header [class]="finalClass()">
-            <section class="py-1 px-2 flex flex-row flex-nowrap justify-between w-full">
-                <h1 class="flex align-center items-center justify-center text-2xl font-semibold">
+        <p-menubar [model]="items()">
+            <ng-template #start>
+                <h1
+                    class="flex align-center items-center justify-center text-2xl font-semibold hidden md:block"
+                >
                     {{ title() }}
                 </h1>
-                <button
-                    class="section__button"
-                    [status]="navBarStatus()"
-                    (appOnClicked)="navBarStatus.set($event)"
+            </ng-template>
+            <ng-template #end>
+                <h1
+                    class="flex align-center items-center justify-center text-2xl font-semibold md:hidden block"
                 >
-                    <div class="section__icon"></div>
-                </button>
-                <div class="section__items">
-                    @for (route of allRoutes(); track route.id) {
-                        <h2 class="p-2 flex items-center justify-center text-xl">
-                            @if (route.heading === 'Logout') {
-                                <p (mousedown)="logoutClicked.emit()" style="cursor: pointer;">
-                                    {{ route.heading }}
-                                </p>
-                            } @else {
-                                <a [routerLink]="route.route">{{ route.heading }}</a>
-                            }
-                        </h2>
-                    }
-                </div>
-            </section>
-
-            <nav class="font-bold origin-top" [appShowNav]="navBarStatus()">
-                <ul class="p-[0.25em] px-[2.5%] list-none flex flex-col flex-nowrap">
-                    @for (route of allRoutes(); track route.id) {
-                        <li
-                            class="p-2 flex items-center justify-center"
-                            (appHideNav)="navBarStatus.set(false)"
-                        >
-                            <a [routerLink]="route.route">{{ route.heading }}</a>
-                        </li>
-                    }
-                </ul>
-            </nav>
-        </header>
+                    {{ title() }}
+                </h1>
+            </ng-template>
+        </p-menubar>
     `,
     styleUrls: ['./ui-header.component.scss'],
 })
 export class SharedUiComponent {
+    #loginService = inject(LoginService);
     navBarStatus = signal<boolean>(false);
-    allRoutes = input<HeaderRouterInterface[]>();
+    allRoutes = input.required<HeaderRouterInterface[]>();
     title = input<string>('');
     logoutClicked = output<void>();
     baseClass = 'sticky top-0 z-10 p-3';
     inputBgColorTxColor = input<string>('');
     finalClass = computed(() => this.baseClass + this.inputBgColorTxColor());
+    items = computed(() => {
+        const routes = this.allRoutes();
+        const mappedRoutes = routes.map((val: HeaderRouterInterface) => {
+            let menuItem: MenuItem;
+            if (val.heading === 'Logout') {
+                menuItem = {
+                    label: val.heading,
+                    command: () => this.logout(),
+                };
+            } else {
+                menuItem = {
+                    label: val.heading,
+                    routerLink: val.route,
+                };
+            }
+            return menuItem;
+        });
+        return mappedRoutes;
+    });
+
+    logout(): void {
+        this.#loginService.logout();
+    }
 }

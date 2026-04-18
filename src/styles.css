@@ -17,3 +17,7 @@
 .p-paginator {
     @apply !bg-transparent;
 }
+
+.p-menubar {
+    @apply !h-[10vh];
+}
