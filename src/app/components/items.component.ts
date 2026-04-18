@@ -9,7 +9,7 @@ import { ButtonComponent } from './button.component';
     imports: [ButtonComponent, ReactiveFormsModule],
     template: `
         <div class="grid__container">
-            <div class="one">{{ item().slNo }}</div>
+            <div class="one">#{{ item().slNo }}</div>
             <div class="two">{{ item().item }}</div>
             <div class="three">
                 @if (editMode()) {
