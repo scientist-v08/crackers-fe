@@ -1,6 +1,6 @@
 import { Component, computed, inject, input, OnInit, output, signal } from '@angular/core';
 import { InventoryService } from '../../../services/inventory.service';
-import { ButtonComponent } from '../../../components/button.component';
+import { ButtonComponent } from './button.component';
 import {
     InventoryStateOrdered,
     InventoryStateReceived,
@@ -24,9 +24,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
     imports: [ButtonComponent, Dialog, ReactiveFormsModule, InputNumberModule],
     selector: 'app-complete',
     template: `
-        <app-button (buttonClicked)="complete()">{{ goToState() }}</app-button
-        >&nbsp;
-        <app-button (buttonClicked)="partialCompleteDialogOpen()"
+        <app-button [width]="'w-44'" (buttonClicked)="complete()">{{ goToState() }}</app-button>
+        <app-button class="mt-2" [width]="'w-44'" (buttonClicked)="partialCompleteDialogOpen()"
             >Partially {{ goToState() }}</app-button
         >
         <p-dialog

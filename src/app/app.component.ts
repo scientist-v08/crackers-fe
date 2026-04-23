@@ -1,11 +1,11 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { LoginService } from './services/login.service';
-import { SharedUiComponent } from './ui-header/ui-header.component';
+import { HeaderComponent } from './header/header.component';
 
 @Component({
     standalone: true,
-    imports: [RouterOutlet, SharedUiComponent],
+    imports: [RouterOutlet, HeaderComponent],
     selector: 'app-root',
     templateUrl: './app.component.html',
 })

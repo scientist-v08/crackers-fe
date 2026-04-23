@@ -1,24 +1,37 @@
-<p-tabs value="0">
-    <p-tablist>
-        <p-tab (mousedown)="tabClicked(ordered)" value="0">Ordered</p-tab>
-        <p-tab (mousedown)="tabClicked(received)" value="1">Received</p-tab>
-        <p-tab (mousedown)="tabClicked(unpacked)" value="2">Unpacked</p-tab>
-    </p-tablist>
-    <p-tabpanels>
-        <p-tabpanel value="0">
-            @if (serviceState() === ordered) {
-                <app-items />
-            }
-        </p-tabpanel>
-        <p-tabpanel value="1">
-            @if (serviceState() === received) {
-                <app-items />
-            }
-        </p-tabpanel>
-        <p-tabpanel value="2">
-            @if (serviceState() === unpacked) {
-                <app-items />
-            }
-        </p-tabpanel>
-    </p-tabpanels>
-</p-tabs>
+<h1 class="text-center text-4xl font-extrabold text-gray-900 dark:text-white mt-8 mb-6">
+    Inventory
+    <div class="text-xl font-medium">
+        Total goods {{ goodsValueDivision() }}: ₹{{ totalGoodsValue() }}
+    </div>
+</h1>
+
+<div class="min-h-screen p-6">
+    <div
+        class="mx-auto max-w-6xl space-y-8 p-8 bg-white dark:bg-gray-700 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700"
+    >
+        <p-tabs value="0">
+            <p-tablist>
+                <p-tab (mousedown)="tabClicked(ordered)" value="0">Ordered</p-tab>
+                <p-tab (mousedown)="tabClicked(received)" value="1">Received</p-tab>
+                <p-tab (mousedown)="tabClicked(unpacked)" value="2">Unpacked</p-tab>
+            </p-tablist>
+            <p-tabpanels>
+                <p-tabpanel value="0">
+                    @if (serviceState() === ordered) {
+                        <app-items (totalEmit)="totalObtained($event, 'ordered')" />
+                    }
+                </p-tabpanel>
+                <p-tabpanel value="1">
+                    @if (serviceState() === received) {
+                        <app-items (totalEmit)="totalObtained($event, 'received')" />
+                    }
+                </p-tabpanel>
+                <p-tabpanel value="2">
+                    @if (serviceState() === unpacked) {
+                        <app-items (totalEmit)="totalObtained($event, 'unpacked')" />
+                    }
+                </p-tabpanel>
+            </p-tabpanels>
+        </p-tabs>
+    </div>
+</div>

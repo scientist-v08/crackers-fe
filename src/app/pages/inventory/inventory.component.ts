@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { TabsModule } from 'primeng/tabs';
 import { InventoryService } from '../../services/inventory.service';
 import {
@@ -17,6 +17,8 @@ import { ItemsComponent } from './components/items.component';
 })
 export default class InventoryComponent {
     #inventoryService = inject(InventoryService);
+    totalGoodsValue = signal<number>(0);
+    goodsValueDivision = signal<string>('');
     ordered = InventoryStateOrdered;
     received = InventoryStateReceived;
     unpacked = InventoryStateUnpacked;
@@ -24,5 +26,10 @@ export default class InventoryComponent {
 
     tabClicked(item: InventoryState): void {
         this.#inventoryService.state.set(item);
+    }
+
+    totalObtained(val: number, division: string): void {
+        this.totalGoodsValue.set(val);
+        this.goodsValueDivision.set(division);
     }
 }

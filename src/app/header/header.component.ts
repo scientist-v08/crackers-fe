@@ -1,15 +1,11 @@
 import { Component, computed, inject, input, output, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { HideNavDirective } from '../directives/hideNav-directive';
-import { OnClickedDirective } from '../directives/onClicked-directive';
-import { ShowNavDirective } from '../directives/showNav-directive';
 import { HeaderRouterInterface } from '../interfaces/header-router.interface';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
 import { LoginService } from '../services/login.service';
 
 @Component({
-    selector: 'lib-shared-ui-header',
+    selector: 'app-header',
     standalone: true,
     imports: [MenubarModule],
     template: `
@@ -30,9 +26,8 @@ import { LoginService } from '../services/login.service';
             </ng-template>
         </p-menubar>
     `,
-    styleUrls: ['./ui-header.component.scss'],
 })
-export class SharedUiComponent {
+export class HeaderComponent {
     #loginService = inject(LoginService);
     navBarStatus = signal<boolean>(false);
     allRoutes = input.required<HeaderRouterInterface[]>();
