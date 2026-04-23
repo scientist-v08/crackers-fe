@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, output, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { CardModule } from 'primeng/card';
@@ -8,13 +8,14 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { Toast } from 'primeng/toast';
 import { Subject, switchMap, takeUntil, tap } from 'rxjs';
-import { ButtonComponent } from '../../../components/button.component';
+import { ButtonComponent } from './button.component';
 import { SpinnerComponent } from '../../../components/spinner.component';
 import { InventoryState } from '../../../constants/inventory.constants';
 import { InventoryItem, InventoryResponseInterface } from '../../../interfaces/inventory.interface';
 import { InventoryService } from '../../../services/inventory.service';
 import { AddItemComponent } from './addItem.component';
 import { CompleteComponent } from './complete.component';
+import { InventoryItemsTableComponent } from './items-table.component';
 
 @Component({
     selector: 'app-items',
@@ -30,15 +31,16 @@ import { CompleteComponent } from './complete.component';
         Toast,
         CompleteComponent,
         SpinnerComponent,
+        InventoryItemsTableComponent,
     ],
     template: `
-        <div class="flex items-center justify-center flex-col md:flex-row md:justify-between">
+        <div
+            class="flex items-center justify-center flex-col-reverse md:flex-row md:justify-between mb-2 hidden md:block"
+        >
             @if (showAddItem()) {
                 <app-add-item (toaster)="messageService($event)" />
             }
-            <h2 class="text-3xl font-semibold text-indigo-900 dark:text-amber-300 mb-4">
-                Total cost of goods: ₹{{ total() }}
-            </h2>
+            <h2 class="text-3xl font-semibold text-gray-900 dark:text-white"></h2>
         </div>
         <div
             class="flex gap-2 flex-col items-center justify-center md:flex-row md:items-center md:justify-between mb-4"
@@ -57,29 +59,40 @@ import { CompleteComponent } from './complete.component';
                     />
                     <label for="on_label">Search Item</label>
                 </p-floatlabel>
-                <app-button class="md:mr-2" (buttonClicked)="searchItems()">Search</app-button>
-                <app-button (buttonClicked)="refreshItems()">Refresh</app-button>
+                <app-button
+                    [width]="'w-3xs md:w-28'"
+                    class="md:mr-2"
+                    (buttonClicked)="searchItems()"
+                    >Search</app-button
+                >
+                <app-button [width]="'w-3xs md:w-28'" (buttonClicked)="refreshItems()"
+                    >Refresh</app-button
+                >
             </form>
-            <p-paginator
-                [first]="first()"
-                [rows]="rows()"
-                [totalRecords]="totalElements()"
-                [rowsPerPageOptions]="[5, 10, 15]"
-                (onPageChange)="onPageChange($event)"
-            />
+            <div>
+                @if (showAddItem()) {
+                    <app-add-item class="block md:hidden" (toaster)="messageService($event)" />
+                }
+            </div>
         </div>
         @if (allItems().length === 0 && !loadingData()) {
             <div class="text-black dark:text-white text-3xl">No data</div>
         }
         @if (!loadingData()) {
-            <div class="mb-2 rounded-lg grid md:grid-cols-3 gap-4">
+            <app-inventory-items-table
+                [allItems]="allItems()"
+                class="hidden md:block mt-8 max-w-6xl mx-auto"
+                (changeState)="changeState($event)"
+                (partialSuccessMessageService)="partialSuccessMessageService($event)"
+            />
+            <div class="mb-2 rounded-lg justify-center grid md:grid-cols-3 gap-4 block md:hidden">
                 @for (item of allItems(); track item.ID) {
                     <p-card
-                        class="bg-gray-100 dark:bg-gray-900"
+                        class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 shadow-lg gap-4"
                         header="{{ item.BrandOrCompany }}: {{ item.Item }}"
                     >
                         <div class="flex justify-between items-center">
-                            <div>Number of boxes per carton:</div>
+                            <div>Boxes per carton:</div>
                             <div>{{ item.NumOfBoxes }}</div>
                         </div>
                         <div class="flex justify-between items-center">
@@ -94,7 +107,7 @@ import { CompleteComponent } from './complete.component';
                             <div>Subtotal:</div>
                             <div>{{ item.SubTotal }}</div>
                         </div>
-                        <div class="items-center flex justify-center md:justify-start">
+                        <div class="items-center flex justify-center md:justify-start mt-2">
                             @if (inventoryState() !== 'Unpacked') {
                                 <app-complete
                                     class="items-center md:flex-row flex flex-col justify-center md:gap-2"
@@ -107,6 +120,13 @@ import { CompleteComponent } from './complete.component';
                     </p-card>
                 }
             </div>
+            <p-paginator
+                [first]="first()"
+                [rows]="rows()"
+                [totalRecords]="totalElements()"
+                [rowsPerPageOptions]="[5, 10, 15]"
+                (onPageChange)="onPageChange($event)"
+            />
         } @else {
             <app-spinner class="flex items-center justify-center" />
         }
@@ -124,6 +144,7 @@ export class ItemsComponent implements OnInit, OnDestroy {
     unsubscribe$ = new Subject<void>();
     allItems = signal<InventoryItem[]>([]);
     total = signal<number>(1);
+    totalEmit = output<number>();
     totalElements = signal<number>(0);
     pageNumber = signal<number>(1);
     pageSize = signal<number>(5);
@@ -175,10 +196,12 @@ export class ItemsComponent implements OnInit, OnDestroy {
                     this.loadingData.set(false);
                     this.allItems.set(res.inventoryItems);
                     this.total.set(res.total);
+                    this.totalEmit.emit(res.total);
                     this.totalElements.set(res.totalElements);
                 },
                 error: (err: HttpErrorResponse) => {
                     this.loadingData.set(false);
+                    this.totalEmit.emit(0);
                     this.errorHandler(err);
                 },
             });
@@ -313,10 +336,12 @@ export class ItemsComponent implements OnInit, OnDestroy {
                             this.loadingData.set(false);
                             this.allItems.set(res.inventoryItems);
                             this.total.set(res.total);
+                            this.totalEmit.emit(res.total);
                             this.totalElements.update((value) => value - 1);
                         },
                         error: (err: HttpErrorResponse) => {
                             this.loadingData.set(false);
+                            this.totalEmit.emit(0);
                             this.errorHandler(err);
                         },
                     });

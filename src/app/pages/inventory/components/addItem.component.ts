@@ -1,5 +1,5 @@
 import { Component, inject, OnDestroy, OnInit, output, signal } from '@angular/core';
-import { ButtonComponent } from '../../../components/button.component';
+import { ButtonComponent } from './button.component';
 import { Dialog } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -15,7 +15,7 @@ import { HttpErrorResponse } from '@angular/common/http';
     imports: [ButtonComponent, Dialog, InputTextModule, ReactiveFormsModule, InputNumberModule],
     selector: 'app-add-item',
     template: `
-        <app-button (buttonClicked)="visible = true">Add New +</app-button>
+        <app-button [width]="'w-3xs md:w-28'" (buttonClicked)="visible = true">Add New</app-button>
         <p-dialog
             [formGroup]="addNewForm"
             header="Add New Item"

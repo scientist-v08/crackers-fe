@@ -17,9 +17,7 @@ import { LoginService } from '../../services/login.service';
         >
             <div class="w-full max-w-md">
                 <!-- Main Login Card -->
-                <div
-                    class="bg-white dark:bg-gray-800 shadow-2xl rounded-3xl overflow-hidden border border-gray-100 dark:border-gray-700 transition-all duration-300"
-                >
+                <div class="">
                     <div class="p-8 sm:p-10">
                         <div class="text-center mb-10">
                             <h1
@@ -166,23 +164,7 @@ import { LoginService } from '../../services/login.service';
                                     class="w-full group relative flex justify-center py-4 px-4 border border-transparent text-lg font-bold rounded-2xl text-black bg-amber-300 hover:bg-amber-400 dark:text-white dark:bg-pink-600 dark:hover:bg-pink-700 focus:outline-none focus:ring-4 focus:ring-amber-500/50 dark:focus:ring-pink-500/50 transition-all duration-300 shadow-lg shadow-amber-500/20 dark:shadow-pink-500/20 active:scale-[0.98]"
                                     type="submit"
                                 >
-                                    <span class="flex items-center">
-                                        Login
-                                        <svg
-                                            class="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            stroke="currentColor"
-                                        >
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="2"
-                                                d="M14 5l7 7m0 0l-7 7m7-7H3"
-                                            />
-                                        </svg>
-                                    </span>
+                                    <span class="flex items-center"> Login </span>
                                 </button>
                             </div>
                         </form>

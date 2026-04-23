@@ -8,11 +8,12 @@ import { Toast } from 'primeng/toast';
 import { SpinnerComponent } from '../../components/spinner.component';
 import { CardModule } from 'primeng/card';
 import { AddExpenseComponent } from './components/add-expense.component';
+import { ExpensesTableComponent } from './components/expenses-table.component';
 
 @Component({
     selector: 'app-expenses',
     standalone: true,
-    imports: [Toast, SpinnerComponent, CardModule, AddExpenseComponent],
+    imports: [Toast, SpinnerComponent, CardModule, AddExpenseComponent, ExpensesTableComponent],
     templateUrl: './expenses.component.html',
     providers: [MessageService],
 })
