@@ -119,6 +119,13 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
             if (!this.showItems()) {
                 this.showItems.set(true);
             }
+            this.#messageService.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: 'Item added successfully',
+                key: 'br',
+                life: 3000,
+            });
         } else {
             this.billingForm.markAllAsTouched();
         }
