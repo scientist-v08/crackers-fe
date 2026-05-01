@@ -60,8 +60,8 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
         category: this.#fb.control('', [Validators.required]),
         name: this.#fb.control(''),
         number: this.#fb.control(''),
-        MRP: this.#fb.control(0, [Validators.required]),
-        quantity: this.#fb.control(1, [Validators.required]),
+        MRP: this.#fb.control(null, [Validators.required]),
+        quantity: this.#fb.control(null, [Validators.required]),
     });
     visible = false;
     discountDropDownOptions = signal<DiscountDropdownInterface[]>(discountDropDownOptions);
@@ -123,7 +123,7 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
                 severity: 'success',
                 summary: 'Success',
                 detail: 'Item added successfully',
-                key: 'br',
+                key: 'tl',
                 life: 3000,
             });
         } else {
@@ -153,8 +153,8 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
             category: '',
             name: '',
             number: '',
-            MRP: 0,
-            quantity: 1,
+            MRP: null,
+            quantity: null,
         });
         this.showItems.set(false);
         this.showTotal.set(false);
