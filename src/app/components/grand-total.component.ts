@@ -6,69 +6,27 @@ import { ButtonComponent } from './button.component';
     standalone: true,
     imports: [ButtonComponent],
     template: `
-        <div class="grid__container">
-            <div class="one">
-                <h1 class="font-black">
-                    {{ finalizedAmt() > 0 ? 'Finalized Amount:' : 'Grand Total:' }}
-                </h1>
+        <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+            <div class="text-center lg:text-left">
+                <p class="total-label">
+                    {{ finalizedAmt() > 0 ? 'Finalized Amount' : 'Grand Total' }}
+                </p>
+                <p class="total-amount mt-2">
+                    ₹{{ finalizedAmt() > 0 ? finalizedAmt() : grandTotal() }}
+                </p>
             </div>
-            <div class="two font-black">
-                {{ finalizedAmt() > 0 ? finalizedAmt() : grandTotal() }}
-            </div>
-            <div class="three">
-                <app-button (buttonClicked)="generateBill.emit()">Generate Bill</app-button>
+            <div class="section-actions section-actions--center lg:border-0 lg:pt-0">
+                <app-button variant="accent" (buttonClicked)="generateBill.emit()">
+                    Generate Bill
+                </app-button>
                 <app-button (buttonClicked)="previewBill.emit()">Preview Bill</app-button>
-                <app-button (buttonClicked)="comparePrices.emit()">Compare prices</app-button>
-                <app-button (buttonClicked)="newBill.emit()">New Bill</app-button>
+                <app-button variant="secondary" (buttonClicked)="comparePrices.emit()">
+                    Compare Prices
+                </app-button>
+                <app-button variant="secondary" (buttonClicked)="newBill.emit()">New Bill</app-button>
             </div>
         </div>
     `,
-    styles: [
-        `
-            .grid__container {
-                display: grid;
-                grid-template-columns: 1fr 1fr 3fr;
-                grid-template-areas: 'one two three';
-            }
-            .one {
-                grid-area: one;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-            .two {
-                grid-area: two;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-            .three {
-                grid-area: three;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 1rem;
-            }
-            @media (max-width: 768px) {
-                .grid__container {
-                    grid-template-columns: 1fr;
-                    grid-template-areas:
-                        'one'
-                        'two'
-                        'three';
-                }
-                .one {
-                    flex-direction: column;
-                }
-                .two {
-                    flex-direction: column;
-                }
-                .three {
-                    flex-direction: column;
-                }
-            }
-        `,
-    ],
 })
 export class GrandTotalComponent {
     grandTotal = input.required<number>();

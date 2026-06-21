@@ -6,11 +6,11 @@ import { ExpenseInterface } from '../../../interfaces/expenses.interface';
     selector: 'app-expenses-table',
     imports: [TableModule],
     template: `
-        <p-table [value]="expenses()" dataKey="ID">
+        <p-table [value]="expenses()" dataKey="ID" styleClass="p-datatable-sm">
             <ng-template #header>
                 <tr>
-                    <th>Sl.No</th>
-                    <th>Reson for expense</th>
+                    <th>Sl. No</th>
+                    <th>Reason for Expense</th>
                     <th>Amount</th>
                 </tr>
             </ng-template>
@@ -18,7 +18,7 @@ import { ExpenseInterface } from '../../../interfaces/expenses.interface';
                 <tr>
                     <td>{{ item.ID }}</td>
                     <td>{{ item.ReasonForExpense }}</td>
-                    <td>{{ item.Amount }}</td>
+                    <td>₹{{ item.Amount }}</td>
                 </tr>
             </ng-template>
         </p-table>

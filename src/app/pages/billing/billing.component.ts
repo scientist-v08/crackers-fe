@@ -11,7 +11,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Dialog } from 'primeng/dialog';
 import { Toast } from 'primeng/toast';
-import { Subject, takeUntil, tap } from 'rxjs';
+import { finalize, Subject, takeUntil, tap } from 'rxjs';
 import { BillComparisonComponent } from '../../components/bill-comparison.component';
 import { ButtonComponent } from '../../components/button.component';
 import { GrandTotalComponent } from '../../components/grand-total.component';
@@ -32,6 +32,7 @@ import { DropdownInterface } from '../../interfaces/dropdown.interface';
 import { ItemsInterface } from '../../interfaces/items.interface';
 import { BillingService } from '../../services/billing.service';
 import { ItemsTableComponent } from '../../components/items-table.component';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 
 @Component({
     selector: 'app-billing',
@@ -304,6 +305,45 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
                     });
                 },
             });
+        /*this.#billingService
+            .generatePreviewBill(requestBody)
+            .pipe(
+                tap(() => (this.visible = true)),
+                finalize(() => (this.visible = false)),
+                takeUntil(this.unsubscribe$),
+            )
+            .subscribe({
+                next: (res: HttpResponse<Blob>) => {
+                    const blob = res.body!;
+                    const contentDisposition = res.headers.get('Content-Disposition') || '';
+                    const filenameMatch = contentDisposition.match(/filename="?([^"]+)"?/);
+                    const filename = filenameMatch ? filenameMatch[1] : 'bill.pdf';
+
+                    // Create download
+                    const blobUrl = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = blobUrl;
+                    a.download = filename;
+                    a.click();
+                    window.URL.revokeObjectURL(blobUrl);
+
+                    // Open WhatsApp
+                    const number = this.billingForm.controls.number.getRawValue() ?? '';
+                    const whatsappTab = 'https://wa.me/91' + number;
+                    window.open(whatsappTab, '_blank');
+                },
+                error: async (err: HttpErrorResponse) => {
+                    const errorText = await err.error.text();
+                    const errorJson = JSON.parse(errorText);
+                    this.#messageService.add({
+                        severity: 'error',
+                        summary: 'Error',
+                        detail: errorJson.message,
+                        key: 'br',
+                        life: 3000,
+                    });
+                },
+            });*/
     }
 
     comparePrices(): void {
@@ -327,6 +367,7 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
     }
 
     otherFinalized(amt: number): void {
+        this.showComparisons.set(false);
         this.otherAmt.set(amt);
     }
 

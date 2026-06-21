@@ -24,36 +24,43 @@ import { InputNumberModule } from 'primeng/inputnumber';
     imports: [ButtonComponent, Dialog, ReactiveFormsModule, InputNumberModule],
     selector: 'app-complete',
     template: `
-        <app-button [width]="'w-44'" (buttonClicked)="complete()">{{ goToState() }}</app-button>
-        <app-button class="mt-2" [width]="'w-44'" (buttonClicked)="partialCompleteDialogOpen()"
-            >Partially {{ goToState() }}</app-button
-        >
+        <div class="btn-group">
+            <app-button [width]="'w-auto'" (buttonClicked)="complete()">Mark {{ goToState() }}</app-button>
+            <app-button
+                variant="secondary"
+                [width]="'w-auto'"
+                (buttonClicked)="partialCompleteDialogOpen()"
+            >
+                Partially {{ goToState() }}
+            </app-button>
+        </div>
         <p-dialog
             [formGroup]="partialNumberForm"
-            header="Add New Item"
+            header="Partial Receipt"
             [modal]="true"
             [(visible)]="visible"
             [style]="{ width: '25rem' }"
         >
-            <div class="flex flex-col mb-4">
-                <label for="numberOfCartons" class="font-semibold w-full"
-                    >Number of Cartons actually received</label
+            <div class="form-field">
+                <label for="numberOfCartons" class="form-label form-label-required"
+                    >Number of Cartons Actually Received</label
                 >
                 <p-inputnumber
+                    class="w-full"
                     id="numberOfCartons"
                     locale="en-IN"
                     inputId="locale-indian"
                     formControlName="number"
                 />
-                @if (validForm()) {
-                    <small class="text-red-500">Invalid entry</small>
-                }
-            </div>
-            <div class="flex justify-end gap-2">
-                <app-button (buttonClicked)="visible = false">Cancel</app-button>
-                <div>
-                    <app-button (buttonClicked)="submitForm()">Save</app-button>
+                <div class="form-message">
+                    @if (validForm()) {
+                        <small class="form-error">Invalid entry</small>
+                    }
                 </div>
+            </div>
+            <div class="dialog-actions section-actions--end">
+                <app-button variant="secondary" (buttonClicked)="visible = false">Cancel</app-button>
+                <app-button variant="accent" (buttonClicked)="submitForm()">Save</app-button>
             </div>
         </p-dialog>
     `,

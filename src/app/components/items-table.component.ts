@@ -9,12 +9,12 @@ import { ButtonComponent } from './button.component';
     selector: 'app-items-table',
     imports: [TableModule, InputTextModule, FormsModule, ButtonComponent],
     template: `
-        <p-table [value]="items()" dataKey="slNo">
+        <p-table [value]="items()" dataKey="slNo" styleClass="p-datatable-sm">
             <ng-template #header>
                 <tr>
-                    <th>Sl.No</th>
+                    <th>Sl. No</th>
                     <th>Item</th>
-                    <th>MRP/Net</th>
+                    <th>MRP / Net</th>
                     <th>Quantity</th>
                     <th>Discount</th>
                     <th>Sub-total</th>
@@ -60,9 +60,15 @@ import { ButtonComponent } from './button.component';
                         </p-cellEditor>
                     </td>
                     <td>{{ item.discount }}</td>
-                    <td>{{ item.subTotal }}</td>
+                    <td>₹{{ item.subTotal }}</td>
                     <td>
-                        <app-button (buttonClicked)="deleteClicked(item.slNo)">Delete</app-button>
+                        <app-button
+                            variant="secondary"
+                            width="w-auto"
+                            (buttonClicked)="deleteClicked(item.slNo)"
+                        >
+                            Delete
+                        </app-button>
                     </td>
                 </tr>
             </ng-template>

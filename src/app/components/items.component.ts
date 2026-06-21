@@ -8,164 +8,67 @@ import { ButtonComponent } from './button.component';
     standalone: true,
     imports: [ButtonComponent, ReactiveFormsModule],
     template: `
-        <div class="grid__container">
-            <div class="one">
-                <div
-                    class="flex w-full md:w-auto flex-row md:flex-col justify-between md:justify-center items-center"
-                >
-                    <strong>Sl.No</strong>
-                    <p>#{{ item().slNo }}</p>
-                </div>
-            </div>
-            <div class="two">
-                <div
-                    class="flex w-full md:w-auto flex-row md:flex-col justify-between md:justify-center items-center"
-                >
-                    <strong>Item</strong>
-                    <p>{{ item().item }}</p>
-                </div>
-            </div>
-            <div class="three">
-                <div
-                    class="flex w-full md:w-auto flex-row md:flex-col justify-between md:justify-center items-center"
-                >
-                    <strong>MRP/NET</strong>
-                    <div>
-                        @if (editMode()) {
-                            <input
-                                class="w-full dark:bg-transparent dark:text-amber-300 mb-4 p-2 border border-indigo-200 dark:border-amber-200 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:focus:ring-amber-400"
-                                id="mrpInputBox"
-                                [formControl]="itemForm.controls.mrpOrNet"
-                                type="number"
-                            />
-                        } @else {
-                            {{ item().mrpOrNet }}
-                        }
-                    </div>
-                </div>
-            </div>
-            <div class="four">
-                <div
-                    class="flex w-full md:w-auto flex-row md:flex-col justify-between md:justify-center items-center"
-                >
-                    <strong>Discount</strong>
-                    <p>{{ item().discount }}</p>
-                </div>
-            </div>
-            <div class="five">
-                <div
-                    class="flex w-full md:w-auto flex-row md:flex-col justify-between md:justify-center items-center"
-                >
-                    <strong>Quantity</strong>
-                    <div>
-                        @if (editMode()) {
-                            <input
-                                class="w-full dark:bg-transparent dark:text-amber-300 mb-4 p-2 border border-indigo-200 dark:border-amber-200 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:focus:ring-amber-400"
-                                id="quantityInputBox"
-                                [formControl]="itemForm.controls.quantity"
-                                type="number"
-                            />
-                        } @else {
-                            {{ item().quantity }}
-                        }
-                    </div>
-                </div>
-            </div>
-            <div class="six">
-                <div
-                    class="flex w-full md:w-auto flex-row md:flex-col justify-between md:justify-center items-center"
-                >
-                    <strong>Sub-Total</strong>
-                    <p>{{ item().subTotal }}</p>
-                </div>
-            </div>
-            <div class="seven">
-                <div class="flex w-full md:w-auto flex-row md:flex-col justify-center items-center">
-                    <strong class="hidden md:block">Actions</strong>
-                    <div class="flex flex-col gap-2 items-center justify-center">
-                        <app-button (buttonClicked)="editClicked()">
-                            @if (editMode()) {
-                                Done Editing
-                            } @else {
-                                Edit
-                            }
-                        </app-button>
-                        <app-button (buttonClicked)="deleteClicked(item().slNo)">Delete</app-button>
-                    </div>
-                </div>
-            </div>
+        <div class="data-card-header">Item #{{ item().slNo }}</div>
+
+        <div class="data-row">
+            <span class="data-row-label">Item</span>
+            <span class="data-row-value">{{ item().item }}</span>
+        </div>
+
+        <div class="data-row">
+            <span class="data-row-label">MRP / Net</span>
+            <span class="data-row-value">
+                @if (editMode()) {
+                    <input
+                        class="form-control w-28"
+                        id="mrpInputBox"
+                        [formControl]="itemForm.controls.mrpOrNet"
+                        type="number"
+                    />
+                } @else {
+                    {{ item().mrpOrNet }}
+                }
+            </span>
+        </div>
+
+        <div class="data-row">
+            <span class="data-row-label">Discount</span>
+            <span class="data-row-value">{{ item().discount }}</span>
+        </div>
+
+        <div class="data-row">
+            <span class="data-row-label">Quantity</span>
+            <span class="data-row-value">
+                @if (editMode()) {
+                    <input
+                        class="form-control w-28"
+                        id="quantityInputBox"
+                        [formControl]="itemForm.controls.quantity"
+                        type="number"
+                    />
+                } @else {
+                    {{ item().quantity }}
+                }
+            </span>
+        </div>
+
+        <div class="data-row">
+            <span class="data-row-label">Sub-total</span>
+            <span class="data-row-value">₹{{ item().subTotal }}</span>
+        </div>
+
+        <div class="section-actions section-actions--center">
+            <app-button
+                [variant]="editMode() ? 'accent' : 'secondary'"
+                (buttonClicked)="editClicked()"
+            >
+                {{ editMode() ? 'Done Editing' : 'Edit' }}
+            </app-button>
+            <app-button variant="secondary" (buttonClicked)="deleteClicked(item().slNo)">
+                Delete
+            </app-button>
         </div>
     `,
-    styles: [
-        `
-            .grid__container {
-                display: grid;
-                grid-template-columns: 0.1fr 2fr 1fr 1fr 1fr 1fr 2fr;
-                grid-template-areas: 'one two three four five six seven';
-            }
-            .one {
-                grid-area: one;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-            .two {
-                grid-area: two;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-            .three {
-                grid-area: three;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-            .four {
-                grid-area: four;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-            .five {
-                grid-area: five;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-            .six {
-                grid-area: six;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-            .seven {
-                grid-area: seven;
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                justify-content: center;
-                gap: 0.25rem;
-            }
-            @media (max-width: 768px) {
-                .grid__container {
-                    grid-template-columns: 1fr;
-                    gap: 0.5rem;
-                    grid-template-areas:
-                        'one'
-                        'two'
-                        'three'
-                        'four'
-                        'five'
-                        'six'
-                        'seven';
-                }
-                .seven {
-                    flex-direction: column;
-                }
-            }
-        `,
-    ],
 })
 export class ItemsClass {
     #fb = inject(FormBuilder);

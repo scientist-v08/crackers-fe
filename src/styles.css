@@ -1,43 +1,467 @@
-/* You can add global styles to this file, and also import other style files */
-
 @import 'tailwindcss';
 
+@theme {
+    --font-display: 'Cinzel', serif;
+    --font-body: 'Inter', sans-serif;
+
+    --color-crackers-shadow: #1a0f0d;
+    --color-crackers-mid: #7f1d1d;
+    --color-crackers-highlight: #faf6f0;
+    --color-crackers-accent: #b8860b;
+    --color-crackers-surface: #ffffff;
+    --color-crackers-border: #e8dfd4;
+    --color-crackers-muted: #6b5c52;
+    --color-crackers-error: #b91c1c;
+    --color-crackers-success: #166534;
+
+    --spacing-field: 2.75rem;
+    --spacing-stack: 1rem;
+    --spacing-section: 1.5rem;
+    --spacing-page: 1.5rem;
+}
+
+/* ── Base ─────────────────────────────────────────────── */
+
+html,
+body {
+    @apply h-full antialiased;
+    font-family: var(--font-body);
+    color: var(--color-crackers-shadow);
+    background-color: var(--color-crackers-highlight);
+}
+
+/* ── Page layout & vertical flow ──────────────────────── */
+
+.page-shell {
+    @apply min-h-full px-4 py-6 md:px-8 md:py-8;
+}
+
+.page-container {
+    @apply mx-auto w-full max-w-5xl;
+}
+
+.page-stack {
+    @apply flex flex-col;
+    gap: var(--spacing-page);
+}
+
+.page-header {
+    @apply text-center;
+}
+
+.page-title {
+    font-family: var(--font-display);
+    @apply text-3xl font-semibold tracking-tight text-crackers-shadow md:text-4xl;
+}
+
+.page-subtitle {
+    @apply mt-2 text-base leading-relaxed text-crackers-muted;
+}
+
+/* ── Cards & sections ─────────────────────────────────── */
+
+.content-card {
+    @apply rounded-lg border border-crackers-border bg-crackers-surface p-6 md:p-8;
+    box-shadow: 0 1px 3px rgb(26 15 13 / 6%);
+}
+
+.section-block {
+    @apply flex flex-col;
+    gap: var(--spacing-section);
+}
+
+.section-block + .section-block {
+    @apply border-t border-crackers-border pt-8;
+}
+
+.section-header {
+    @apply flex flex-col gap-1;
+}
+
+.section-title {
+    font-family: var(--font-display);
+    @apply text-xl font-medium leading-tight text-crackers-shadow;
+}
+
+.section-description {
+    @apply text-sm leading-relaxed text-crackers-muted;
+}
+
+.card-body {
+    @apply flex flex-col;
+    gap: var(--spacing-section);
+}
+
+/* ── Form rhythm ──────────────────────────────────────── */
+
+.form-body {
+    @apply flex flex-col;
+    gap: var(--spacing-stack);
+}
+
+.form-stack {
+    @apply flex flex-col;
+    gap: var(--spacing-stack);
+}
+
+.form-grid {
+    @apply grid grid-cols-1 items-start gap-4 md:grid-cols-2;
+}
+
+.form-field--full {
+    @apply md:col-span-2;
+}
+
+.form-field {
+    @apply flex min-w-0 flex-col gap-2;
+}
+
+.form-group {
+    @apply flex min-w-0 flex-col gap-2;
+}
+
+.form-label {
+    @apply block text-sm font-medium leading-none text-crackers-shadow;
+}
+
+.form-label-required::after {
+    content: ' *';
+    @apply text-crackers-error;
+}
+
+.form-control,
+.form-input,
+.form-select {
+    @apply w-full rounded border border-crackers-border bg-crackers-highlight px-4 text-base leading-normal text-crackers-shadow outline-none transition-colors;
+    min-height: var(--spacing-field);
+}
+
+.form-control,
+.form-input {
+    @apply py-2.5;
+}
+
+.form-select {
+    @apply flex items-center appearance-none py-0 pr-10;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%236b5c52'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1rem;
+}
+
+.form-control::placeholder,
+.form-input::placeholder {
+    @apply text-crackers-muted/60;
+}
+
+.form-control:focus,
+.form-input:focus,
+.form-select:focus {
+    @apply border-crackers-mid ring-2 ring-crackers-mid/15;
+}
+
+.form-control-row {
+    @apply flex items-stretch gap-2;
+}
+
+.form-control-row .form-control,
+.form-control-row .form-input {
+    @apply min-w-0 flex-1;
+}
+
+.form-control-row .btn {
+    @apply shrink-0 self-stretch;
+}
+
+.form-message {
+    @apply min-h-5 text-sm leading-snug;
+}
+
+.form-error {
+    @apply text-sm font-medium leading-snug text-crackers-error;
+}
+
+.form-error-box {
+    @apply rounded border border-crackers-error/20 bg-crackers-error/5 px-3 py-2 text-sm leading-relaxed text-crackers-error;
+}
+
+.section-actions {
+    @apply flex flex-col items-center gap-3 border-t sm:border-t-0 border-crackers-border pt-6 sm:flex-row sm:flex-wrap sm:items-center;
+}
+
+.dialog-actions {
+    @apply mt-6 flex flex-col gap-3 border-t border-crackers-border pt-6 sm:flex-row sm:flex-wrap sm:items-center;
+}
+
+.section-actions--center {
+    @apply sm:justify-center;
+}
+
+.section-actions--end {
+    @apply sm:justify-end;
+}
+
+/* ── Toolbar (search / filters) ───────────────────────── */
+
+.toolbar {
+    @apply flex flex-col gap-4 mb-4 sm:flex-row sm:items-end sm:justify-between;
+}
+
+.toolbar-group {
+    @apply flex flex-1 flex-col gap-4 sm:flex-row sm:items-end;
+}
+
+.toolbar-field {
+    @apply w-full sm:max-w-xs;
+}
+
+/* ── Buttons ──────────────────────────────────────────── */
+
+.btn {
+    @apply inline-flex min-h-[var(--spacing-field)] items-center justify-center rounded border px-5 py-2 text-sm font-medium leading-none transition-colors disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+.btn-primary {
+    @apply border-crackers-mid bg-crackers-mid text-white hover:bg-crackers-shadow;
+}
+
+.btn-secondary {
+    @apply border-crackers-border bg-crackers-surface text-crackers-shadow hover:border-crackers-mid/40 hover:bg-crackers-highlight;
+}
+
+.btn-accent {
+    @apply border-crackers-accent bg-crackers-accent text-white hover:bg-crackers-shadow;
+}
+
+.btn-ghost {
+    @apply border-transparent bg-transparent text-crackers-mid underline-offset-2 hover:underline;
+}
+
+.btn-group {
+    @apply flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center;
+}
+
+/* ── Data display ─────────────────────────────────────── */
+
+.data-card {
+    @apply rounded border border-crackers-border bg-crackers-surface p-4;
+}
+
+.data-stack {
+    @apply flex flex-col gap-4 md:hidden;
+}
+
+.data-card-header {
+    font-family: var(--font-display);
+    @apply mb-3 border-b border-crackers-border pb-2 text-base font-medium text-crackers-shadow;
+}
+
+.data-row {
+    @apply flex min-h-[var(--spacing-field)] items-center justify-between gap-4 text-sm;
+}
+
+.data-row-label {
+    @apply shrink-0 text-crackers-muted;
+}
+
+.data-row-value {
+    @apply text-right font-medium text-crackers-shadow;
+}
+
+.stat-banner {
+    @apply mt-3 inline-block rounded border border-crackers-border bg-crackers-highlight px-4 py-2.5 text-base text-crackers-shadow;
+}
+
+.stat-banner strong {
+    font-family: var(--font-display);
+    @apply text-crackers-mid;
+}
+
+.empty-state {
+    @apply py-12 text-center text-lg text-crackers-muted;
+}
+
+/* ── Tables & totals ──────────────────────────────────── */
+
+.total-panel {
+    @apply rounded-lg border-2 border-crackers-mid/20 bg-crackers-highlight p-6 md:p-8;
+}
+
+.total-label {
+    font-family: var(--font-display);
+    @apply text-lg font-medium text-crackers-shadow;
+}
+
+.total-amount {
+    font-family: var(--font-display);
+    @apply text-3xl font-semibold text-crackers-mid;
+}
+
+.comparison-grid {
+    @apply grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4;
+}
+
+.comparison-card {
+    @apply flex flex-col gap-1 rounded border border-crackers-border bg-crackers-surface p-4 text-center;
+}
+
+.comparison-card-label {
+    @apply text-sm text-crackers-muted;
+}
+
+.comparison-card-value {
+    @apply text-lg font-semibold text-crackers-shadow;
+}
+
+/* ── App shell ────────────────────────────────────────── */
+
+.app-header {
+    @apply flex h-16 shrink-0 items-center justify-between border-b border-crackers-border bg-crackers-surface px-4 md:px-8;
+}
+
+.app-brand {
+    font-family: var(--font-display);
+    @apply text-lg font-semibold text-crackers-shadow md:text-xl;
+}
+
+.app-nav {
+    @apply flex flex-wrap items-center justify-end gap-1 md:gap-2;
+}
+
+.app-nav-link {
+    @apply rounded px-3 py-2 text-sm font-medium text-crackers-muted transition-colors hover:bg-crackers-highlight hover:text-crackers-shadow;
+}
+
+.app-nav-link--active {
+    @apply bg-crackers-highlight text-crackers-mid;
+}
+
+.app-nav-button {
+    @apply rounded px-3 py-2 text-sm font-medium text-crackers-mid transition-colors hover:bg-crackers-error/10 hover:text-crackers-error;
+}
+
+.app-main {
+    @apply h-[calc(100vh-4rem)] overflow-auto bg-crackers-highlight;
+}
+
+/* ── Login ────────────────────────────────────────────── */
+
+.login-shell {
+    @apply flex h-full items-center justify-center px-4 py-8;
+}
+
+.login-card {
+    @apply w-full max-w-md rounded-lg border border-crackers-border bg-crackers-surface p-8 md:p-10;
+    box-shadow: 0 4px 24px rgb(26 15 13 / 8%);
+}
+
+.login-brand {
+    font-family: var(--font-display);
+    @apply text-center text-2xl font-semibold text-crackers-shadow md:text-3xl;
+}
+
+.login-tagline {
+    @apply mt-2 text-center text-sm leading-relaxed text-crackers-muted;
+}
+
+.login-form {
+    @apply mt-8 flex flex-col;
+    gap: var(--spacing-section);
+}
+
+/* ── PrimeNG overrides ────────────────────────────────── */
+
 .p-card {
-    @apply !bg-gray-200 dark:!bg-gray-900 !text-gray-800 dark:!text-gray-200 !gap-4;
+    @apply !gap-3 !rounded-lg !border !border-crackers-border !bg-crackers-surface !text-crackers-shadow;
+    box-shadow: 0 1px 3px rgb(26 15 13 / 6%) !important;
 }
 
-.p-tabpanels {
-    @apply !bg-transparent dark:!bg-transparent;
-}
-
-.p-tablist {
-    @apply !bg-transparent dark:!bg-transparent;
-}
-
-.p-paginator {
-    @apply !bg-transparent;
-}
-
-.p-menubar {
-    @apply !h-[10vh] !bg-slate-300 !text-slate-900 dark:!bg-slate-700 dark:!text-white;
-}
-
-.p-menubar-start {
-    @apply md:!w-1/5;
-}
-
-.p-menubar-root-list {
-    @apply md:!w-4/5 md:!flex md:!items-center md:!justify-end !bg-slate-300 dark:!bg-slate-700;
-}
-
-.p-menubar-item-label {
-    @apply !text-slate-900 dark:!text-white !font-medium;
-}
-
-.p-floatlabel > .p-inputtext {
-    @apply !w-3xs md:!w-auto;
+.p-card-title,
+.p-card .p-card-header {
+    font-family: var(--font-display) !important;
+    @apply !text-base !font-medium !text-crackers-shadow;
 }
 
 .p-card-body {
-    @apply !w-3xs;
+    @apply !w-full !p-4;
+}
+
+.p-tablist {
+    @apply !gap-1 !border-b !border-crackers-border !bg-transparent;
+}
+
+.p-tablist .p-tab {
+    font-family: var(--font-display) !important;
+    @apply !rounded-t !border-0 !bg-transparent !px-4 !py-3 !text-sm !font-medium !text-crackers-muted;
+}
+
+.p-tablist .p-tab[data-p-active='true'],
+.p-tablist .p-tab.p-tab-active {
+    @apply !border-b-2 !border-crackers-mid !text-crackers-mid;
+}
+
+.p-tabpanels {
+    @apply !bg-transparent !pt-6;
+}
+
+.p-paginator {
+    @apply !mt-6 !border-0 !bg-transparent;
+}
+
+.p-datatable .p-datatable-thead > tr > th {
+    font-family: var(--font-display) !important;
+    @apply !border-crackers-border !bg-crackers-highlight !px-4 !py-3 !text-left !text-xs !font-medium !tracking-wide !text-crackers-muted uppercase;
+}
+
+.p-datatable .p-datatable-tbody > tr > td {
+    @apply !border-crackers-border !px-4 !py-3 !text-sm !text-crackers-shadow;
+}
+
+.p-datatable .p-datatable-tbody > tr:hover {
+    @apply !bg-crackers-highlight/60;
+}
+
+.p-dialog {
+    @apply !rounded-lg !border !border-crackers-border;
+}
+
+.p-dialog-header {
+    font-family: var(--font-display) !important;
+    @apply !border-b !border-crackers-border !bg-crackers-surface !px-6 !py-4 !text-crackers-shadow;
+}
+
+.p-dialog-content {
+    @apply !bg-crackers-surface !px-6 !py-6;
+}
+
+.p-inputtext {
+    @apply !w-full !min-h-[var(--spacing-field)] !rounded !border-crackers-border !bg-crackers-highlight !px-4 !py-2.5 !text-base !text-crackers-shadow;
+}
+
+.p-inputtext:enabled:focus {
+    @apply !border-crackers-mid !ring-2 !ring-crackers-mid/15;
+}
+
+.p-inputnumber {
+    @apply !w-full;
+}
+
+.p-inputnumber .p-inputnumber-input {
+    @apply !w-full !min-h-[var(--spacing-field)] !rounded !border !border-crackers-border !bg-crackers-highlight !px-4 !py-2.5 !text-base !text-crackers-shadow;
+}
+
+.p-inputnumber:not(.p-disabled) .p-inputnumber-input:enabled:focus {
+    @apply !border-crackers-mid !ring-2 !ring-crackers-mid/15;
+}
+
+.p-inputnumber.p-inputnumber-fluid {
+    @apply !w-full;
+}
+
+.p-floatlabel label {
+    @apply !text-crackers-muted;
+}
+
+.p-toast .p-toast-message {
+    @apply !rounded !border !border-crackers-border;
 }

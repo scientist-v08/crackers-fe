@@ -1,9 +1,8 @@
 <app-header
     [title]="title"
     [allRoutes]="routes()"
-    [inputBgColorTxColor]="' text-black bg-amber-300 dark:text-white dark:bg-pink-600 max-h-[10vh] h-[10vh] flex align-center'"
     (logoutClicked)="loginService.logout()"
 />
-<main class="h-[90vh] overflow-auto bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+<main class="app-main">
     <router-outlet></router-outlet>
 </main>
