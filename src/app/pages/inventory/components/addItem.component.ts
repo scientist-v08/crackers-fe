@@ -15,7 +15,7 @@ import { HttpErrorResponse } from '@angular/common/http';
     imports: [ButtonComponent, Dialog, InputTextModule, ReactiveFormsModule, InputNumberModule],
     selector: 'app-add-item',
     template: `
-        <app-button [width]="'w-3xs md:w-28'" (buttonClicked)="visible = true">Add New</app-button>
+        <app-button [width]="'w-auto'" (buttonClicked)="visible = true">Add New Item</app-button>
         <p-dialog
             [formGroup]="addNewForm"
             header="Add New Item"
@@ -23,74 +23,78 @@ import { HttpErrorResponse } from '@angular/common/http';
             [(visible)]="visible"
             [style]="{ width: '25rem' }"
         >
-            <div class="flex flex-col mb-4">
-                <label for="brandOrCompany" class="font-semibold w-24">Brand/Company</label>
-                <input
-                    formControlName="brandOrCompany"
-                    pInputText
-                    id="brandOrCompany"
-                    class="flex-auto"
-                    autocomplete="off"
-                />
+            <div class="form-stack">
+                <div class="form-field">
+                    <label for="brandOrCompany" class="form-label form-label-required">Brand / Company</label>
+                    <input
+                        formControlName="brandOrCompany"
+                        pInputText
+                        id="brandOrCompany"
+                        class="form-control"
+                        autocomplete="off"
+                    />
+                </div>
+                <div class="form-field">
+                    <label for="item" class="form-label form-label-required">Item</label>
+                    <input
+                        formControlName="item"
+                        pInputText
+                        id="item"
+                        class="form-control"
+                        autocomplete="off"
+                    />
+                </div>
+                <div class="form-field">
+                    <label for="numberOfBoxes" class="form-label form-label-required"
+                        >Number of Boxes Per Carton</label
+                    >
+                    <p-inputnumber
+                        class="w-full"
+                        id="numberOfBoxes"
+                        locale="en-IN"
+                        inputId="locale-indian"
+                        formControlName="numberOfBoxes"
+                    />
+                </div>
+                <div class="form-field">
+                    <label for="numberOfCartons" class="form-label form-label-required">Number of Cartons</label>
+                    <p-inputnumber
+                        class="w-full"
+                        id="numberOfCartons"
+                        locale="en-IN"
+                        inputId="locale-indian"
+                        formControlName="numberOfCartons"
+                    />
+                </div>
+                <div class="form-field">
+                    <label for="pricePerCarton" class="form-label form-label-required">Price Per Carton</label>
+                    <p-inputnumber
+                        class="w-full"
+                        id="pricePerCarton"
+                        locale="en-IN"
+                        inputId="locale-indian"
+                        formControlName="pricePerCarton"
+                    />
+                </div>
+                <div class="form-field">
+                    <label for="subTotal" class="form-label">Sub-total</label>
+                    <p-inputnumber
+                        class="w-full"
+                        id="subTotal"
+                        formControlName="subTotal"
+                        mode="currency"
+                        inputId="currency-india"
+                        currency="INR"
+                        locale="en-IN"
+                    />
+                </div>
             </div>
-            <div class="flex flex-col mb-4">
-                <label for="item" class="font-semibold w-24">Item</label>
-                <input
-                    formControlName="item"
-                    pInputText
-                    id="item"
-                    class="flex-auto"
-                    autocomplete="off"
-                />
-            </div>
-            <div class="flex flex-col mb-4">
-                <label for="numberOfBoxes" class="font-semibold w-full"
-                    >Number of Boxes Per Carton</label
-                >
-                <p-inputnumber
-                    id="numberOfBoxes"
-                    locale="en-IN"
-                    inputId="locale-indian"
-                    formControlName="numberOfBoxes"
-                />
-            </div>
-            <div class="flex flex-col mb-4">
-                <label for="numberOfCartons" class="font-semibold w-full">Number of Cartons</label>
-                <p-inputnumber
-                    id="numberOfCartons"
-                    locale="en-IN"
-                    inputId="locale-indian"
-                    formControlName="numberOfCartons"
-                />
-            </div>
-            <div class="flex flex-col mb-4">
-                <label for="pricePerCarton" class="font-semibold w-full">Price Per Carton</label>
-                <p-inputnumber
-                    id="pricePerCarton"
-                    locale="en-IN"
-                    inputId="locale-indian"
-                    formControlName="pricePerCarton"
-                />
-            </div>
-            <div class="flex flex-col mb-4">
-                <label for="subTotal" class="font-semibold w-24">Sub-total</label>
-                <p-inputnumber
-                    id="subTotal"
-                    formControlName="subTotal"
-                    mode="currency"
-                    inputId="currency-india"
-                    currency="INR"
-                    locale="en-IN"
-                />
-            </div>
-            <div class="flex justify-end gap-2">
-                <app-button (buttonClicked)="visible = false">Cancel</app-button>
-                <div>
-                    <app-button (buttonClicked)="submitForm()">Save</app-button>
+            <div class="dialog-actions section-actions--end">
+                <app-button variant="secondary" (buttonClicked)="visible = false">Cancel</app-button>
+                <div class="flex flex-col items-end gap-2">
+                    <app-button variant="accent" (buttonClicked)="submitForm()">Save Item</app-button>
                     @if (validForm()) {
-                        <small class="text-red-500"
-                            >Invalid entries. All fields are required.</small
-                        >
+                        <small class="form-error">Invalid entries. All fields are required.</small>
                     }
                 </div>
             </div>

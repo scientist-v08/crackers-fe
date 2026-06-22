@@ -1,47 +1,48 @@
-<h1 class="text-center text-4xl font-extrabold text-gray-900 dark:text-white mt-8 mb-6">
-    Expenses
-    <div class="text-xl font-medium">Total expenses incurred: ₹{{ totalExpenses() }}</div>
-</h1>
+<div class="page-shell">
+    <div class="page-container page-stack">
+        <header class="page-header">
+            <h1 class="page-title">Expenses</h1>
+            <p class="page-subtitle">Record and review business expenses</p>
+            <div class="stat-banner">
+                Total expenses incurred: <strong>₹{{ totalExpenses() }}</strong>
+            </div>
+        </header>
 
-<div class="min-h-screen p-6">
-    <div
-        class="mx-auto max-w-6xl space-y-8 p-8 bg-white dark:bg-gray-700 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700"
-    >
-        <div
-            class="flex items-center justify-center flex-col md:flex-row md:justify-between max-w-6xl md:mx-auto p-1 md:p-1"
-        >
-            <app-add-expense (errToast)="errToast($event)" (successToast)="successToast()" />
-            <div></div>
-        </div>
-        @if (!loadingData()) {
-            <app-expenses-table
-                [expenses]="allExpenses()"
-                class="hidden md:block mt-8 max-w-6xl mx-auto"
-            />
-            <div
-                class="mb-2 rounded-lg justify-center grid md:grid-cols-3 gap-4 p-4 block md:hidden"
-            >
-                @for (item of allExpenses(); track item.ID) {
-                    <p-card header="Expense #{{ item.ID }}">
-                        <div class="m-0 flex flex-col gap-2">
-                            <div class="flex justify-between items-center">
-                                <div>Reason for expense:</div>
-                                <div>{{ item.ReasonForExpense }}</div>
+        <div class="content-card">
+            <div class="toolbar">
+                <div class="section-header">
+                    <h2 class="section-title">Expense Records</h2>
+                </div>
+                <app-add-expense (errToast)="errToast($event)" (successToast)="successToast()" />
+            </div>
+
+            <div class="card-body">
+                @if (!loadingData()) {
+                    <app-expenses-table [expenses]="allExpenses()" class="hidden md:block" />
+                    <div class="data-stack md:hidden">
+                        @for (item of allExpenses(); track item.ID) {
+                            <div class="data-card">
+                                <div class="data-card-header">Expense #{{ item.ID }}</div>
+                                <div class="data-row">
+                                    <span class="data-row-label">Reason for expense</span>
+                                    <span class="data-row-value">{{ item.ReasonForExpense }}</span>
+                                </div>
+                                <div class="data-row">
+                                    <span class="data-row-label">Amount spent</span>
+                                    <span class="data-row-value">₹{{ item.Amount }}</span>
+                                </div>
                             </div>
-                            <div class="flex justify-between items-center">
-                                <div>Amount spent:</div>
-                                <div>₹{{ item.Amount }}</div>
-                            </div>
-                        </div>
-                    </p-card>
+                        }
+                    </div>
+                } @else {
+                    <app-spinner class="flex items-center justify-center py-12" />
+                }
+
+                @if (allExpenses().length === 0 && !loadingData()) {
+                    <p class="empty-state">No expenses recorded yet</p>
                 }
             </div>
-        } @else {
-            <app-spinner class="flex items-center justify-center" />
-        }
-        @if (allExpenses().length === 0 && !loadingData()) {
-            <div class="text-black dark:text-white text-3xl">No data</div>
-        }
+        </div>
     </div>
 </div>
 <p-toast position="bottom-right" key="br" />

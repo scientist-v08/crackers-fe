@@ -8,7 +8,7 @@ import { CompleteComponent } from './complete.component';
     selector: 'app-inventory-items-table',
     imports: [TableModule, CompleteComponent],
     template: `
-        <p-table [value]="allItems()" dataKey="ID">
+        <p-table [value]="allItems()" dataKey="ID" styleClass="p-datatable-sm">
             <ng-template #header>
                 <tr>
                     <th>Item</th>
@@ -24,8 +24,8 @@ import { CompleteComponent } from './complete.component';
                     <td>{{ item.BrandOrCompany }}: {{ item.Item }}</td>
                     <td>{{ item.NumOfBoxes }}</td>
                     <td>{{ item.NumOfCartons }}</td>
-                    <td>{{ item.PricePerCarton }}</td>
-                    <td>{{ item.SubTotal }}</td>
+                    <td>₹{{ item.PricePerCarton }}</td>
+                    <td>₹{{ item.SubTotal }}</td>
                     <td>
                         @if (inventoryState() !== 'Unpacked') {
                             <app-complete

@@ -2,8 +2,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, OnDestroy, OnInit, output, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { CardModule } from 'primeng/card';
-import { FloatLabel } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { Toast } from 'primeng/toast';
@@ -21,10 +19,8 @@ import { InventoryItemsTableComponent } from './items-table.component';
     selector: 'app-items',
     standalone: true,
     imports: [
-        CardModule,
         InputTextModule,
         ReactiveFormsModule,
-        FloatLabel,
         ButtonComponent,
         PaginatorModule,
         AddItemComponent,
@@ -34,90 +30,79 @@ import { InventoryItemsTableComponent } from './items-table.component';
         InventoryItemsTableComponent,
     ],
     template: `
-        <div
-            class="flex items-center justify-center flex-col-reverse md:flex-row md:justify-between mb-2 hidden md:block"
-        >
+        <div class="toolbar">
             @if (showAddItem()) {
-                <app-add-item (toaster)="messageService($event)" />
+                <app-add-item class="hidden sm:block" (toaster)="messageService($event)" />
             }
-            <h2 class="text-3xl font-semibold text-gray-900 dark:text-white"></h2>
-        </div>
-        <div
-            class="flex gap-2 flex-col items-center justify-center md:flex-row md:items-center md:justify-between mb-4"
-        >
-            <form
-                class="flex gap-2 flex-col md:flex-row items-center justify-center"
-                [formGroup]="searchForm"
-            >
-                <p-floatlabel class="md:mr-2" variant="on">
+            <form class="toolbar-group" [formGroup]="searchForm">
+                <div class="form-field toolbar-field">
+                    <label class="form-label" for="searchItem">Search Item</label>
                     <input
-                        id="on_label"
+                        id="searchItem"
+                        class="form-control"
                         [class]="searchBoxInvalidClass()"
                         pInputText
                         formControlName="item"
                         autocomplete="off"
+                        placeholder="Enter item name"
                     />
-                    <label for="on_label">Search Item</label>
-                </p-floatlabel>
-                <app-button
-                    [width]="'w-3xs md:w-28'"
-                    class="md:mr-2"
-                    (buttonClicked)="searchItems()"
-                    >Search</app-button
-                >
-                <app-button [width]="'w-3xs md:w-28'" (buttonClicked)="refreshItems()"
-                    >Refresh</app-button
-                >
+                </div>
+                <div class="btn-group sm:shrink-0">
+                    <app-button [width]="'w-auto'" (buttonClicked)="searchItems()">Search</app-button>
+                    <app-button variant="secondary" [width]="'w-auto'" (buttonClicked)="refreshItems()">
+                        Refresh
+                    </app-button>
+                </div>
             </form>
-            <div>
-                @if (showAddItem()) {
-                    <app-add-item class="block md:hidden" (toaster)="messageService($event)" />
-                }
-            </div>
+            @if (showAddItem()) {
+                <app-add-item class="block sm:hidden" (toaster)="messageService($event)" />
+            }
         </div>
+
+        <div class="card-body">
         @if (allItems().length === 0 && !loadingData()) {
-            <div class="text-black dark:text-white text-3xl">No data</div>
+            <p class="empty-state">No inventory items found</p>
         }
+
         @if (!loadingData()) {
             <app-inventory-items-table
                 [allItems]="allItems()"
-                class="hidden md:block mt-8 max-w-6xl mx-auto"
+                class="hidden md:block"
                 (changeState)="changeState($event)"
                 (partialSuccessMessageService)="partialSuccessMessageService($event)"
             />
-            <div class="mb-2 rounded-lg justify-center grid md:grid-cols-3 gap-4 block md:hidden">
+            <div class="data-stack md:hidden">
                 @for (item of allItems(); track item.ID) {
-                    <p-card
-                        class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 shadow-lg gap-4"
-                        header="{{ item.BrandOrCompany }}: {{ item.Item }}"
-                    >
-                        <div class="flex justify-between items-center">
-                            <div>Boxes per carton:</div>
-                            <div>{{ item.NumOfBoxes }}</div>
+                    <div class="data-card">
+                        <div class="data-card-header">
+                            {{ item.BrandOrCompany }}: {{ item.Item }}
                         </div>
-                        <div class="flex justify-between items-center">
-                            <div>Number of cartons:</div>
-                            <div>{{ item.NumOfCartons }}</div>
+                        <div class="data-row">
+                            <span class="data-row-label">Boxes per carton</span>
+                            <span class="data-row-value">{{ item.NumOfBoxes }}</span>
                         </div>
-                        <div class="flex justify-between items-center">
-                            <div>Price per carton:</div>
-                            <div>{{ item.PricePerCarton }}</div>
+                        <div class="data-row">
+                            <span class="data-row-label">Number of cartons</span>
+                            <span class="data-row-value">{{ item.NumOfCartons }}</span>
                         </div>
-                        <div class="flex justify-between items-center">
-                            <div>Subtotal:</div>
-                            <div>{{ item.SubTotal }}</div>
+                        <div class="data-row">
+                            <span class="data-row-label">Price per carton</span>
+                            <span class="data-row-value">₹{{ item.PricePerCarton }}</span>
                         </div>
-                        <div class="items-center flex justify-center md:justify-start mt-2">
-                            @if (inventoryState() !== 'Unpacked') {
+                        <div class="data-row">
+                            <span class="data-row-label">Subtotal</span>
+                            <span class="data-row-value">₹{{ item.SubTotal }}</span>
+                        </div>
+                        @if (inventoryState() !== 'Unpacked') {
+                            <div class="section-actions">
                                 <app-complete
-                                    class="items-center md:flex-row flex flex-col justify-center md:gap-2"
                                     [itemToBeCompleted]="item"
                                     (toaster)="changeState($event)"
                                     (toasterForPartial)="partialSuccessMessageService($event)"
                                 />
-                            }
-                        </div>
-                    </p-card>
+                            </div>
+                        }
+                    </div>
                 }
             </div>
             <p-paginator
@@ -128,8 +113,9 @@ import { InventoryItemsTableComponent } from './items-table.component';
                 (onPageChange)="onPageChange($event)"
             />
         } @else {
-            <app-spinner class="flex items-center justify-center" />
+            <app-spinner class="flex items-center justify-center py-12" />
         }
+        </div>
         <p-toast position="bottom-right" key="br" />
     `,
     providers: [MessageService],

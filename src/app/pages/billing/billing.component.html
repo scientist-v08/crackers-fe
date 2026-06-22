@@ -1,391 +1,274 @@
-<h1 class="text-center text-4xl font-extrabold text-gray-900 dark:text-white mt-8 mb-6">
-    Create Bill
-</h1>
+<div class="page-shell">
+    <div class="page-container page-stack">
+        <header class="page-header">
+            <h1 class="page-title">Create Bill</h1>
+            <p class="page-subtitle">Add items, calculate totals, and generate customer bills</p>
+        </header>
 
-<div class="min-h-screen p-6">
-    <form
-        class="mx-auto max-w-6xl space-y-8 p-8 bg-white dark:bg-gray-700 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700"
-        [formGroup]="billingForm"
-    >
-        <!-- Standard Fireworks Discount Section -->
-        <div class="p-4">
-            <h2
-                class="text-sm md:text-3xl font-semibold text-gray-900 dark:text-white mb-6 md:border-b pb-4 md:border-gray-200 md:dark:border-gray-600"
-            >
-                <span class="mr-2">💰</span>
-                Standard Fireworks Discount
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Select Discount -->
-                <div>
-                    <label
-                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 after:content-['*'] after:text-red-500 after:ml-1"
-                        for="standardDiscount"
-                    >
-                        Select Discount
-                    </label>
-                    <div class="relative">
-                        <select
-                            class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all duration-200 appearance-none pr-8"
-                            id="standardDiscount"
-                            formControlName="discount"
-                        >
-                            <option
-                                class="dark:bg-gray-700 dark:text-white"
-                                value=""
-                                disabled
-                                selected
+        <form class="content-card" [formGroup]="billingForm">
+            <section class="section-block">
+                <div class="section-header">
+                    <h2 class="section-title">Customer &amp; Discount</h2>
+                    <p class="section-description">
+                        Set the standard fireworks discount and optional customer details
+                    </p>
+                </div>
+
+                <div class="form-body">
+                    <div class="form-grid">
+                        <div class="form-field">
+                            <label class="form-label form-label-required" for="standardDiscount">
+                                Select Discount
+                            </label>
+                            <select
+                                class="form-control form-select"
+                                id="standardDiscount"
+                                formControlName="discount"
                             >
-                                Select a percentage
-                            </option>
-                            @for (discount of discountDropDownOptions(); track discount.id) {
-                                <option
-                                    class="dark:bg-gray-700 dark:text-white"
-                                    [value]="discount.discount"
-                                >
-                                    {{ discount.value }}
-                                </option>
-                            }
-                        </select>
-                        <div
-                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300"
-                        >
-                            <svg
-                                class="h-4 w-4"
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                            >
-                                <path
-                                    fill-rule="evenodd"
-                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                    clip-rule="evenodd"
-                                />
-                            </svg>
+                                <option value="" disabled selected>Select a percentage</option>
+                                @for (discount of discountDropDownOptions(); track discount.id) {
+                                    <option [value]="discount.discount">
+                                        {{ discount.value }}
+                                    </option>
+                                }
+                            </select>
+                            <div class="form-message">
+                                @if (
+                                    billingForm.get('discount')?.touched &&
+                                    billingForm.get('discount')?.hasError('required')
+                                ) {
+                                    <p class="form-error">Discount is required</p>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="form-field">
+                            <label class="form-label" for="name">Customer Name</label>
+                            <input
+                                class="form-control"
+                                id="name"
+                                formControlName="name"
+                                type="text"
+                                placeholder="Enter customer name"
+                            />
+                            <div class="form-message">
+                                @if (
+                                    billingForm.get('name')?.touched &&
+                                    billingForm.get('name')?.hasError('required')
+                                ) {
+                                    <p class="form-error">Customer name is required</p>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="form-field form-field--full">
+                            <label class="form-label" for="number">Customer Mobile Number</label>
+                            <input
+                                class="form-control"
+                                id="number"
+                                min="0"
+                                step="1"
+                                onpaste="return false;"
+                                onkeydown="
+                                    return (
+                                        event.key !== '-' && event.key !== 'e' && event.key !== 'E'
+                                    );
+                                "
+                                formControlName="number"
+                                type="number"
+                                placeholder="Enter 10-digit mobile number"
+                            />
                         </div>
                     </div>
-                    @if (
-                        billingForm.get('discount')?.touched &&
-                        billingForm.get('discount')?.hasError('required')
-                    ) {
-                        <p class="mt-2 text-sm font-medium text-red-600 flex items-center">
-                            <span class="mr-1">🚨</span>
-                            Discount is required
-                        </p>
-                    }
+                </div>
+            </section>
+
+            <section class="section-block">
+                <div class="section-header">
+                    <h2 class="section-title">Item Details</h2>
+                    <p class="section-description">
+                        Choose company and category, then enter rate and quantity
+                    </p>
                 </div>
 
-                <!-- Customer Name & Mobile Number -->
-                <div>
-                    <label
-                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-                        for="name"
-                    >
-                        Customer Name
-                    </label>
-                    <input
-                        class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all duration-200"
-                        id="name"
-                        formControlName="name"
-                        type="text"
-                        placeholder="Enter customer name"
-                    />
-                    @if (
-                        billingForm.get('name')?.touched &&
-                        billingForm.get('name')?.hasError('required')
-                    ) {
-                        <p class="mt-2 text-sm font-medium text-red-600 flex items-center">
-                            <span class="mr-1">🚨</span>
-                            Customer Name is required
-                        </p>
+                <div class="form-body">
+                    <div class="form-grid">
+                        <div class="form-field">
+                            <label class="form-label form-label-required" for="company">
+                                Select Company
+                            </label>
+                            <select
+                                class="form-control form-select"
+                                id="company"
+                                formControlName="company"
+                            >
+                                <option value="" disabled selected>Select Company</option>
+                                @for (company of companyDropdown(); track company.id) {
+                                    <option [value]="company.item">{{ company.item }}</option>
+                                }
+                            </select>
+                            <div class="form-message">
+                                @if (
+                                    billingForm.get('company')?.touched &&
+                                    billingForm.get('company')?.hasError('required')
+                                ) {
+                                    <p class="form-error">Company is required</p>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="form-field">
+                            <label class="form-label form-label-required" for="category">
+                                Select Category
+                            </label>
+                            <select
+                                class="form-control form-select"
+                                id="category"
+                                formControlName="category"
+                            >
+                                <option value="" disabled selected>Select Category</option>
+                                @for (category of categoryDropdown(); track category.id) {
+                                    <option [value]="category.item">{{ category.item }}</option>
+                                }
+                            </select>
+                            <div class="form-message">
+                                @if (
+                                    billingForm.get('category')?.touched &&
+                                    billingForm.get('category')?.hasError('required')
+                                ) {
+                                    <p class="form-error">Category is required</p>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="form-field">
+                            <label class="form-label form-label-required" for="mrp"
+                                >MRP / Net Rate</label
+                            >
+                            <input
+                                class="form-control"
+                                id="mrp"
+                                min="0"
+                                step="1"
+                                onpaste="return false;"
+                                onkeydown="
+                                    return (
+                                        event.key !== '-' && event.key !== 'e' && event.key !== 'E'
+                                    );
+                                "
+                                formControlName="MRP"
+                                type="number"
+                                placeholder="Enter MRP or net rate"
+                            />
+                            <div class="form-message">
+                                @if (
+                                    billingForm.get('MRP')?.touched &&
+                                    billingForm.get('MRP')?.hasError('required')
+                                ) {
+                                    <p class="form-error">MRP / Net Rate is required</p>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="form-field">
+                            <label class="form-label form-label-required" for="quantity"
+                                >Quantity</label
+                            >
+                            <input
+                                class="form-control"
+                                id="quantity"
+                                min="0"
+                                step="1"
+                                onpaste="return false;"
+                                onkeydown="
+                                    return (
+                                        event.key !== '-' && event.key !== 'e' && event.key !== 'E'
+                                    );
+                                "
+                                formControlName="quantity"
+                                type="number"
+                                placeholder="Enter quantity"
+                            />
+                            <div class="form-message">
+                                @if (
+                                    billingForm.get('quantity')?.touched &&
+                                    billingForm.get('quantity')?.hasError('required')
+                                ) {
+                                    <p class="form-error">Quantity is required</p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-actions section-actions--center">
+                        <app-button (buttonClicked)="addItem()">Add Item</app-button>
+                        <app-button variant="accent" (buttonClicked)="calculateTotal()">
+                            Calculate Total
+                        </app-button>
+                        <app-button variant="secondary" (buttonClicked)="newBill()"
+                            >New Bill</app-button
+                        >
+                    </div>
+                    @if (selectAtLeastOneitem()) {
+                        <p class="form-error text-center">At least one item must be added</p>
                     }
                 </div>
-            </div>
-            <div class="mt-6">
-                <label
-                    class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-                    for="number"
-                >
-                    Customer Mobile Number
-                </label>
-                <input
-                    class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all duration-200"
-                    id="number"
-                    min="0"
-                    step="1"
-                    onpaste="return false;"
-                    onkeydown="return event.key !== '-' && event.key !== 'e' && event.key !== 'E';"
-                    formControlName="number"
-                    type="number"
-                    placeholder="Enter customer number"
+            </section>
+        </form>
+
+        @if (showItems()) {
+            <section class="content-card">
+                <div class="section-header">
+                    <h2 class="section-title">Bill Items</h2>
+                </div>
+                <div class="card-body">
+                    <app-items-table
+                        class="hidden md:block"
+                        [items]="items()"
+                        (toEdit)="onEdited($event)"
+                        (toDelete)="deleteItem($event)"
+                    />
+                    <div class="data-stack">
+                        @for (item of items(); track item.slNo) {
+                            <app-items
+                                class="data-card"
+                                [item]="item"
+                                (toEdit)="onEdited($event)"
+                                (toDelete)="deleteItem($event)"
+                            />
+                        }
+                    </div>
+                </div>
+            </section>
+        }
+
+        @if (showTotal()) {
+            <div #scroll>
+                <app-grand-total
+                    class="total-panel block"
+                    [grandTotal]="totalCost()"
+                    [finalizedAmt]="otherAmt()"
+                    (generateBill)="generateBill()"
+                    (previewBill)="previewBill()"
+                    (comparePrices)="comparePrices()"
+                    (newBill)="newBill()"
                 />
             </div>
-        </div>
-
-        <!-- Item Details Section -->
-        <div class="p-4">
-            <h2
-                class="text-3xl font-semibold text-gray-900 dark:text-white mb-6 md:border-b pb-4 md:border-gray-200 md:dark:border-gray-600"
-            >
-                <span class="mr-2">📦</span>
-                Item Details
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Select Company -->
-                <div>
-                    <label
-                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 after:content-['*'] after:text-red-500 after:ml-1"
-                        for="company"
-                    >
-                        Select Company
-                    </label>
-                    <div class="relative">
-                        <select
-                            class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all duration-200 appearance-none pr-8"
-                            id="company"
-                            formControlName="company"
-                        >
-                            <option
-                                class="dark:bg-gray-700 dark:text-white"
-                                value=""
-                                disabled
-                                selected
-                            >
-                                Select Company
-                            </option>
-                            @for (company of companyDropdown(); track company.id) {
-                                <option
-                                    class="dark:bg-gray-700 dark:text-white"
-                                    [value]="company.item"
-                                >
-                                    {{ company.item }}
-                                </option>
-                            }
-                        </select>
-                        <div
-                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300"
-                        >
-                            <svg
-                                class="h-4 w-4"
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                            >
-                                <path
-                                    fill-rule="evenodd"
-                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                    clip-rule="evenodd"
-                                />
-                            </svg>
-                        </div>
-                    </div>
-                    @if (
-                        billingForm.get('company')?.touched &&
-                        billingForm.get('company')?.hasError('required')
-                    ) {
-                        <p class="mt-2 text-sm font-medium text-red-600 flex items-center">
-                            <span class="mr-1">🚨</span>
-                            Company is required
-                        </p>
-                    }
-                </div>
-
-                <!-- Select Category -->
-                <div>
-                    <label
-                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 after:content-['*'] after:text-red-500 after:ml-1"
-                        for="category"
-                    >
-                        Select Category
-                    </label>
-                    <div class="relative">
-                        <select
-                            class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all duration-200 appearance-none pr-8"
-                            id="category"
-                            formControlName="category"
-                        >
-                            <option
-                                class="dark:bg-gray-700 dark:text-white"
-                                value=""
-                                disabled
-                                selected
-                            >
-                                Select Category
-                            </option>
-                            @for (category of categoryDropdown(); track category.id) {
-                                <option
-                                    class="dark:bg-gray-700 dark:text-white"
-                                    [value]="category.item"
-                                >
-                                    {{ category.item }}
-                                </option>
-                            }
-                        </select>
-                        <div
-                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300"
-                        >
-                            <svg
-                                class="h-4 w-4"
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                            >
-                                <path
-                                    fill-rule="evenodd"
-                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                    clip-rule="evenodd"
-                                />
-                            </svg>
-                        </div>
-                    </div>
-                    @if (
-                        billingForm.get('category')?.touched &&
-                        billingForm.get('category')?.hasError('required')
-                    ) {
-                        <p class="mt-2 text-sm font-medium text-red-600 flex items-center">
-                            <span class="mr-1">🚨</span>
-                            Category is required
-                        </p>
-                    }
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                <!-- MRP/Net Rate -->
-                <div>
-                    <label
-                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 after:content-['*'] after:text-red-500 after:ml-1"
-                        for="mrp"
-                    >
-                        MRP/Net Rate
-                    </label>
-                    <input
-                        class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all duration-200"
-                        id="mrp"
-                        min="0"
-                        step="1"
-                        onpaste="return false;"
-                        onkeydown="
-                            return event.key !== '-' && event.key !== 'e' && event.key !== 'E';
-                        "
-                        formControlName="MRP"
-                        type="number"
-                        placeholder="Enter MRP/Net Rate"
-                    />
-                    @if (
-                        billingForm.get('MRP')?.touched &&
-                        billingForm.get('MRP')?.hasError('required')
-                    ) {
-                        <p class="mt-2 text-sm font-medium text-red-600 flex items-center">
-                            <span class="mr-1">🚨</span>
-                            MRP/Net Rate is required
-                        </p>
-                    }
-                </div>
-
-                <!-- Quantity -->
-                <div>
-                    <label
-                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 after:content-['*'] after:text-red-500 after:ml-1"
-                        for="quantity"
-                    >
-                        Quantity
-                    </label>
-                    <input
-                        class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all duration-200"
-                        id="quantity"
-                        min="0"
-                        step="1"
-                        onpaste="return false;"
-                        onkeydown="
-                            return event.key !== '-' && event.key !== 'e' && event.key !== 'E';
-                        "
-                        formControlName="quantity"
-                        type="number"
-                        placeholder="Enter Quantity"
-                    />
-                    @if (
-                        billingForm.get('quantity')?.touched &&
-                        billingForm.get('quantity')?.hasError('required')
-                    ) {
-                        <p class="mt-2 text-sm font-medium text-red-600 flex items-center">
-                            <span class="mr-1">🚨</span>
-                            Quantity is required
-                        </p>
-                    }
-                </div>
-            </div>
-
-            <!-- Action Buttons -->
-            <div class="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4">
-                <app-button (buttonClicked)="addItem()">Add item</app-button>
-                <div class="flex flex-col items-center">
-                    <app-button (buttonClicked)="calculateTotal()">Calculate Total</app-button>
-                    @if (selectAtLeastOneitem()) {
-                        <p class="mt-2 text-sm font-medium text-red-600 flex items-center">
-                            <span class="mr-1">🚨</span>
-                            At least one item is to be added
-                        </p>
-                    }
-                </div>
-                <app-button (buttonClicked)="newBill()">New Bill</app-button>
-            </div>
-        </div>
-    </form>
-
-    <!-- Display Items Section -->
-    @if (showItems()) {
-        <app-items-table
-            class="hidden md:block bg-white dark:bg-gray-700 rounded-xl shadow-md p-4 mt-8 max-w-6xl mx-auto"
-            [items]="items()"
-            (toEdit)="onEdited($event)"
-            (toDelete)="deleteItem($event)"
-        />
-        @for (item of items(); track item.slNo) {
-            <app-items
-                class="block bg-white dark:bg-gray-700 rounded-xl shadow-md p-4 mt-8 max-w-6xl mx-auto md:hidden"
-                [item]="item"
-                (toEdit)="onEdited($event)"
-                (toDelete)="deleteItem($event)"
-            />
         }
-    }
 
-    <!-- Grand Total Section -->
-    @if (showTotal()) {
-        <div #scroll>
-            <app-grand-total
-                class="block bg-white dark:bg-gray-700 rounded-xl shadow-md p-6 mt-8 max-w-6xl mx-auto"
-                [grandTotal]="totalCost()"
-                [finalizedAmt]="otherAmt()"
-                (generateBill)="generateBill()"
-                (previewBill)="previewBill()"
-                (comparePrices)="comparePrices()"
-                (newBill)="newBill()"
-            />
-        </div>
-    }
-
-    <!-- Bill Comparison Section -->
-    @if (showComparisons()) {
-        <div #comparison>
-            <app-bill-comparison
-                class="block bg-white dark:bg-gray-700 rounded-xl shadow-md p-6 mt-8 max-w-6xl mx-auto"
-                [allBillComparisons]="billComparison()"
-                (finalize)="finalizedBill($event)"
-                (otherFinalize)="otherFinalized($event)"
-            />
-        </div>
-    }
+        @if (showComparisons()) {
+            <section #comparison class="content-card">
+                <app-bill-comparison
+                    [allBillComparisons]="billComparison()"
+                    (finalize)="finalizedBill($event)"
+                    (otherFinalize)="otherFinalized($event)"
+                />
+            </section>
+        }
+    </div>
 </div>
 
-<p-dialog
-    class="rounded-lg shadow-xl"
-    [(visible)]="visible"
-    [modal]="true"
-    [style]="{ width: '25rem' }"
-    header=""
->
+<p-dialog [(visible)]="visible" [modal]="true" [style]="{ width: '20rem' }" header="Processing">
     <app-spinner class="flex items-center justify-center py-8" />
 </p-dialog>
 <p-toast position="bottom-right" key="br" />

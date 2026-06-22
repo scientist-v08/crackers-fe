@@ -32,66 +32,69 @@ const minLengthAfterTrim = (minLength: number) => {
     imports: [ButtonComponent, Dialog, InputTextModule, ReactiveFormsModule, InputNumberModule],
     selector: 'app-add-expense',
     template: `
-        <app-button [width]="'w-3xs md:w-28'" (buttonClicked)="visible = true">Add New</app-button>
+        <app-button [width]="'w-auto'" (buttonClicked)="visible = true">Add New Expense</app-button>
         <p-dialog
             [formGroup]="addExpense"
-            header="Add New Item"
+            header="Add New Expense"
             [modal]="true"
             [(visible)]="visible"
             [style]="{ width: '28rem' }"
         >
-            <div class="flex flex-col mb-4">
-                <label for="reasonForExpense" class="font-semibold w-full"
-                    >Reason for expense</label
-                >
-                <input
-                    formControlName="reasonForExpense"
-                    pInputText
-                    id="reasonForExpense"
-                    class="flex-auto"
-                    autocomplete="off"
-                />
-                <div class="text-red-600 text-sm mt-1 min-h-[20px]">
-                    @if (
-                        addExpense.get('reasonForExpense')?.hasError('required') &&
-                        addExpense.get('reasonForExpense')?.touched
-                    ) {
-                        <span>Reason for expense is required</span>
-                    }
-                    @if (
-                        addExpense.get('reasonForExpense')?.hasError('minlength') &&
-                        addExpense.get('reasonForExpense')?.touched
-                    ) {
-                        <span
-                            >Reason must be at least 5 characters long without counting the
-                            spaces</span
-                        >
-                    }
+            <div class="form-stack">
+                <div class="form-field">
+                    <label for="reasonForExpense" class="form-label form-label-required"
+                        >Reason for expense</label
+                    >
+                    <input
+                        formControlName="reasonForExpense"
+                        pInputText
+                        id="reasonForExpense"
+                        class="form-control"
+                        autocomplete="off"
+                    />
+                    <div class="form-message">
+                        @if (
+                            addExpense.get('reasonForExpense')?.hasError('required') &&
+                            addExpense.get('reasonForExpense')?.touched
+                        ) {
+                            <span class="form-error">Reason for expense is required</span>
+                        }
+                        @if (
+                            addExpense.get('reasonForExpense')?.hasError('minlength') &&
+                            addExpense.get('reasonForExpense')?.touched
+                        ) {
+                            <span class="form-error"
+                                >Reason must be at least 5 characters long without counting the
+                                spaces</span
+                            >
+                        }
+                    </div>
+                </div>
+                <div class="form-field">
+                    <label for="amount" class="form-label form-label-required">Amount</label>
+                    <p-inputnumber
+                        class="w-full"
+                        id="amount"
+                        locale="en-IN"
+                        inputId="locale-indian"
+                        formControlName="amount"
+                    />
+                    <div class="form-message">
+                        @if (
+                            addExpense.get('amount')?.hasError('min') &&
+                            addExpense.get('amount')?.touched
+                        ) {
+                            <span class="form-error">Amount must be at least 10</span>
+                        }
+                    </div>
                 </div>
             </div>
-            <div class="flex flex-col mb-4">
-                <label for="amount" class="font-semibold w-full">Amount</label>
-                <p-inputnumber
-                    id="amount"
-                    locale="en-IN"
-                    inputId="locale-indian"
-                    formControlName="amount"
-                />
-                <div class="text-red-600 text-sm mt-1 min-h-[20px]">
-                    @if (
-                        addExpense.get('amount')?.hasError('min') &&
-                        addExpense.get('amount')?.touched
-                    ) {
-                        Amount must be at least 10
-                    }
-                </div>
-            </div>
-            <div class="flex justify-center items-center gap-2 mx-auto">
-                <app-button (buttonClicked)="visible = false">Cancel</app-button>
-                <div>
-                    <app-button (buttonClicked)="submitForm()">Save</app-button>
+            <div class="dialog-actions section-actions--end">
+                <app-button variant="secondary" (buttonClicked)="visible = false">Cancel</app-button>
+                <div class="flex flex-col items-end gap-2">
+                    <app-button variant="accent" (buttonClicked)="submitForm()">Save Expense</app-button>
                     @if (validForm()) {
-                        <small class="text-red">Invalid entries. All fields are required.</small>
+                        <small class="form-error">Invalid entries. All fields are required.</small>
                     }
                 </div>
             </div>

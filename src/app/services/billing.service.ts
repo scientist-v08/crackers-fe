@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { BillDetailsInterface, BillResponseInterface } from '../interfaces/billDetails.interface';
@@ -35,6 +35,14 @@ export class BillingService {
                 }),
             );
     }
+
+    /*public generatePreviewBill(req: BillDetailsInterface): Observable<HttpResponse<Blob>> {
+        const billPreviewurl = this.url + 'billing/preview';
+        return this.#http.post(billPreviewurl, req, {
+            observe: 'response',
+            responseType: 'blob',
+        });
+    }*/
 
     public generatePreviewBill(req: BillDetailsInterface): Observable<BillResponseInterface> {
         const billPreviewurl = this.url + 'billing/preview';

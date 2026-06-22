@@ -5,7 +5,14 @@ export interface LoginRequestBody {
 
 export interface LoginInterface {
     access_token: string;
-    routes: LoginRouteInterface[];
+    routes: LoginRouteInterface[] | Route[];
+}
+
+export interface Route {
+    id: number;
+    route: string;
+    heading: string;
+    role: number;
 }
 
 export interface LoginRouteInterface {
