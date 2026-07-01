@@ -138,6 +138,9 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
             this.totalCost.set(this.items().reduce((sum, item) => sum + item.subTotal, 0));
             if (!this.showTotal()) {
                 this.showTotal.set(true);
+            } else {
+                const discount = Number(this.billingForm.controls.discount.getRawValue()) ?? 0.25;
+                this.finalizedBill(discount);
             }
             this.shouldScroll.set(true);
         } else {
@@ -276,7 +279,7 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
             billItems: this.items(),
             finalizedAmt: this.otherAmt(),
         };
-        this.#billingService
+        /*this.#billingService
             .generatePreviewBill(requestBody)
             .pipe(
                 tap(() => (this.visible = true)),
@@ -304,8 +307,8 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
                         life: 3000,
                     });
                 },
-            });
-        /*this.#billingService
+            });*/
+        this.#billingService
             .generatePreviewBill(requestBody)
             .pipe(
                 tap(() => (this.visible = true)),
@@ -343,7 +346,7 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
                         life: 3000,
                     });
                 },
-            });*/
+            });
     }
 
     comparePrices(): void {

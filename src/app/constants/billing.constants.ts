@@ -2,11 +2,10 @@ import { DiscountDropdownInterface } from '../interfaces/discountDropdown.interf
 import { DropdownInterface } from '../interfaces/dropdown.interface';
 
 export const discountDropDownOptions: DiscountDropdownInterface[] = [
-    { id: 1, value: '70%', discount: 0.3 },
-    { id: 2, value: '75%', discount: 0.25 },
+    { id: 1, value: '75%', discount: 0.25 },
+    { id: 2, value: '76%', discount: 0.24 },
     { id: 3, value: '77%', discount: 0.23 },
-    { id: 4, value: '78%', discount: 0.22 },
-    { id: 5, value: '80%', discount: 0.2 },
+    { id: 4, value: '80%', discount: 0.2 },
 ];
 
 export const companyDropdown: DropdownInterface[] = [

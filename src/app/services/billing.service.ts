@@ -36,15 +36,15 @@ export class BillingService {
             );
     }
 
-    /*public generatePreviewBill(req: BillDetailsInterface): Observable<HttpResponse<Blob>> {
+    public generatePreviewBill(req: BillDetailsInterface): Observable<HttpResponse<Blob>> {
         const billPreviewurl = this.url + 'billing/preview';
         return this.#http.post(billPreviewurl, req, {
             observe: 'response',
             responseType: 'blob',
         });
-    }*/
+    }
 
-    public generatePreviewBill(req: BillDetailsInterface): Observable<BillResponseInterface> {
+    /*public generatePreviewBill(req: BillDetailsInterface): Observable<BillResponseInterface> {
         const billPreviewurl = this.url + 'billing/preview';
         return this.#http
             .post<Blob>(billPreviewurl, req, {
@@ -67,7 +67,7 @@ export class BillingService {
                     };
                 }),
             );
-    }
+    }*/
 
     public billComparison(allItems: ItemsInterface[], percent: number): BillComparisonInterface {
         const discount = `${100 - percent * 100}% off`;

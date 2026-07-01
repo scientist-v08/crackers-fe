@@ -11,10 +11,13 @@ import {
     Route,
 } from '../../interfaces/login.interface';
 import { LoginService } from '../../services/login.service';
+import { MessageService } from 'primeng/api';
+import { Toast } from 'primeng/toast';
 
 @Component({
     standalone: true,
-    imports: [ReactiveFormsModule],
+    imports: [ReactiveFormsModule, Toast],
+    providers: [MessageService],
     selector: 'app-login',
     template: `
         <div class="login-shell">
@@ -22,11 +25,7 @@ import { LoginService } from '../../services/login.service';
                 <h1 class="login-brand">Vinayaka Crackers</h1>
                 <p class="login-tagline">Sign in to manage billing, inventory, and expenses</p>
 
-                <form
-                    class="login-form"
-                    [formGroup]="loginForm"
-                    (ngSubmit)="loginSubmission()"
-                >
+                <form class="login-form" [formGroup]="loginForm" (ngSubmit)="loginSubmission()">
                     <div class="form-field">
                         <label class="form-label form-label-required" for="username">
                             Username
@@ -92,6 +91,7 @@ import { LoginService } from '../../services/login.service';
                 </form>
             </div>
         </div>
+        <p-toast position="bottom-right" key="br" />
     `,
     styles: [],
     host: {
@@ -102,6 +102,7 @@ export default class LoginComponent implements OnDestroy {
     #fb = inject(FormBuilder);
     #loginService = inject(LoginService);
     #router = inject(Router);
+    #messageService = inject(MessageService);
     passwordType = signal<'password' | 'text'>('password');
     loginForm = this.#fb.group({
         username: this.#fb.control('', Validators.required),
@@ -155,9 +156,15 @@ export default class LoginComponent implements OnDestroy {
                     this.#loginService.allRoutes.set(headerRoutes);
                     this.#loginService.isLoggingOut.set(false);
                 },
-                error: (err: HttpErrorResponse) => {
-                    this.incorrectPassword.set(true);
-                    console.log(err.message);
+                error: async (err: HttpErrorResponse) => {
+                    const errorText = await err.error;
+                    this.#messageService.add({
+                        severity: 'error',
+                        summary: 'Error',
+                        detail: errorText.message,
+                        key: 'br',
+                        life: 3000,
+                    });
                 },
             });
         } else {
