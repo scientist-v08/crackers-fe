@@ -1,6 +1,6 @@
 export interface LoginRequestBody {
-    Email: string;
-    Password: string;
+    email: string;
+    password: string;
 }
 
 export interface LoginInterface {

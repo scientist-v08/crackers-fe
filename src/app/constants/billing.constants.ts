@@ -10,7 +10,9 @@ export const discountDropDownOptions: DiscountDropdownInterface[] = [
 
 export const companyDropdown: DropdownInterface[] = [
     { id: 1, value: 'st', item: 'Standard' },
-    { id: 2, value: 'ot', item: 'Other/Gift Box' },
+    { id: 2, value: 'ay', item: 'Ayyan' },
+    { id: 3, value: 'sp', item: 'Supreme' },
+    { id: 4, value: 'ot', item: 'Other/Gift Box' },
 ];
 
 export const categoryDropdown: DropdownInterface[] = [
