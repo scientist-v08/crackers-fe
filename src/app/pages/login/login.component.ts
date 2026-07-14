@@ -118,8 +118,8 @@ export default class LoginComponent implements OnDestroy {
     loginSubmission(): void {
         if (this.loginForm.valid) {
             const reqBody: LoginRequestBody = {
-                Email: this.loginForm.get('username')?.getRawValue(),
-                Password: this.loginForm.get('password')?.getRawValue(),
+                email: this.loginForm.get('username')?.getRawValue(),
+                password: this.loginForm.get('password')?.getRawValue(),
             };
             this.subscription = this.#loginService.login(reqBody).subscribe({
                 next: (res: LoginInterface) => {
