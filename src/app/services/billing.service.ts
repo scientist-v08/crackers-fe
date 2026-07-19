@@ -37,7 +37,7 @@ export class BillingService {
     }
 
     public generatePreviewBill(req: BillDetailsInterface): Observable<HttpResponse<Blob>> {
-        const billPreviewurl = this.url + 'billing/preview';
+        const billPreviewurl = this.url + 'all/billing/preview';
         return this.#http.post(billPreviewurl, req, {
             observe: 'response',
             responseType: 'blob',

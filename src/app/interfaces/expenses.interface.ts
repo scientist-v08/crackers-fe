@@ -4,12 +4,9 @@ export interface ExpenseResponseInterface {
 }
 
 export interface ExpenseInterface {
-    ID: number;
-    CreatedAt: string;
-    UpdatedAt: string;
-    DeletedAt: any;
-    ReasonForExpense: string;
-    Amount: number;
+    id: number;
+    reasonForExpense: string;
+    amount: number;
 }
 
 export interface AddExpenseInterface {
@@ -18,5 +15,5 @@ export interface AddExpenseInterface {
 }
 
 export interface AddExpenseSuccess {
-    Success: string;
+    success: string;
 }

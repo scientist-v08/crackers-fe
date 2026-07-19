@@ -58,6 +58,11 @@ export const appRoutes: Route[] = [
         canActivate: [canActivateAdmin],
     },
     {
+        path: 'priceList',
+        loadComponent: () => import('./pages/priceList/priceList.component'),
+        canActivate: [canActivateUserOrAdmin],
+    },
+    {
         path: '**',
         loadComponent: () => import('./pages/not-found/not-found.component'),
     },

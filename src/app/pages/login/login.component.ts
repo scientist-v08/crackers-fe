@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject, OnDestroy, signal } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -98,7 +98,7 @@ import { Toast } from 'primeng/toast';
         class: 'block h-full',
     },
 })
-export default class LoginComponent implements OnDestroy {
+export default class LoginComponent implements OnInit, OnDestroy {
     #fb = inject(FormBuilder);
     #loginService = inject(LoginService);
     #router = inject(Router);
@@ -126,12 +126,7 @@ export default class LoginComponent implements OnDestroy {
                     localStorage.setItem('token', res.access_token);
                     const routes = res.routes || [];
                     // Determine if user is ADMIN
-                    const isAdmin =
-                        routes.length > 0 &&
-                        // New format (number)
-                        ((routes[0] as Route).role === 2 ||
-                            // Old format (string)
-                            (routes[0] as LoginRouteInterface).Role === 'ROLE_ADMIN');
+                    const isAdmin = res.isAdmin;
 
                     if (isAdmin) {
                         localStorage.setItem('admin', 'true');
@@ -170,6 +165,14 @@ export default class LoginComponent implements OnDestroy {
         } else {
             this.loginForm.markAllAsTouched();
         }
+    }
+
+    ngOnInit(): void {
+        this.logout();
+    }
+
+    logout(): void {
+        this.#loginService.logout();
     }
 
     ngOnDestroy(): void {
