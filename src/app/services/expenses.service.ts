@@ -14,12 +14,12 @@ export class ExpensesService {
     url = environment.baseUrl;
 
     getAllExpenses(): Observable<ExpenseResponseInterface> {
-        const url = this.url + 'get/expenses';
+        const url = this.url + 'admin/expenses';
         return this.#http.get<ExpenseResponseInterface>(url);
     }
 
     addExpense(reqbody: AddExpenseInterface): Observable<AddExpenseSuccess> {
-        const url = this.url + 'post/expenses';
+        const url = this.url + 'admin/expenses';
         return this.#http.post<AddExpenseSuccess>(url, reqbody);
     }
 }

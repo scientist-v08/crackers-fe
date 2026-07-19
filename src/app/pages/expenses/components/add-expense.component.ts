@@ -90,9 +90,11 @@ const minLengthAfterTrim = (minLength: number) => {
                 </div>
             </div>
             <div class="dialog-actions section-actions--end">
-                <app-button variant="secondary" (buttonClicked)="visible = false">Cancel</app-button>
+                <app-button variant="secondary" (buttonClicked)="visible = false"
+                    >Cancel</app-button
+                >
                 <div class="flex flex-col items-end gap-2">
-                    <app-button variant="accent" (buttonClicked)="submitForm()">Save Expense</app-button>
+                    <app-button variant="accent" (buttonClicked)="submitForm()">Add</app-button>
                     @if (validForm()) {
                         <small class="form-error">Invalid entries. All fields are required.</small>
                     }
@@ -126,6 +128,7 @@ export class AddExpenseComponent implements OnDestroy {
                 reasonForExpense: this.addExpense.controls.reasonForExpense.getRawValue() ?? '',
                 amount: this.addExpense.controls.amount.getRawValue() ?? 1,
             };
+            this.addExpense.reset();
             this.#expensesService
                 .addExpense(reqbody)
                 .pipe(takeUntil(this.unsubscribe$))
