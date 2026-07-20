@@ -316,7 +316,7 @@ body {
 /* ── App shell ────────────────────────────────────────── */
 
 .app-header {
-    @apply flex h-16 shrink-0 items-center justify-between border-b border-crackers-border bg-crackers-surface px-4 md:px-8;
+    @apply hidden md:flex h-16 shrink-0 items-center justify-between border-b border-crackers-border bg-crackers-surface px-4 md:px-8;
 }
 
 .app-brand {
@@ -329,7 +329,7 @@ body {
 }
 
 .app-nav-link {
-    @apply rounded px-3 py-2 text-sm font-medium text-crackers-muted transition-colors hover:bg-crackers-highlight hover:text-crackers-shadow;
+    @apply rounded cursor-default px-3 py-2 text-sm font-medium text-crackers-muted transition-colors hover:bg-crackers-highlight hover:text-crackers-shadow;
 }
 
 .app-nav-link--active {
@@ -338,6 +338,51 @@ body {
 
 .app-nav-button {
     @apply rounded px-3 py-2 text-sm font-medium text-crackers-mid transition-colors hover:bg-crackers-error/10 hover:text-crackers-error;
+}
+
+/* Active item styling */
+.p-menuitem-active .p-menubar-item-label,
+.p-menubar-item-link-active .p-menubar-item-label,
+.p-menubar-item.p-menuitem-active .p-menubar-item-label {
+    color: var(--crackers-shadow) !important; /* Your main dark/brand text */
+}
+
+.p-menubar-item-link-active {
+    @apply !bg-crackers-highlight !text-crackers-mid;
+}
+
+/* Reset hover/active/focus backgrounds to clean look */
+@layer base {
+    :root {
+        --p-menubar-mobile-button-hover-background: transparent !important;
+        --p-menubar-item-focus-background: transparent !important;
+        --p-menubar-item-active-background: transparent !important;
+        --p-menubar-item-hover-background: transparent !important;
+    }
+}
+
+/* Mobile Menubar - Main Container */
+.p-menubar {
+    @apply !block !flex !h-16 !w-full !border-0 !rounded-none !bg-crackers-surface md:!hidden;
+}
+
+.p-menubar-root-list {
+    @apply !bg-crackers-surface;
+}
+
+/* Menu Item Labels */
+.p-menubar-item-label {
+    @apply !text-crackers-muted hover:!text-crackers-shadow;
+}
+
+/* Mobile Hamburger Button */
+.p-menubar-button {
+    @apply !text-crackers-mid hover:!text-crackers-shadow;
+}
+
+/* Optional: Make active link more prominent */
+.p-menubar-item.p-menuitem-active .p-menubar-item-label {
+    @apply !font-medium;
 }
 
 .app-main {
