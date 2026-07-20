@@ -1,15 +1,10 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject, OnDestroy, signal } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { HeaderRouterInterface } from '../../interfaces/header-router.interface';
-import {
-    LoginInterface,
-    LoginRequestBody,
-    LoginRouteInterface,
-    Route,
-} from '../../interfaces/login.interface';
+import { LoginInterface, LoginRequestBody } from '../../interfaces/login.interface';
 import { LoginService } from '../../services/login.service';
 
 @Component({
@@ -22,11 +17,7 @@ import { LoginService } from '../../services/login.service';
                 <h1 class="login-brand">Vinayaka Crackers</h1>
                 <p class="login-tagline">Sign in to manage billing, inventory, and expenses</p>
 
-                <form
-                    class="login-form"
-                    [formGroup]="loginForm"
-                    (ngSubmit)="loginSubmission()"
-                >
+                <form class="login-form" [formGroup]="loginForm" (ngSubmit)="loginSubmission()">
                     <div class="form-field">
                         <label class="form-label form-label-required" for="username">
                             Username
@@ -98,7 +89,7 @@ import { LoginService } from '../../services/login.service';
         class: 'block h-full',
     },
 })
-export default class LoginComponent implements OnDestroy {
+export default class LoginComponent implements OnInit, OnDestroy {
     #fb = inject(FormBuilder);
     #loginService = inject(LoginService);
     #router = inject(Router);
@@ -117,20 +108,15 @@ export default class LoginComponent implements OnDestroy {
     loginSubmission(): void {
         if (this.loginForm.valid) {
             const reqBody: LoginRequestBody = {
-                Email: this.loginForm.get('username')?.getRawValue(),
-                Password: this.loginForm.get('password')?.getRawValue(),
+                email: this.loginForm.get('username')?.getRawValue(),
+                password: this.loginForm.get('password')?.getRawValue(),
             };
             this.subscription = this.#loginService.login(reqBody).subscribe({
                 next: (res: LoginInterface) => {
                     localStorage.setItem('token', res.access_token);
                     const routes = res.routes || [];
                     // Determine if user is ADMIN
-                    const isAdmin =
-                        routes.length > 0 &&
-                        // New format (number)
-                        ((routes[0] as Route).role === 2 ||
-                            // Old format (string)
-                            (routes[0] as LoginRouteInterface).Role === 'ROLE_ADMIN');
+                    const isAdmin = routes.length > 0 && routes[0].role === 'ROLE_ADMIN';
 
                     if (isAdmin) {
                         localStorage.setItem('admin', 'true');
@@ -145,9 +131,9 @@ export default class LoginComponent implements OnDestroy {
                         const routeItem = item as any;
 
                         return {
-                            id: routeItem.id ?? routeItem.Id,
-                            route: routeItem.route ?? routeItem.Route,
-                            heading: routeItem.heading ?? routeItem.Heading,
+                            id: routeItem.id,
+                            route: routeItem.route,
+                            heading: routeItem.heading,
                         };
                     });
                     localStorage.setItem('routes', JSON.stringify(headerRoutes));
@@ -163,6 +149,14 @@ export default class LoginComponent implements OnDestroy {
         } else {
             this.loginForm.markAllAsTouched();
         }
+    }
+
+    ngOnInit(): void {
+        this.logout();
+    }
+
+    logout(): void {
+        this.#loginService.logout();
     }
 
     ngOnDestroy(): void {

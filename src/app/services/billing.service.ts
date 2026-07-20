@@ -73,7 +73,7 @@ export class BillingService {
         const discount = `${100 - percent * 100}% off`;
         const total = allItems.reduce((total: number, item: ItemsInterface) => {
             const baseAmount = item.mrpOrNet * item.quantity;
-            if (item.item.startsWith('Standard:')) {
+            if (!item.item.startsWith('Other/Gift Box:')) {
                 return total + Math.floor(baseAmount * percent);
             } else {
                 return total + baseAmount;
@@ -89,7 +89,7 @@ export class BillingService {
         return allItems.map((item: ItemsInterface) => {
             const changedDiscount = `${100 - discount * 100}%`;
             const baseAmount = item.mrpOrNet * item.quantity;
-            if (item.item.startsWith('Standard:')) {
+            if (!item.item.startsWith('Other/Gift Box:')) {
                 item.discount = changedDiscount;
                 item.subTotal = Math.floor(baseAmount * discount);
             }
@@ -111,7 +111,7 @@ export class BillingService {
             item: `${company}: ${category}`,
             mrpOrNet: MRP ?? 0,
             quantity: quantity ?? 0,
-            discount: company === 'Standard' ? `${discount}%` : 'NA',
+            discount: company !== 'Other/Gift Box' ? `${discount}%` : 'NA',
             subTotal: this.subTotalCalculation(company, obtainedDiscount, quantity, MRP),
         };
     }
@@ -123,7 +123,7 @@ export class BillingService {
         mrpOrNet: number | null,
     ): number {
         if (company) {
-            if (company === 'Standard') {
+            if (company !== 'Other/Gift Box') {
                 const subtotal = Math.floor((mrpOrNet as number) * (quantity as number) * discount);
                 return subtotal ?? 0;
             } else {
