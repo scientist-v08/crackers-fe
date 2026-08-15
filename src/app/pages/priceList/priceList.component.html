@@ -1,0 +1,63 @@
+<div class="page-shell">
+    <div class="page-container page-stack">
+        <header class="page-header">
+            <h1 class="page-title">Price List</h1>
+            <p class="page-subtitle">Review business items price list</p>
+        </header>
+
+        <div class="content-card">
+            <div class="toolbar">
+                <div class="section-header">
+                    <h2 class="section-title">Price List</h2>
+                </div>
+            </div>
+
+            <div class="card-body">
+                @if (!loadingData()) {
+                    <p-tabs [value]="allPrices()[0].brand">
+                        <p-tablist>
+                            @for (tab of allPrices(); track tab.brand) {
+                                <p-tab [value]="tab.brand">{{ tab.brand }}</p-tab>
+                            }
+                        </p-tablist>
+                        <p-tabpanels>
+                            @for (tab of allPrices(); track tab.brand) {
+                                <p-tabpanel [value]="tab.brand">
+                                    <app-price-list-table
+                                        [priceList]="tab.list"
+                                        class="hidden md:block"
+                                    />
+                                    <div class="data-stack md:hidden">
+                                        @for (item of tab.list; track item.id; let i = $index) {
+                                            <div class="data-card">
+                                                <div class="data-card-header">#{{ i + 1 }}</div>
+                                                <div class="data-row">
+                                                    <span class="data-row-label">Item</span>
+                                                    <span class="data-row-value">{{
+                                                        item.item
+                                                    }}</span>
+                                                </div>
+                                                <div class="data-row">
+                                                    <span class="data-row-label">Price</span>
+                                                    <span class="data-row-value"
+                                                        >₹{{ item.price }}</span
+                                                    >
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </p-tabpanel>
+                            }
+                        </p-tabpanels>
+                    </p-tabs>
+                } @else {
+                    <app-spinner class="flex items-center justify-center py-12" />
+                }
+
+                @if (allPrices().length === 0 && !loadingData()) {
+                    <p class="empty-state">No prices recorded yet</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
