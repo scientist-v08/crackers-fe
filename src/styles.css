@@ -204,7 +204,7 @@ body {
 /* ── Toolbar (search / filters) ───────────────────────── */
 
 .toolbar {
-    @apply flex flex-col gap-4 mb-4 sm:flex-row sm:items-end sm:justify-between;
+    @apply flex flex-col items-center gap-4 mb-4 sm:flex-row sm:items-end sm:justify-between;
 }
 
 .toolbar-group {
