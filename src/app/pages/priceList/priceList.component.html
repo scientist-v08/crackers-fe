@@ -27,25 +27,7 @@
                                         [priceList]="tab.list"
                                         class="hidden md:block"
                                     />
-                                    <div class="data-stack md:hidden">
-                                        @for (item of tab.list; track item.id; let i = $index) {
-                                            <div class="data-card">
-                                                <div class="data-card-header">#{{ i + 1 }}</div>
-                                                <div class="data-row">
-                                                    <span class="data-row-label">Item</span>
-                                                    <span class="data-row-value">{{
-                                                        item.item
-                                                    }}</span>
-                                                </div>
-                                                <div class="data-row">
-                                                    <span class="data-row-label">Price</span>
-                                                    <span class="data-row-value"
-                                                        >₹{{ item.price }}</span
-                                                    >
-                                                </div>
-                                            </div>
-                                        }
-                                    </div>
+                                    <app-price-list-card [itemList]="tab.list" />
                                 </p-tabpanel>
                             }
                         </p-tabpanels>
