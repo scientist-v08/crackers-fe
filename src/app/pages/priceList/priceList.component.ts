@@ -4,11 +4,12 @@ import { PriceListTableComponent } from './components/priceListTable.component';
 import { PriceListService } from '../../services/priceList.service';
 import { ProductList } from '../../interfaces/priceList.interface';
 import { TabsModule } from 'primeng/tabs';
+import { PriceListcard } from './components/priceListCard.component';
 
 @Component({
     selector: 'app-price-list',
     templateUrl: './priceList.component.html',
-    imports: [PriceListTableComponent, SpinnerComponent, TabsModule],
+    imports: [PriceListTableComponent, SpinnerComponent, TabsModule, PriceListcard],
     providers: [],
 })
 export default class PriceListComponent {
