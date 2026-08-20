@@ -16,14 +16,16 @@ import { ButtonComponent } from './button.component';
                 </p>
             </div>
             <div class="section-actions section-actions--center lg:border-0 lg:pt-0">
-                <app-button variant="accent" (buttonClicked)="generateBill.emit()">
+                <!-- <app-button variant="accent" (buttonClicked)="generateBill.emit()">
                     Generate Bill
-                </app-button>
+                </app-button> -->
                 <app-button (buttonClicked)="previewBill.emit()">Preview Bill</app-button>
                 <app-button variant="secondary" (buttonClicked)="comparePrices.emit()">
                     Compare Prices
                 </app-button>
-                <app-button variant="secondary" (buttonClicked)="newBill.emit()">New Bill</app-button>
+                <app-button variant="secondary" (buttonClicked)="newBill.emit()"
+                    >New Bill</app-button
+                >
             </div>
         </div>
     `,
