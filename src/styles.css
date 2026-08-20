@@ -4,7 +4,7 @@
     --font-display: 'Cinzel', serif;
     --font-body: 'Inter', sans-serif;
 
-    --color-crackers-shadow: #1a0f0d;
+    --color-crackers-shadow: #d3d3d3;
     --color-crackers-mid: #7f1d1d;
     --color-crackers-highlight: #faf6f0;
     --color-crackers-accent: #b8860b;
@@ -433,20 +433,39 @@ body {
 
 .p-tablist {
     @apply !gap-1 !border-b !border-crackers-border !bg-transparent;
+    position: relative;
+}
+
+.p-tablist-content {
+    @apply !overflow-x-auto;
 }
 
 .p-tablist .p-tab {
     font-family: var(--font-display) !important;
-    @apply !rounded-t !border-0 !bg-transparent !px-4 !py-3 !text-sm !font-medium !text-crackers-muted;
+    @apply !rounded-none !border-0 !bg-transparent !px-4 !py-3 !text-sm !font-medium !text-crackers-muted;
 }
 
 .p-tablist .p-tab[data-p-active='true'],
 .p-tablist .p-tab.p-tab-active {
-    @apply !border-b-2 !border-crackers-mid !text-crackers-mid;
+    @apply !text-crackers-mid;
+}
+
+/* Override Aura active-bar colour + stop it from being clipped */
+.p-tablist-active-bar {
+    @apply !bg-crackers-mid !h-0.5;
+    bottom: 0 !important;
 }
 
 .p-tabpanels {
     @apply !bg-transparent !pt-6;
+}
+
+.p-tablist-nav-button {
+    @apply !bg-crackers-surface !text-crackers-muted !border-0 !shadow-none;
+}
+
+.p-tablist-nav-button:hover {
+    @apply !text-crackers-mid !bg-crackers-highlight;
 }
 
 .p-paginator {
