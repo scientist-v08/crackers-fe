@@ -138,6 +138,9 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
             this.totalCost.set(this.items().reduce((sum, item) => sum + item.subTotal, 0));
             if (!this.showTotal()) {
                 this.showTotal.set(true);
+            } else {
+                const discount = Number(this.billingForm.controls.discount.getRawValue()) ?? 0.25;
+                this.finalizedBill(discount);
             }
             this.shouldScroll.set(true);
         } else {
@@ -206,7 +209,9 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
     generateBill(): void {
         const customerName = this.billingForm.controls.name.getRawValue() ?? '';
         const mobileControl = this.billingForm.get('number');
+        const discountControl = this.billingForm.get('discount');
         const mobileNumber = (mobileControl?.value ?? '').toString().trim();
+        const usedDiscount = (discountControl?.value ?? '').toString().trim();
         if (customerName.length < 5 || !mobileNumber || !/^\d{10}$/.test(mobileNumber)) {
             this.#messageService.add({
                 severity: 'error',
@@ -222,6 +227,7 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
             mobile: mobileNumber,
             grandTotal: this.totalCost(),
             billItems: this.items(),
+            discount: usedDiscount,
             finalizedAmt: this.otherAmt(),
         };
         this.#billingService
@@ -257,7 +263,9 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
 
     previewBill(): void {
         const mobileControl = this.billingForm.get('number');
+        const discountControl = this.billingForm.get('discount');
         const mobileNumber = (mobileControl?.value ?? '').toString().trim();
+        const usedDiscount = (discountControl?.value ?? '').toString().trim();
 
         if (!mobileNumber || !/^\d{10}$/.test(mobileNumber)) {
             this.#messageService.add({
@@ -274,6 +282,7 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
             mobile: mobileNumber,
             grandTotal: this.totalCost(),
             billItems: this.items(),
+            discount: usedDiscount,
             finalizedAmt: this.otherAmt(),
         };
         this.#billingService

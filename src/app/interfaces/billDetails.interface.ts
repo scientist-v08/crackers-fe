@@ -5,6 +5,7 @@ export interface BillDetailsInterface {
     mobile: string;
     grandTotal: number;
     billItems: ItemsInterface[];
+    discount: string;
     finalizedAmt: number;
 }
 
