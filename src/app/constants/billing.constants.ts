@@ -12,6 +12,7 @@ export const companyDropdown: DropdownInterface[] = [
     { id: 1, value: 'st', item: 'Standard' },
     { id: 2, value: 'ay', item: 'Ayyan' },
     { id: 3, value: 'sp', item: 'Supreme' },
+    { id: 3, value: 'ad', item: 'ARD' },
     { id: 4, value: 'ot', item: 'Other/Gift Box' },
 ];
 
