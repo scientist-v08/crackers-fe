@@ -190,7 +190,7 @@ body {
 }
 
 .dialog-actions {
-    @apply mt-6 flex flex-col gap-3 border-t border-crackers-border pt-6 sm:flex-row sm:flex-wrap sm:items-center;
+    @apply mt-6 flex flex-row gap-3 border-t border-crackers-border pt-6;
 }
 
 .section-actions--center {
@@ -198,17 +198,17 @@ body {
 }
 
 .section-actions--end {
-    @apply sm:justify-end;
+    @apply justify-end;
 }
 
 /* ── Toolbar (search / filters) ───────────────────────── */
 
 .toolbar {
-    @apply flex flex-col items-center gap-4 mb-4 sm:flex-row sm:items-end sm:justify-between;
+    @apply flex flex-col md:flex-row md:w-full items-center gap-4 mb-4 sm:items-start sm:justify-between;
 }
 
 .toolbar-group {
-    @apply flex flex-1 flex-col gap-4 sm:flex-row sm:items-end;
+    @apply flex flex-1 flex-col gap-4 sm:flex-row sm:items-end md:w-full md:justify-end;
 }
 
 .toolbar-field {
