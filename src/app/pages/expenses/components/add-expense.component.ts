@@ -90,13 +90,15 @@ const minLengthAfterTrim = (minLength: number) => {
                 </div>
             </div>
             <div class="dialog-actions section-actions--end">
-                <app-button variant="secondary" (buttonClicked)="visible = false">Cancel</app-button>
-                <div class="flex flex-col items-end gap-2">
-                    <app-button variant="accent" (buttonClicked)="submitForm()">Save Expense</app-button>
-                    @if (validForm()) {
-                        <small class="form-error">Invalid entries. All fields are required.</small>
-                    }
-                </div>
+                <app-button variant="secondary" (buttonClicked)="visible = false"
+                    >Cancel</app-button
+                >
+                <app-button variant="accent" (buttonClicked)="submitForm()">Save</app-button>
+                @if (validForm()) {
+                    <small class="form-error">Invalid entries. All fields are required.</small>
+                }
+                <!-- <div class="flex flex-col items-end gap-2">
+                </div> -->
             </div>
         </p-dialog>
     `,
@@ -106,7 +108,7 @@ export class AddExpenseComponent implements OnDestroy {
     #expensesService = inject(ExpensesService);
     addExpense = this.#fb.group({
         reasonForExpense: this.#fb.control('', [Validators.required, minLengthAfterTrim(5)]),
-        amount: this.#fb.control(0, [Validators.min(10)]),
+        amount: this.#fb.control(null, [Validators.min(10)]),
     });
     visible = false;
     validForm = signal<boolean>(false);
@@ -120,7 +122,7 @@ export class AddExpenseComponent implements OnDestroy {
     }
 
     public submitForm(): void {
-        if (this.addExpense.valid) {
+        if (this.addExpense.valid && (this.addExpense.controls.amount.getRawValue() ?? 1) > 9) {
             this.validForm.set(false);
             const reqbody: AddExpenseInterface = {
                 reasonForExpense: this.addExpense.controls.reasonForExpense.getRawValue() ?? '',
@@ -131,6 +133,7 @@ export class AddExpenseComponent implements OnDestroy {
                 .pipe(takeUntil(this.unsubscribe$))
                 .subscribe({
                     next: () => {
+                        this.addExpense.reset();
                         this.successToast.emit();
                     },
                     error: (err: HttpErrorResponse) => {

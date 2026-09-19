@@ -32,11 +32,10 @@ import { InventoryItemsTableComponent } from './items-table.component';
     template: `
         <div class="toolbar">
             @if (showAddItem()) {
-                <app-add-item class="hidden sm:block" (toaster)="messageService($event)" />
+                <app-add-item (toaster)="messageService($event)" />
             }
             <form class="toolbar-group" [formGroup]="searchForm">
                 <div class="form-field toolbar-field">
-                    <label class="form-label" for="searchItem">Search Item</label>
                     <input
                         id="searchItem"
                         class="form-control"
@@ -44,77 +43,98 @@ import { InventoryItemsTableComponent } from './items-table.component';
                         pInputText
                         formControlName="item"
                         autocomplete="off"
-                        placeholder="Enter item name"
+                        placeholder="Search item by name"
                     />
+                    <div class="flex mt-4 md:hidden flex-row justify-between items-center">
+                        <app-button [width]="'w-auto'" (buttonClicked)="searchItems()"
+                            >Search</app-button
+                        >
+                        <app-button
+                            variant="secondary"
+                            [width]="'w-auto'"
+                            (buttonClicked)="refreshItems()"
+                        >
+                            Refresh
+                        </app-button>
+                    </div>
                 </div>
-                <div class="btn-group sm:shrink-0">
-                    <app-button [width]="'w-auto'" (buttonClicked)="searchItems()">Search</app-button>
-                    <app-button variant="secondary" [width]="'w-auto'" (buttonClicked)="refreshItems()">
+                <div
+                    class="hidden gap-3 md:flex md:flex-row md:flex-wrap md:items-center md:shrink-0"
+                >
+                    <app-button [width]="'w-auto'" (buttonClicked)="searchItems()"
+                        >Search</app-button
+                    >
+                    <app-button
+                        variant="secondary"
+                        [width]="'w-auto'"
+                        (buttonClicked)="refreshItems()"
+                    >
                         Refresh
                     </app-button>
                 </div>
             </form>
-            @if (showAddItem()) {
-                <app-add-item class="block sm:hidden" (toaster)="messageService($event)" />
-            }
         </div>
 
         <div class="card-body">
-        @if (allItems().length === 0 && !loadingData()) {
-            <p class="empty-state">No inventory items found</p>
-        }
+            @if (allItems().length === 0 && !loadingData()) {
+                <p class="empty-state">No inventory items found</p>
+            }
 
-        @if (!loadingData()) {
-            <app-inventory-items-table
-                [allItems]="allItems()"
-                class="hidden md:block"
-                (changeState)="changeState($event)"
-                (partialSuccessMessageService)="partialSuccessMessageService($event)"
-            />
-            <div class="data-stack md:hidden">
-                @for (item of allItems(); track item.ID) {
-                    <div class="data-card">
-                        <div class="data-card-header">
-                            {{ item.BrandOrCompany }}: {{ item.Item }}
-                        </div>
-                        <div class="data-row">
-                            <span class="data-row-label">Boxes per carton</span>
-                            <span class="data-row-value">{{ item.NumOfBoxes }}</span>
-                        </div>
-                        <div class="data-row">
-                            <span class="data-row-label">Number of cartons</span>
-                            <span class="data-row-value">{{ item.NumOfCartons }}</span>
-                        </div>
-                        <div class="data-row">
-                            <span class="data-row-label">Price per carton</span>
-                            <span class="data-row-value">₹{{ item.PricePerCarton }}</span>
-                        </div>
-                        <div class="data-row">
-                            <span class="data-row-label">Subtotal</span>
-                            <span class="data-row-value">₹{{ item.SubTotal }}</span>
-                        </div>
-                        @if (inventoryState() !== 'Unpacked') {
-                            <div class="section-actions">
-                                <app-complete
-                                    [itemToBeCompleted]="item"
-                                    (toaster)="changeState($event)"
-                                    (toasterForPartial)="partialSuccessMessageService($event)"
-                                />
+            @if (!loadingData()) {
+                @if (allItems().length > 0) {
+                    <app-inventory-items-table
+                        [allItems]="allItems()"
+                        class="hidden md:block"
+                        (changeState)="changeState($event)"
+                        (partialSuccessMessageService)="partialSuccessMessageService($event)"
+                    />
+                    <div class="data-stack md:hidden">
+                        @for (item of allItems(); track item.ID) {
+                            <div class="data-card">
+                                <div class="data-card-header">
+                                    {{ item.BrandOrCompany }}: {{ item.Item }}
+                                </div>
+                                <div class="data-row">
+                                    <span class="data-row-label">Boxes per carton</span>
+                                    <span class="data-row-value">{{ item.NumOfBoxes }}</span>
+                                </div>
+                                <div class="data-row">
+                                    <span class="data-row-label">Number of cartons</span>
+                                    <span class="data-row-value">{{ item.NumOfCartons }}</span>
+                                </div>
+                                <div class="data-row">
+                                    <span class="data-row-label">Price per carton</span>
+                                    <span class="data-row-value">₹{{ item.PricePerCarton }}</span>
+                                </div>
+                                <div class="data-row">
+                                    <span class="data-row-label">Subtotal</span>
+                                    <span class="data-row-value">₹{{ item.SubTotal }}</span>
+                                </div>
+                                @if (inventoryState() !== 'Unpacked') {
+                                    <div class="section-actions">
+                                        <app-complete
+                                            [itemToBeCompleted]="item"
+                                            (toaster)="changeState($event)"
+                                            (toasterForPartial)="
+                                                partialSuccessMessageService($event)
+                                            "
+                                        />
+                                    </div>
+                                }
                             </div>
                         }
                     </div>
+                    <p-paginator
+                        [first]="first()"
+                        [rows]="rows()"
+                        [totalRecords]="totalElements()"
+                        [rowsPerPageOptions]="[5, 10, 15]"
+                        (onPageChange)="onPageChange($event)"
+                    />
                 }
-            </div>
-            <p-paginator
-                [first]="first()"
-                [rows]="rows()"
-                [totalRecords]="totalElements()"
-                [rowsPerPageOptions]="[5, 10, 15]"
-                (onPageChange)="onPageChange($event)"
-            />
-        } @else {
-            <app-spinner class="flex items-center justify-center py-12" />
-        }
+            } @else {
+                <app-spinner class="flex items-center justify-center py-12" />
+            }
         </div>
         <p-toast position="bottom-right" key="br" />
     `,

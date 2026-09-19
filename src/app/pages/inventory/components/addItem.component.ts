@@ -25,7 +25,9 @@ import { HttpErrorResponse } from '@angular/common/http';
         >
             <div class="form-stack">
                 <div class="form-field">
-                    <label for="brandOrCompany" class="form-label form-label-required">Brand / Company</label>
+                    <label for="brandOrCompany" class="form-label form-label-required"
+                        >Brand / Company</label
+                    >
                     <input
                         formControlName="brandOrCompany"
                         pInputText
@@ -33,6 +35,14 @@ import { HttpErrorResponse } from '@angular/common/http';
                         class="form-control"
                         autocomplete="off"
                     />
+                    <div class="form-message">
+                        @if (
+                            addNewForm.get('brandOrCompany')?.hasError('required') &&
+                            addNewForm.get('brandOrCompany')?.touched
+                        ) {
+                            <span class="form-error">Brand / Company is required</span>
+                        }
+                    </div>
                 </div>
                 <div class="form-field">
                     <label for="item" class="form-label form-label-required">Item</label>
@@ -43,6 +53,14 @@ import { HttpErrorResponse } from '@angular/common/http';
                         class="form-control"
                         autocomplete="off"
                     />
+                    <div class="form-message">
+                        @if (
+                            addNewForm.get('item')?.hasError('required') &&
+                            addNewForm.get('item')?.touched
+                        ) {
+                            <span class="form-error">Item is required</span>
+                        }
+                    </div>
                 </div>
                 <div class="form-field">
                     <label for="numberOfBoxes" class="form-label form-label-required"
@@ -55,9 +73,21 @@ import { HttpErrorResponse } from '@angular/common/http';
                         inputId="locale-indian"
                         formControlName="numberOfBoxes"
                     />
+                    <div class="form-message">
+                        @if (
+                            addNewForm.get('numberOfBoxes')?.hasError('min') &&
+                            addNewForm.get('numberOfBoxes')?.touched
+                        ) {
+                            <span class="form-error"
+                                >Number of Boxes Per Carton must be at least 1</span
+                            >
+                        }
+                    </div>
                 </div>
                 <div class="form-field">
-                    <label for="numberOfCartons" class="form-label form-label-required">Number of Cartons</label>
+                    <label for="numberOfCartons" class="form-label form-label-required"
+                        >Number of Cartons</label
+                    >
                     <p-inputnumber
                         class="w-full"
                         id="numberOfCartons"
@@ -65,9 +95,19 @@ import { HttpErrorResponse } from '@angular/common/http';
                         inputId="locale-indian"
                         formControlName="numberOfCartons"
                     />
+                    <div class="form-message">
+                        @if (
+                            addNewForm.get('numberOfCartons')?.hasError('min') &&
+                            addNewForm.get('numberOfCartons')?.touched
+                        ) {
+                            <span class="form-error">Number of Cartons must be at least 1</span>
+                        }
+                    </div>
                 </div>
                 <div class="form-field">
-                    <label for="pricePerCarton" class="form-label form-label-required">Price Per Carton</label>
+                    <label for="pricePerCarton" class="form-label form-label-required"
+                        >Price Per Carton</label
+                    >
                     <p-inputnumber
                         class="w-full"
                         id="pricePerCarton"
@@ -75,6 +115,14 @@ import { HttpErrorResponse } from '@angular/common/http';
                         inputId="locale-indian"
                         formControlName="pricePerCarton"
                     />
+                    <div class="form-message">
+                        @if (
+                            addNewForm.get('pricePerCarton')?.hasError('min') &&
+                            addNewForm.get('pricePerCarton')?.touched
+                        ) {
+                            <span class="form-error">Price Per Carton must be at least 1</span>
+                        }
+                    </div>
                 </div>
                 <div class="form-field">
                     <label for="subTotal" class="form-label">Sub-total</label>
@@ -90,13 +138,15 @@ import { HttpErrorResponse } from '@angular/common/http';
                 </div>
             </div>
             <div class="dialog-actions section-actions--end">
-                <app-button variant="secondary" (buttonClicked)="visible = false">Cancel</app-button>
-                <div class="flex flex-col items-end gap-2">
-                    <app-button variant="accent" (buttonClicked)="submitForm()">Save Item</app-button>
-                    @if (validForm()) {
-                        <small class="form-error">Invalid entries. All fields are required.</small>
-                    }
-                </div>
+                <app-button variant="secondary" (buttonClicked)="visible = false"
+                    >Cancel</app-button
+                >
+                <app-button variant="accent" (buttonClicked)="submitForm()">Save Item</app-button>
+                @if (validForm()) {
+                    <small class="form-error">Invalid entries. All fields are required.</small>
+                }
+                <!-- <div class="flex flex-col items-end gap-2">
+                </div> -->
             </div>
         </p-dialog>
     `,
@@ -164,6 +214,7 @@ export class AddItemComponent implements OnInit, OnDestroy {
                 .pipe(takeUntil(this.unsubscribe$))
                 .subscribe({
                     next: (val) => {
+                        this.addNewForm.reset();
                         this.toaster.emit({ type: 'success', message: val.Success });
                         this.visible = false;
                     },
