@@ -8,6 +8,10 @@ import {
     InventoryStateUnpacked,
 } from '../../constants/inventory.constants';
 import { ItemsComponent } from './components/items.component';
+import { Store } from '@ngrx/store';
+import { InventoryActions } from '../../store/inventory.actions';
+import * as InventorySelectors from '../../store/inventory.selectors';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
     selector: 'app-inventory',
@@ -16,16 +20,35 @@ import { ItemsComponent } from './components/items.component';
     templateUrl: './inventory.component.html',
 })
 export default class InventoryComponent {
-    #inventoryService = inject(InventoryService);
-    totalGoodsValue = signal<number>(0);
-    goodsValueDivision = signal<string>('');
+    #store = inject(Store);
+
     ordered = InventoryStateOrdered;
     received = InventoryStateReceived;
     unpacked = InventoryStateUnpacked;
-    serviceState = this.#inventoryService.state;
+
+    selectedTab = toSignal(this.#store.select(InventorySelectors.selectSelectedTab), {
+        initialValue: InventoryStateOrdered,
+    });
+
+    totalGoodsValue = toSignal(this.#store.select(InventorySelectors.selectTotal), {
+        initialValue: 0,
+    });
+
+    goodsValueDivision = computed(() => {
+        switch (this.selectedTab()) {
+            case this.ordered:
+                return 'ordered';
+            case this.received:
+                return 'received';
+            case this.unpacked:
+                return 'unpacked';
+            default:
+                return '';
+        }
+    });
 
     activeTab = computed(() => {
-        switch (this.serviceState()) {
+        switch (this.selectedTab()) {
             case this.ordered:
                 return '0';
             case this.received:
@@ -38,11 +61,6 @@ export default class InventoryComponent {
     });
 
     tabClicked(item: InventoryState): void {
-        this.#inventoryService.state.set(item);
-    }
-
-    totalObtained(val: number, division: string): void {
-        this.totalGoodsValue.set(val);
-        this.goodsValueDivision.set(division);
+        this.#store.dispatch(InventoryActions.setTab({ tab: item }));
     }
 }

@@ -18,18 +18,18 @@
                 </p-tablist>
                 <p-tabpanels>
                     <p-tabpanel value="0">
-                        @if (serviceState() === ordered) {
-                            <app-items (totalEmit)="totalObtained($event, 'ordered')" />
+                        @if (selectedTab() === ordered) {
+                            <app-items />
                         }
                     </p-tabpanel>
                     <p-tabpanel value="1">
-                        @if (serviceState() === received) {
-                            <app-items (totalEmit)="totalObtained($event, 'received')" />
+                        @if (selectedTab() === received) {
+                            <app-items />
                         }
                     </p-tabpanel>
                     <p-tabpanel value="2">
-                        @if (serviceState() === unpacked) {
-                            <app-items (totalEmit)="totalObtained($event, 'unpacked')" />
+                        @if (selectedTab() === unpacked) {
+                            <app-items />
                         }
                     </p-tabpanel>
                 </p-tabpanels>
