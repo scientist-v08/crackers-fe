@@ -10,11 +10,11 @@
         </header>
 
         <div class="content-card">
-            <p-tabs value="0">
+            <p-tabs [value]="activeTab()">
                 <p-tablist>
-                    <p-tab (mousedown)="tabClicked(ordered)" value="0">Ordered</p-tab>
-                    <p-tab (mousedown)="tabClicked(received)" value="1">Received</p-tab>
-                    <p-tab (mousedown)="tabClicked(unpacked)" value="2">Unpacked</p-tab>
+                    <p-tab (click)="tabClicked(ordered)" value="0">Ordered</p-tab>
+                    <p-tab (click)="tabClicked(received)" value="1">Received</p-tab>
+                    <p-tab (click)="tabClicked(unpacked)" value="2">Unpacked</p-tab>
                 </p-tablist>
                 <p-tabpanels>
                     <p-tabpanel value="0">

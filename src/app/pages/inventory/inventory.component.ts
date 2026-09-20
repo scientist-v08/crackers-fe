@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { TabsModule } from 'primeng/tabs';
 import { InventoryService } from '../../services/inventory.service';
 import {
@@ -23,6 +23,19 @@ export default class InventoryComponent {
     received = InventoryStateReceived;
     unpacked = InventoryStateUnpacked;
     serviceState = this.#inventoryService.state;
+
+    activeTab = computed(() => {
+        switch (this.serviceState()) {
+            case this.ordered:
+                return '0';
+            case this.received:
+                return '1';
+            case this.unpacked:
+                return '2';
+            default:
+                return '0';
+        }
+    });
 
     tabClicked(item: InventoryState): void {
         this.#inventoryService.state.set(item);

@@ -300,16 +300,24 @@ export class ItemsComponent implements OnInit, OnDestroy {
             life: 3000,
         });
         if (event.type === 'success') {
-            this.allItems.update((item) => {
-                const updatedItems = item.map((itemToUpdate) => {
+            this.allItems.update((items) => {
+                const updatedItems = items.map((itemToUpdate) => {
                     if (itemToUpdate.ID === event.id) {
+                        const newNumOfCartons = itemToUpdate.NumOfCartons - event.numOfCartons;
                         return {
                             ...itemToUpdate,
-                            NumOfCartons: itemToUpdate.NumOfCartons - event.numOfCartons,
+                            NumOfCartons: newNumOfCartons,
+                            SubTotal: newNumOfCartons * itemToUpdate.PricePerCarton,
                         };
                     }
                     return itemToUpdate;
                 });
+
+                // Calculate new total after update
+                const newTotal = updatedItems.reduce((acc, curr) => acc + curr.SubTotal, 0);
+                this.total.set(newTotal);
+                this.totalEmit.emit(newTotal);
+
                 return updatedItems;
             });
         }
