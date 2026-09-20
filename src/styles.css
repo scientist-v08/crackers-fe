@@ -238,7 +238,7 @@ body {
 }
 
 .btn-group {
-    @apply flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center;
+    @apply flex flex-col items-stretch gap-3 sm:flex-row sm:items-center;
 }
 
 /* ── Data display ─────────────────────────────────────── */

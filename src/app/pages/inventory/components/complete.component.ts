@@ -18,6 +18,9 @@ import {
     Validators,
 } from '@angular/forms';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { Store } from '@ngrx/store';
+import { toSignal } from '@angular/core/rxjs-interop';
+import * as InventorySelectors from '../../../store/inventory.selectors';
 
 @Component({
     standalone: true,
@@ -25,12 +28,10 @@ import { InputNumberModule } from 'primeng/inputnumber';
     selector: 'app-complete',
     template: `
         <div class="btn-group">
-            <app-button [width]="'w-auto'" (buttonClicked)="complete()">Mark {{ goToState() }}</app-button>
-            <app-button
-                variant="secondary"
-                [width]="'w-auto'"
-                (buttonClicked)="partialCompleteDialogOpen()"
+            <app-button variant="accent" (buttonClicked)="complete()"
+                >Mark {{ goToState() }}</app-button
             >
+            <app-button variant="secondary" (buttonClicked)="partialCompleteDialogOpen()">
                 Partially {{ goToState() }}
             </app-button>
         </div>
@@ -59,7 +60,9 @@ import { InputNumberModule } from 'primeng/inputnumber';
                 </div>
             </div>
             <div class="dialog-actions section-actions--end">
-                <app-button variant="secondary" (buttonClicked)="visible = false">Cancel</app-button>
+                <app-button variant="secondary" (buttonClicked)="visible = false"
+                    >Cancel</app-button
+                >
                 <app-button variant="accent" (buttonClicked)="submitForm()">Save</app-button>
             </div>
         </p-dialog>
@@ -67,8 +70,11 @@ import { InputNumberModule } from 'primeng/inputnumber';
 })
 export class CompleteComponent implements OnInit {
     #inventoryService = inject(InventoryService);
+    #store = inject(Store);
     itemToBeCompleted = input.required<InventoryItem>();
-    state = this.#inventoryService.state;
+    state = toSignal(this.#store.select(InventorySelectors.selectSelectedTab), {
+        initialValue: InventoryStateOrdered,
+    });
     goToState = computed(() => {
         switch (this.state()) {
             case InventoryStateOrdered:

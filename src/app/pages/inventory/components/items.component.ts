@@ -5,15 +5,20 @@ import { MessageService } from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { Toast } from 'primeng/toast';
-import { Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { catchError, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { ButtonComponent } from './button.component';
 import { SpinnerComponent } from '../../../components/spinner.component';
-import { InventoryState } from '../../../constants/inventory.constants';
-import { InventoryItem, InventoryResponseInterface } from '../../../interfaces/inventory.interface';
+import { InventoryStateOrdered } from '../../../constants/inventory.constants';
+import { InventoryItem } from '../../../interfaces/inventory.interface';
 import { InventoryService } from '../../../services/inventory.service';
 import { AddItemComponent } from './addItem.component';
 import { CompleteComponent } from './complete.component';
 import { InventoryItemsTableComponent } from './items-table.component';
+import { Store } from '@ngrx/store';
+import { selectInventoryQueryParams } from '../../../store/inventory.selectors';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { InventoryActions } from '../../../store/inventory.actions';
+import * as InventorySelectors from '../../../store/inventory.selectors';
 
 @Component({
     selector: 'app-items',
@@ -142,12 +147,11 @@ import { InventoryItemsTableComponent } from './items-table.component';
 })
 export class ItemsComponent implements OnInit, OnDestroy {
     #inventoryService = inject(InventoryService);
+    #store = inject(Store);
     #fb = inject(FormBuilder);
     #messageService = inject(MessageService);
-    searchForm = this.#fb.group({
-        item: this.#fb.control('', [Validators.required]),
-    });
-    unsubscribe$ = new Subject<void>();
+
+    // Local UI state
     allItems = signal<InventoryItem[]>([]);
     total = signal<number>(1);
     totalEmit = output<number>();
@@ -161,56 +165,22 @@ export class ItemsComponent implements OnInit, OnDestroy {
     showAddItem = signal<boolean>(false);
     state = signal<string>('');
     loadingData = signal<boolean>(false);
-    inventoryState = this.#inventoryService.state;
+    inventoryState = toSignal(this.#store.select(InventorySelectors.selectSelectedTab), {
+        initialValue: InventoryStateOrdered,
+    });
+    searchForm = this.#fb.group({
+        item: this.#fb.control('', [Validators.required]),
+    });
+    unsubscribe$ = new Subject<void>();
+    private queryParams$ = this.#store.select(selectInventoryQueryParams);
 
     public ngOnInit(): void {
-        this.getItems();
+        this.storeChanges();
     }
 
     public ngOnDestroy(): void {
         this.unsubscribe$.next();
         this.unsubscribe$.complete();
-    }
-
-    private getItems(): void {
-        this.first.set(0);
-        this.allItems.set([]);
-        this.#inventoryService.stateObservable$
-            .pipe(
-                switchMap((res: InventoryState) => {
-                    if (res === 'Ordered') {
-                        this.showAddItem.set(true);
-                    } else {
-                        this.showAddItem.set(false);
-                    }
-                    this.state.set(res);
-                    this.pageNumber.set(1);
-                    this.pageSize.set(5);
-                    return this.#inventoryService
-                        .getAllInventoryItems(
-                            this.pageNumber(),
-                            this.pageSize(),
-                            this.title(),
-                            this.state(),
-                        )
-                        .pipe(tap(() => this.loadingData.set(true)));
-                }),
-                takeUntil(this.unsubscribe$),
-            )
-            .subscribe({
-                next: (res: InventoryResponseInterface) => {
-                    this.loadingData.set(false);
-                    this.allItems.set(res.inventoryItems);
-                    this.total.set(res.total);
-                    this.totalEmit.emit(res.total);
-                    this.totalElements.set(res.totalElements);
-                },
-                error: (err: HttpErrorResponse) => {
-                    this.loadingData.set(false);
-                    this.totalEmit.emit(0);
-                    this.errorHandler(err);
-                },
-            });
     }
 
     private errorHandler(err: HttpErrorResponse): void {
@@ -233,18 +203,17 @@ export class ItemsComponent implements OnInit, OnDestroy {
     public searchItems(): void {
         if (this.searchForm.invalid) {
             this.searchBoxInvalidClass.set('ng-invalid ng-dirty');
-        } else {
-            this.searchBoxInvalidClass.set('');
-            this.title.set(this.searchForm.controls.item.getRawValue() ?? '');
-            this.getItems();
         }
+        this.searchBoxInvalidClass.set('');
+        const title = this.searchForm.controls.item.getRawValue() ?? '';
+        this.#store.dispatch(InventoryActions.setSearch({ title }));
     }
 
     public refreshItems(): void {
         this.searchBoxInvalidClass.set('');
-        this.title.set('');
         this.searchForm.reset({ item: '' });
-        this.getItems();
+        this.#store.dispatch(InventoryActions.setSearch({ title: '' }));
+        this.#store.dispatch(InventoryActions.refreshItems());
     }
 
     onPageChange(event: PaginatorState) {
@@ -255,22 +224,13 @@ export class ItemsComponent implements OnInit, OnDestroy {
         this.first.set(event.first ?? 0);
         this.rows.set(event.rows ?? 5);
         this.allItems.set([]);
-        this.#inventoryService
-            .getAllInventoryItems(this.pageNumber(), this.pageSize(), this.title(), this.state())
-            .pipe(
-                tap(() => this.loadingData.set(true)),
-                takeUntil(this.unsubscribe$),
-            )
-            .subscribe({
-                next: (res: InventoryResponseInterface) => {
-                    this.loadingData.set(false);
-                    this.allItems.set(res.inventoryItems);
-                },
-                error: (err: HttpErrorResponse) => {
-                    this.loadingData.set(false);
-                    this.errorHandler(err);
-                },
-            });
+        this.#store.dispatch(
+            InventoryActions.setPagination({
+                pageNumber: (event.page ?? 0) + 1,
+                pageSize: event.rows ?? 5,
+                first: event.first ?? 0,
+            }),
+        );
     }
 
     messageService(event: { type: string; message: string }): void {
@@ -300,16 +260,24 @@ export class ItemsComponent implements OnInit, OnDestroy {
             life: 3000,
         });
         if (event.type === 'success') {
-            this.allItems.update((item) => {
-                const updatedItems = item.map((itemToUpdate) => {
+            this.allItems.update((items) => {
+                const updatedItems = items.map((itemToUpdate) => {
                     if (itemToUpdate.ID === event.id) {
+                        const newNumOfCartons = itemToUpdate.NumOfCartons - event.numOfCartons;
                         return {
                             ...itemToUpdate,
-                            NumOfCartons: itemToUpdate.NumOfCartons - event.numOfCartons,
+                            NumOfCartons: newNumOfCartons,
+                            SubTotal: newNumOfCartons * itemToUpdate.PricePerCarton,
                         };
                     }
                     return itemToUpdate;
                 });
+
+                // Calculate new total after update
+                const newTotal = updatedItems.reduce((acc, curr) => acc + curr.SubTotal, 0);
+                this.total.set(newTotal);
+                this.#store.dispatch(InventoryActions.setTotal({ amt: newTotal }));
+
                 return updatedItems;
             });
         }
@@ -319,6 +287,13 @@ export class ItemsComponent implements OnInit, OnDestroy {
         if (type.type === 'error') {
             this.messageService(type);
         } else {
+            this.#messageService.add({
+                severity: type.type,
+                summary: type.type,
+                detail: type.message,
+                key: 'br',
+                life: 3000,
+            });
             const firstCondition = this.totalElements() % this.pageSize() === 1;
             const secondCondition =
                 Math.ceil(this.totalElements() / this.pageSize()) === this.pageNumber();
@@ -326,32 +301,44 @@ export class ItemsComponent implements OnInit, OnDestroy {
                 this.refreshItems();
             } else {
                 this.allItems.set([]);
-                this.#inventoryService
-                    .getAllInventoryItems(
-                        this.pageNumber(),
-                        this.pageSize(),
-                        this.title(),
-                        this.state(),
-                    )
-                    .pipe(
-                        tap(() => this.loadingData.set(true)),
-                        takeUntil(this.unsubscribe$),
-                    )
-                    .subscribe({
-                        next: (res: InventoryResponseInterface) => {
-                            this.loadingData.set(false);
-                            this.allItems.set(res.inventoryItems);
-                            this.total.set(res.total);
-                            this.totalEmit.emit(res.total);
-                            this.totalElements.update((value) => value - 1);
-                        },
-                        error: (err: HttpErrorResponse) => {
-                            this.loadingData.set(false);
-                            this.totalEmit.emit(0);
-                            this.errorHandler(err);
-                        },
-                    });
+                this.#store.dispatch(InventoryActions.refreshItems());
             }
         }
+    }
+
+    private storeChanges(): void {
+        this.queryParams$
+            .pipe(
+                tap((params) => {
+                    this.showAddItem.set(params.tab === InventoryStateOrdered);
+                    this.loadingData.set(true);
+                    this.allItems.set([]); // optional: clear while loading
+                }),
+                switchMap((params) =>
+                    this.#inventoryService
+                        .getAllInventoryItems(
+                            params.pageNumber,
+                            params.pageSize,
+                            params.title,
+                            params.tab,
+                        )
+                        .pipe(
+                            catchError((err) => {
+                                this.errorHandler(err);
+                                return of(null); // prevent stream from dying
+                            }),
+                        ),
+                ),
+                takeUntil(this.unsubscribe$),
+            )
+            .subscribe((res) => {
+                this.loadingData.set(false);
+                if (!res) return;
+
+                this.allItems.set(res.inventoryItems);
+                this.total.set(res.total);
+                this.#store.dispatch(InventoryActions.setTotal({ amt: res.total }));
+                this.totalElements.set(res.totalElements);
+            });
     }
 }
