@@ -59,7 +59,7 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
         discount: this.#fb.control('0.25', [Validators.required]),
         company: this.#fb.control('', [Validators.required]),
         category: this.#fb.control('', [Validators.required]),
-        name: this.#fb.control(''),
+        name: this.#fb.control('NA'),
         number: this.#fb.control(''),
         MRP: this.#fb.control(null, [Validators.required]),
         quantity: this.#fb.control(null, [Validators.required]),
@@ -155,7 +155,7 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
             discount: '0.25',
             company: '',
             category: '',
-            name: '',
+            name: 'NA',
             number: '',
             MRP: null,
             quantity: null,
@@ -212,11 +212,11 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
         const discountControl = this.billingForm.get('discount');
         const mobileNumber = (mobileControl?.value ?? '').toString().trim();
         const usedDiscount = (discountControl?.value ?? '').toString().trim();
-        if (customerName.length < 5 || !mobileNumber || !/^\d{10}$/.test(mobileNumber)) {
+        if (!mobileNumber || !/^\d{10}$/.test(mobileNumber)) {
             this.#messageService.add({
                 severity: 'error',
                 summary: 'Error',
-                detail: 'The customer name and the customer mobile number is to be entered',
+                detail: 'The customer mobile number is to be entered',
                 key: 'br',
                 life: 3000,
             });
@@ -356,7 +356,7 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
     }
 
     comparePrices(): void {
-        const discountRates = [0.25, 0.24, 0.23, 0.2] as const;
+        const discountRates = [0.25, 0.23, 0.2, 0.18] as const;
         const comparisons = discountRates.map((rate) =>
             this.#billingService.billComparison(this.items(), rate),
         );

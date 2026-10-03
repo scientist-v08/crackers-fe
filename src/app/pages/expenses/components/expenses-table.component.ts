@@ -16,9 +16,9 @@ import { ExpenseInterface } from '../../../interfaces/expenses.interface';
             </ng-template>
             <ng-template #body let-item>
                 <tr>
-                    <td>{{ item.ID }}</td>
-                    <td>{{ item.ReasonForExpense }}</td>
-                    <td>₹{{ item.Amount }}</td>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.reasonForExpense }}</td>
+                    <td>₹{{ item.amount }}</td>
                 </tr>
             </ng-template>
         </p-table>
