@@ -5,6 +5,7 @@ import { PriceListService } from '../../services/priceList.service';
 import { ProductList } from '../../interfaces/priceList.interface';
 import { TabsModule } from 'primeng/tabs';
 import { PriceListcard } from './components/priceListCard.component';
+import { JsonPipe } from '@angular/common';
 
 @Component({
     selector: 'app-price-list',
