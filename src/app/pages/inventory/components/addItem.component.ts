@@ -20,7 +20,8 @@ import { HttpErrorResponse } from '@angular/common/http';
             [formGroup]="addNewForm"
             header="Add New Item"
             [modal]="true"
-            [(visible)]="visible"
+            [visible]="visible"
+            (visibleChange)="onDialogVisibilityChange($event)"
             [style]="{ width: '25rem' }"
         >
             <div class="form-stack">
@@ -138,7 +139,7 @@ import { HttpErrorResponse } from '@angular/common/http';
                 </div>
             </div>
             <div class="dialog-actions section-actions--end">
-                <app-button variant="secondary" (buttonClicked)="visible = false"
+                <app-button variant="secondary" (buttonClicked)="onDialogVisibilityChange(false)"
                     >Cancel</app-button
                 >
                 <app-button variant="accent" (buttonClicked)="submitForm()">Save Item</app-button>
@@ -244,5 +245,29 @@ export class AddItemComponent implements OnInit, OnDestroy {
         } else {
             this.validForm.set(true);
         }
+    }
+
+    public onDialogVisibilityChange(visible: boolean): void {
+        this.visible = visible;
+
+        if (!visible) {
+            this.resetForm();
+        }
+    }
+
+    private resetForm(): void {
+        this.addNewForm.patchValue({
+            brandOrCompany: '',
+            item: '',
+            numberOfBoxes: 0,
+            numberOfCartons: 0,
+            pricePerCarton: 0,
+        });
+
+        this.addNewForm.markAsPristine();
+        this.addNewForm.markAsUntouched();
+        this.addNewForm.updateValueAndValidity();
+
+        this.validForm.set(false);
     }
 }
