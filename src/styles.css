@@ -5,7 +5,7 @@
     --font-body: 'Inter', sans-serif;
 
     --color-crackers-shadow: #1a0f0d;
-    --color-crackers-mid: #7f1d1d;
+    --color-crackers-mid: #ef4444; /* red-600 – matches primary.color */
     --color-crackers-highlight: #faf6f0;
     --color-crackers-accent: #b8860b;
     --color-crackers-surface: #ffffff;
@@ -340,51 +340,6 @@ body {
     @apply rounded px-3 py-2 text-sm font-medium text-crackers-mid transition-colors hover:bg-crackers-error/10 hover:text-crackers-error;
 }
 
-/* Active item styling */
-.p-menuitem-active .p-menubar-item-label,
-.p-menubar-item-link-active .p-menubar-item-label,
-.p-menubar-item.p-menuitem-active .p-menubar-item-label {
-    color: var(--crackers-shadow) !important; /* Your main dark/brand text */
-}
-
-.p-menubar-item-link-active {
-    @apply !bg-crackers-highlight !text-crackers-mid;
-}
-
-/* Reset hover/active/focus backgrounds to clean look */
-@layer base {
-    :root {
-        --p-menubar-mobile-button-hover-background: transparent !important;
-        --p-menubar-item-focus-background: transparent !important;
-        --p-menubar-item-active-background: transparent !important;
-        --p-menubar-item-hover-background: transparent !important;
-    }
-}
-
-/* Mobile Menubar - Main Container */
-.p-menubar {
-    @apply !block !flex !h-16 !w-full !border-0 !rounded-none !bg-crackers-surface md:!hidden;
-}
-
-.p-menubar-root-list {
-    @apply !bg-crackers-surface;
-}
-
-/* Menu Item Labels */
-.p-menubar-item-label {
-    @apply !text-crackers-muted hover:!text-crackers-shadow;
-}
-
-/* Mobile Hamburger Button */
-.p-menubar-button {
-    @apply !text-crackers-mid hover:!text-crackers-shadow;
-}
-
-/* Optional: Make active link more prominent */
-.p-menubar-item.p-menuitem-active .p-menubar-item-label {
-    @apply !font-medium;
-}
-
 .app-main {
     @apply h-[calc(100vh-4rem)] overflow-auto bg-crackers-highlight;
 }
@@ -414,118 +369,51 @@ body {
     gap: var(--spacing-section);
 }
 
-/* ── PrimeNG overrides ────────────────────────────────── */
+/* ───────────────── PrimeNG structural overrides ───────────────── */
 
-.p-card {
-    @apply !gap-3 !rounded-lg !border !border-crackers-border !bg-crackers-surface !text-crackers-shadow;
-    box-shadow: 0 1px 3px rgb(26 15 13 / 6%) !important;
-}
-
+/* Card – font + spacing already mostly covered; keep only if you still need exact title size */
 .p-card-title,
 .p-card .p-card-header {
     font-family: var(--font-display) !important;
-    @apply !text-base !font-medium !text-crackers-shadow;
 }
 
-.p-card-body {
-    @apply !w-full !p-4;
-}
-
-.p-tablist {
-    @apply !gap-1 !border-b !border-crackers-border !bg-transparent;
-    position: relative;
-}
-
-.p-tablist-content {
-    @apply !overflow-x-auto;
-}
-
+/* Tabs – font on labels */
 .p-tablist .p-tab {
     font-family: var(--font-display) !important;
-    @apply !rounded-none !border-0 !bg-transparent !px-4 !py-3 !text-sm !font-medium !text-crackers-muted;
 }
 
-.p-tablist .p-tab[data-p-active='true'],
-.p-tablist .p-tab.p-tab-active {
-    @apply !text-crackers-mid;
-}
-
-/* Override Aura active-bar colour + stop it from being clipped */
-.p-tablist-active-bar {
-    @apply !bg-crackers-mid !h-0.5;
-    bottom: 0 !important;
-}
-
-.p-tabpanels {
-    @apply !bg-transparent !pt-6;
-}
-
-.p-tablist-nav-button {
-    @apply !bg-crackers-surface !text-crackers-muted !border-0 !shadow-none;
-}
-
-.p-tablist-nav-button:hover {
-    @apply !text-crackers-mid !bg-crackers-highlight;
-}
-
-.p-paginator {
-    @apply !mt-6 !border-0 !bg-transparent;
-}
-
+/* DataTable header font */
 .p-datatable .p-datatable-thead > tr > th {
     font-family: var(--font-display) !important;
-    @apply !border-crackers-border !bg-crackers-highlight !px-4 !py-3 !text-left !text-xs !font-medium !tracking-wide !text-crackers-muted uppercase;
+    @apply !text-xs !font-medium !tracking-wide uppercase;
 }
 
-.p-datatable .p-datatable-tbody > tr > td {
-    @apply !border-crackers-border !px-4 !py-3 !text-sm !text-crackers-shadow;
-}
-
-.p-datatable .p-datatable-tbody > tr:hover {
-    @apply !bg-crackers-highlight/60;
-}
-
-.p-dialog {
-    @apply !rounded-lg !border !border-crackers-border;
-}
-
+/* Dialog header font */
 .p-dialog-header {
     font-family: var(--font-display) !important;
-    @apply !border-b !border-crackers-border !bg-crackers-surface !px-6 !py-4 !text-crackers-shadow;
 }
 
-.p-dialog-content {
-    @apply !bg-crackers-surface !px-6 !py-6;
+/* Mobile Menubar layout (tokens don't control height / md:hidden behaviour) */
+.p-menubar {
+    @apply !flex !h-16 !w-full !border-0 !rounded-none md:!hidden;
 }
 
-.p-inputtext {
-    @apply !w-full !min-h-[var(--spacing-field)] !rounded !border-crackers-border !bg-crackers-highlight !px-4 !py-2.5 !text-base !text-crackers-shadow;
+.p-menubar-root-list {
+    @apply !bg-crackers-surface; /* or remove if surface.0 is enough */
 }
 
-.p-inputtext:enabled:focus {
-    @apply !border-crackers-mid !ring-2 !ring-crackers-mid/15;
+/* Optional: force active menubar label weight */
+.p-menubar-item.p-menuitem-active .p-menubar-item-label {
+    @apply !font-medium;
 }
 
-.p-inputnumber {
-    @apply !w-full;
-}
-
+/* Input height to match your --spacing-field (tokens use rem defaults) */
+.p-inputtext,
 .p-inputnumber .p-inputnumber-input {
-    @apply !w-full !min-h-[var(--spacing-field)] !rounded !border !border-crackers-border !bg-crackers-highlight !px-4 !py-2.5 !text-base !text-crackers-shadow;
+    min-height: var(--spacing-field);
 }
 
-.p-inputnumber:not(.p-disabled) .p-inputnumber-input:enabled:focus {
-    @apply !border-crackers-mid !ring-2 !ring-crackers-mid/15;
-}
-
-.p-inputnumber.p-inputnumber-fluid {
-    @apply !w-full;
-}
-
-.p-floatlabel label {
-    @apply !text-crackers-muted;
-}
-
-.p-toast .p-toast-message {
-    @apply !rounded !border !border-crackers-border;
+/* Paginator spacing */
+.p-paginator {
+    @apply !mt-6;
 }

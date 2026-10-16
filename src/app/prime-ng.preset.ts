@@ -1,0 +1,213 @@
+import { definePreset } from '@primeuix/themes';
+import Aura from '@primeuix/themes/aura';
+
+/**
+ * Crackers brand
+ * mid      = #7f1d1d  → primary
+ * error    = #b91c1c
+ * highlight= #faf6f0
+ * surface  = #ffffff
+ * border   = #e8dfd4
+ * muted    = #6b5c52
+ * shadow   = #1a0f0d
+ */
+export const crackersPreset = definePreset(Aura, {
+    semantic: {
+        primary: {
+            50: '{red.50}',
+            100: '{red.100}',
+            200: '{red.200}',
+            300: '{red.300}',
+            400: '{red.400}',
+            500: '{red.500}', // #ef4444 – good default
+            600: '{red.600}', // #dc2626 – slightly stronger
+            700: '{red.700}', // #b91c1c – your old error
+            800: '{red.800}',
+            900: '{red.900}', // #7f1d1d – your old mid (now only for darkest states)
+            950: '{red.950}',
+        },
+
+        colorScheme: {
+            light: {
+                primary: {
+                    color: '{primary.500}', // main UI red (lighter)
+                    inverseColor: '#ffffff',
+                    hoverColor: '{primary.600}',
+                    activeColor: '{primary.700}',
+                },
+                highlight: {
+                    background: '{primary.50}',
+                    focusBackground: '{primary.100}',
+                    color: '{primary.700}',
+                    focusColor: '{primary.800}',
+                },
+                surface: {
+                    0: '#ffffff',
+                    50: '#faf6f0',
+                    100: '#f5efe6',
+                    200: '#e8dfd4',
+                    300: '#d6cbbd',
+                    400: '#b8a99a',
+                    500: '#6b5c52',
+                    600: '#5a4d44',
+                    700: '#3d342e',
+                    800: '#2a221e',
+                    900: '#1a0f0d',
+                    950: '#0f0908',
+                },
+                formField: {
+                    background: '{surface.50}',
+                    disabledBackground: '{surface.100}',
+                    filledBackground: '{surface.50}',
+                    filledHoverBackground: '{surface.100}',
+                    filledFocusBackground: '{surface.0}',
+                    borderColor: '{surface.200}',
+                    hoverBorderColor: '{primary.700}',
+                    focusBorderColor: '{primary.700}',
+                    invalidBorderColor: '{red.700}',
+                    color: '{surface.900}',
+                    disabledColor: '{surface.500}',
+                    placeholderColor: '{surface.500}',
+                    invalidPlaceholderColor: '{red.600}',
+                    floatLabelColor: '{surface.500}',
+                    floatLabelFocusColor: '{primary.700}',
+                    floatLabelActiveColor: '{surface.500}',
+                    floatLabelInvalidColor: '{red.600}',
+                    iconColor: '{surface.500}',
+                    shadow: 'none',
+                },
+                text: {
+                    color: '{surface.900}',
+                    hoverColor: '{surface.800}',
+                    mutedColor: '{surface.500}',
+                    hoverMutedColor: '{surface.600}',
+                },
+                content: {
+                    background: '{surface.0}',
+                    hoverBackground: '{surface.50}',
+                    borderColor: '{surface.200}',
+                    color: '{surface.900}',
+                    hoverColor: '{surface.800}',
+                },
+            },
+        },
+    },
+
+    components: {
+        card: {
+            root: {
+                background: '{content.background}',
+                borderRadius: '{border.radius.lg}',
+                color: '{content.color}',
+                shadow: '0 1px 3px rgb(26 15 13 / 6%)',
+            },
+            body: {
+                padding: '1rem',
+                gap: '0.75rem',
+            },
+            title: {
+                fontWeight: '500',
+            },
+        },
+
+        tabs: {
+            tablist: {
+                background: 'transparent',
+                borderColor: '{content.border.color}',
+            },
+            tab: {
+                background: 'transparent',
+                hoverBackground: 'transparent',
+                activeBackground: 'transparent',
+                borderColor: 'transparent',
+                hoverBorderColor: 'transparent',
+                activeBorderColor: '{primary.color}',
+                color: '{text.muted.color}',
+                hoverColor: '{text.color}',
+                activeColor: '{primary.color}',
+            },
+            activeBar: {
+                background: '{primary.color}',
+                height: '2px',
+            },
+            tabpanel: {
+                background: 'transparent',
+                color: '{content.color}',
+                padding: '1.5rem 0 0 0',
+            },
+        },
+
+        datatable: {
+            headerCell: {
+                background: '{surface.50}',
+                color: '{text.muted.color}',
+                borderColor: '{content.border.color}',
+            },
+            bodyCell: {
+                borderColor: '{content.border.color}',
+            },
+            row: {
+                background: '{content.background}',
+                hoverBackground: '{content.hover.background}',
+            },
+        },
+
+        // Dialog: header only supports padding + gap (no borderColor)
+        dialog: {
+            root: {
+                background: '{overlay.modal.background}',
+                borderColor: '{content.border.color}',
+                color: '{overlay.modal.color}',
+                borderRadius: '{border.radius.lg}',
+            },
+            header: {
+                padding: '1rem 1.5rem',
+                gap: '0.5rem',
+            },
+            content: {
+                padding: '1.5rem',
+            },
+        },
+
+        // Toast: no "message" key — border lives on root
+        toast: {
+            root: {
+                borderRadius: '{content.border.radius}',
+                borderWidth: '1px',
+            },
+        },
+
+        menubar: {
+            root: {
+                background: '{content.background}',
+                borderColor: 'transparent',
+                borderRadius: '0',
+                color: '{text.muted.color}',
+            },
+            item: {
+                focusBackground: 'transparent',
+                activeBackground: 'transparent',
+                color: '{text.muted.color}',
+                focusColor: '{text.color}',
+                activeColor: '{primary.color}',
+            },
+            submenu: {
+                background: '{content.background}',
+                borderColor: '{content.border.color}',
+            },
+            mobileButton: {
+                color: '{primary.color}',
+                hoverColor: '{text.color}',
+                hoverBackground: 'transparent',
+            },
+        },
+
+        // Paginator root has no borderColor
+        paginator: {
+            root: {
+                background: 'transparent',
+                color: '{text.muted.color}',
+            },
+        },
+    },
+});
