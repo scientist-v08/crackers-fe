@@ -12,9 +12,8 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Dialog } from 'primeng/dialog';
 import { Toast } from 'primeng/toast';
-import { finalize, Subject, takeUntil, tap } from 'rxjs';
+import { Subject, takeUntil, tap } from 'rxjs';
 import { BillComparisonComponent } from '../../components/bill-comparison.component';
-import { ButtonComponent } from '../../components/button.component';
 import { GrandTotalComponent } from '../../components/grand-total.component';
 import { ItemsClass } from '../../components/items.component';
 import { SpinnerComponent } from '../../components/spinner.component';
@@ -33,13 +32,12 @@ import { DropdownInterface } from '../../interfaces/dropdown.interface';
 import { ItemsInterface } from '../../interfaces/items.interface';
 import { BillingService } from '../../services/billing.service';
 import { ItemsTableComponent } from '../../components/items-table.component';
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { ButtonFullWidth } from '../../components/button-full-width.component';
 
 @Component({
     selector: 'app-billing',
     standalone: true,
     imports: [
-        ButtonComponent,
         ReactiveFormsModule,
         ItemsClass,
         GrandTotalComponent,
@@ -48,6 +46,7 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
         SpinnerComponent,
         Toast,
         ItemsTableComponent,
+        ButtonFullWidth,
     ],
     templateUrl: './billing.component.html',
     providers: [MessageService],
@@ -131,26 +130,39 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
                 key: 'tl',
                 life: 3000,
             });
+            this.calculateTotal();
         } else {
             this.billingForm.markAllAsTouched();
         }
     }
 
     calculateTotal(): void {
-        if (this.items().length > 0) {
+        this.totalCost.set(this.items().reduce((sum, item) => sum + item.subTotal, 0));
+        const discount = Number(this.billingForm.controls.discount.getRawValue()) ?? 0.2;
+        this.finalizedBill(discount);
+        if (!this.showTotal()) {
+            this.showTotal.set(true);
+        }
+        /*if (this.items().length > 0) {
             this.selectAtLeastOneitem.set(false);
-            this.totalCost.set(this.items().reduce((sum, item) => sum + item.subTotal, 0));
             if (!this.showTotal()) {
                 this.showTotal.set(true);
             } else {
-                const discount = Number(this.billingForm.controls.discount.getRawValue()) ?? 0.25;
-                this.finalizedBill(discount);
             }
             this.shouldScroll.set(true);
         } else {
             this.selectAtLeastOneitem.set(true);
             this.totalCost.set(0);
             this.showTotal.set(false);
+        }*/
+    }
+
+    scroll(): void {
+        if (this.items().length > 0) {
+            this.selectAtLeastOneitem.set(false);
+            this.shouldScroll.set(true);
+        } else {
+            this.selectAtLeastOneitem.set(true);
         }
     }
 
@@ -172,6 +184,7 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
         this.shouldScroll.set(false);
         this.billComparison.set([]);
         this.showComparisons.set(false);
+        this.totalCost.set(0);
         this.billingForm.markAsUntouched();
     }
 

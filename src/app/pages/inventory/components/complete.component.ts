@@ -27,7 +27,7 @@ import * as InventorySelectors from '../../../store/inventory.selectors';
     imports: [ButtonComponent, Dialog, ReactiveFormsModule, InputNumberModule],
     selector: 'app-complete',
     template: `
-        <div class="btn-group">
+        <div class="section-actions--items section-actions--between">
             <app-button variant="accent" (buttonClicked)="complete()"
                 >Mark {{ goToState() }}</app-button
             >

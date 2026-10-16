@@ -193,6 +193,10 @@ body {
     @apply flex flex-col items-center gap-3 border-t sm:border-t-0 border-crackers-border pt-6 sm:flex-row sm:flex-wrap sm:items-center;
 }
 
+.section-actions--items {
+    @apply flex flex-row items-center gap-3 border-t border-t-0 border-crackers-border pt-6;
+}
+
 .dialog-actions {
     @apply mt-6 flex flex-row gap-3 border-t border-crackers-border pt-6;
 }
@@ -203,6 +207,10 @@ body {
 
 .section-actions--end {
     @apply justify-end;
+}
+
+.section-actions--between {
+    @apply justify-between;
 }
 
 /* ── Toolbar (search / filters) ───────────────────────── */
@@ -306,7 +314,7 @@ body {
 }
 
 .comparison-card {
-    @apply flex flex-col gap-1 rounded border border-crackers-border bg-crackers-surface p-4 text-center;
+    @apply flex flex-col gap-1 rounded border border-crackers-border bg-white p-4 text-center;
 }
 
 .comparison-card-label {
@@ -384,6 +392,12 @@ body {
 /* Tabs – font on labels */
 .p-tablist .p-tab {
     font-family: var(--font-display) !important;
+    @apply !rounded-none !border-0 !bg-transparent !px-4 !py-3 !text-sm !font-medium !text-crackers-muted;
+}
+
+.p-tablist .p-tab[data-p-active='true'],
+.p-tablist .p-tab.p-tab-active {
+    @apply !text-crackers-mid;
 }
 
 /* DataTable header font */
@@ -423,7 +437,7 @@ body {
 
 /* Mobile Hamburger Button */
 .p-menubar-button {
-    @apply !text-crackers-mid hover:!text-crackers-shadow;
+    @apply !text-black hover:!text-crackers-shadow;
 }
 
 /* Optional: Make active link more prominent */
@@ -440,4 +454,22 @@ body {
 /* Paginator spacing */
 .p-paginator {
     @apply !mt-6;
+}
+
+/* Override Aura active-bar colour + stop it from being clipped */
+.p-tablist-active-bar {
+    @apply !bg-crackers-mid !h-0.5;
+    bottom: 0 !important;
+}
+
+.p-tabpanels {
+    @apply !bg-transparent !pt-6;
+}
+
+.p-tablist-nav-button {
+    @apply !bg-crackers-surface !text-crackers-muted !border-0 !shadow-none;
+}
+
+.p-tablist-nav-button:hover {
+    @apply !text-crackers-mid !bg-crackers-highlight;
 }

@@ -201,17 +201,19 @@
                     </div>
 
                     <div class="section-actions section-actions--center">
-                        <app-button (buttonClicked)="addItem()">Add Item</app-button>
-                        <app-button variant="accent" (buttonClicked)="calculateTotal()">
-                            Calculate Total
-                        </app-button>
-                        <app-button variant="secondary" (buttonClicked)="newBill()"
-                            >New Bill</app-button
+                        <app-button-full-width (buttonClicked)="addItem()"
+                            >Add Item</app-button-full-width
                         >
+                        <app-button-full-width variant="accent" (buttonClicked)="scroll()"
+                            >Go to total</app-button-full-width
+                        >
+                        @if (selectAtLeastOneitem()) {
+                            <p class="form-error text-center">At least one item must be added</p>
+                        }
+                        <app-button-full-width variant="secondary" (buttonClicked)="newBill()">
+                            New Bill
+                        </app-button-full-width>
                     </div>
-                    @if (selectAtLeastOneitem()) {
-                        <p class="form-error text-center">At least one item must be added</p>
-                    }
                 </div>
             </section>
         </form>
@@ -219,7 +221,7 @@
         @if (showItems()) {
             <section class="content-card">
                 <div class="section-header">
-                    <h2 class="section-title">Bill Items</h2>
+                    <h2 class="section-title mb-4">Bill Items</h2>
                 </div>
                 <div class="card-body">
                     <app-items-table

@@ -1,8 +1,6 @@
-<app-header
-    [title]="title"
-    [allRoutes]="routes()"
-    (logoutClicked)="loginService.logout()"
-/>
+@if (routes().length > 0) {
+    <app-header [title]="title" [allRoutes]="routes()" (logoutClicked)="loginService.logout()" />
+}
 <main class="app-main">
     <router-outlet></router-outlet>
 </main>

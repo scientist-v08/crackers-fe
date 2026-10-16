@@ -1,12 +1,12 @@
 import { Component, inject, input, output, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { ItemsInterface } from '../interfaces/items.interface';
-import { ButtonComponent } from './button.component';
+import { BillItemsActionButton } from './bill-item-action-button.component';
 
 @Component({
     selector: 'app-items',
     standalone: true,
-    imports: [ButtonComponent, ReactiveFormsModule],
+    imports: [ReactiveFormsModule, BillItemsActionButton],
     template: `
         <div class="data-card-header">Item #{{ item().slNo }}</div>
 
@@ -57,16 +57,19 @@ import { ButtonComponent } from './button.component';
             <span class="data-row-value">₹{{ item().subTotal }}</span>
         </div>
 
-        <div class="section-actions section-actions--center">
-            <app-button
+        <div class="section-actions--items section-actions--between">
+            <app-bill-items-action-button
                 [variant]="editMode() ? 'accent' : 'secondary'"
                 (buttonClicked)="editClicked()"
             >
                 {{ editMode() ? 'Done Editing' : 'Edit' }}
-            </app-button>
-            <app-button variant="secondary" (buttonClicked)="deleteClicked(item().slNo)">
+            </app-bill-items-action-button>
+            <app-bill-items-action-button
+                variant="secondary"
+                (buttonClicked)="deleteClicked(item().slNo)"
+            >
                 Delete
-            </app-button>
+            </app-bill-items-action-button>
         </div>
     `,
 })
