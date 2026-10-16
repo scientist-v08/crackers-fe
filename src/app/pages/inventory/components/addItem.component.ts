@@ -15,7 +15,9 @@ import { HttpErrorResponse } from '@angular/common/http';
     imports: [ButtonComponent, Dialog, InputTextModule, ReactiveFormsModule, InputNumberModule],
     selector: 'app-add-item',
     template: `
-        <app-button [width]="'w-auto'" (buttonClicked)="visible = true">Add New Item</app-button>
+        <app-button variant="accent" [width]="'w-auto'" (buttonClicked)="visible = true"
+            >Add New Item</app-button
+        >
         <p-dialog
             [formGroup]="addNewForm"
             header="Add New Item"
