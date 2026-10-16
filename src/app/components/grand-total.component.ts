@@ -1,10 +1,10 @@
 import { Component, input, output } from '@angular/core';
-import { ButtonComponent } from './button.component';
+import { ButtonFullWidth } from './button-full-width.component';
 
 @Component({
     selector: 'app-grand-total',
     standalone: true,
-    imports: [ButtonComponent],
+    imports: [ButtonFullWidth],
     template: `
         <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
             <div class="text-center lg:text-left">
@@ -19,12 +19,14 @@ import { ButtonComponent } from './button.component';
                 <!-- <app-button variant="accent" (buttonClicked)="generateBill.emit()">
                     Generate Bill
                 </app-button> -->
-                <app-button (buttonClicked)="previewBill.emit()">Preview Bill</app-button>
-                <app-button variant="secondary" (buttonClicked)="comparePrices.emit()">
+                <app-button-full-width (buttonClicked)="previewBill.emit()"
+                    >Preview Bill</app-button-full-width
+                >
+                <app-button-full-width variant="secondary" (buttonClicked)="comparePrices.emit()">
                     Compare Prices
-                </app-button>
-                <app-button variant="secondary" (buttonClicked)="newBill.emit()"
-                    >New Bill</app-button
+                </app-button-full-width>
+                <app-button-full-width variant="secondary" (buttonClicked)="newBill.emit()"
+                    >New Bill</app-button-full-width
                 >
             </div>
         </div>
