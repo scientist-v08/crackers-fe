@@ -1,6 +1,7 @@
 import {
     AfterViewChecked,
     Component,
+    computed,
     ElementRef,
     inject,
     OnDestroy,
@@ -56,7 +57,7 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
     #billingService = inject(BillingService);
     #messageService = inject(MessageService);
     billingForm = this.#fb.group({
-        discount: this.#fb.control('0.25', [Validators.required]),
+        discount: this.#fb.control('0.2', [Validators.required]),
         company: this.#fb.control('', [Validators.required]),
         category: this.#fb.control('', [Validators.required]),
         name: this.#fb.control('NA'),
@@ -79,6 +80,9 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
     scrollToCompare = signal<boolean>(false);
     selectAtLeastOneitem = signal<boolean>(false);
     otherAmt = signal<number>(0);
+    allDiscounts = computed(() => {
+        return this.discountDropDownOptions().map((opt) => opt.discount);
+    });
     billId = '';
     billComparison = signal<BillComparisonInterface[]>([]);
     showComparisons = signal<boolean>(false);
@@ -152,7 +156,7 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
 
     newBill(): void {
         this.billingForm.setValue({
-            discount: '0.25',
+            discount: '0.2',
             company: '',
             category: '',
             name: 'NA',
@@ -356,7 +360,7 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
     }
 
     comparePrices(): void {
-        const discountRates = [0.25, 0.23, 0.2, 0.18] as const;
+        const discountRates = this.allDiscounts();
         const comparisons = discountRates.map((rate) =>
             this.#billingService.billComparison(this.items(), rate),
         );
