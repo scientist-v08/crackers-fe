@@ -4,15 +4,19 @@
     --font-display: 'Cinzel', serif;
     --font-body: 'Inter', sans-serif;
 
-    --color-crackers-shadow: #1a0f0d;
-    --color-crackers-mid: #ef4444; /* red-600 – matches primary.color */
+    --color-crackers-shadow: oklch(40.8% 0.123 38.172);
+    --color-crackers-mid: oklch(70.5% 0.213 47.604);
     --color-crackers-highlight: #faf6f0;
-    --color-crackers-accent: #b8860b;
-    --color-crackers-surface: #ffffff;
+    --color-crackers-accent: oklch(75% 0.183 55.934);
+    --color-crackers-surface: oklch(83.7% 0.128 66.29);
+    --color-crackers-surface: oklch(83.7% 0.128 66.29);
+    --color-crackers-surface-match: oklch(95.4% 0.038 75.164);
+    --color-crackers-surface-neutral: #fff;
     --color-crackers-border: #e8dfd4;
     --color-crackers-muted: #6b5c52;
     --color-crackers-error: #b91c1c;
     --color-crackers-success: #166534;
+    --color-crackers-strong: oklch(55.3% 0.195 38.402);
 
     --spacing-field: 2.75rem;
     --spacing-stack: 1rem;
@@ -61,7 +65,7 @@ body {
 /* ── Cards & sections ─────────────────────────────────── */
 
 .content-card {
-    @apply rounded-lg border border-crackers-border bg-crackers-surface p-6 md:p-8;
+    @apply rounded-lg border border-crackers-border bg-crackers-surface-match p-6 md:p-8;
     box-shadow: 0 1px 3px rgb(26 15 13 / 6%);
 }
 
@@ -208,7 +212,7 @@ body {
 }
 
 .toolbar-group {
-    @apply flex flex-1 flex-col gap-4 sm:flex-row sm:items-end md:w-full md:justify-end;
+    @apply flex flex-1 flex-col gap-4 sm:flex-row sm:items-end w-full md:justify-end;
 }
 
 .toolbar-field {
@@ -222,15 +226,15 @@ body {
 }
 
 .btn-primary {
-    @apply border-crackers-mid bg-crackers-mid text-white hover:bg-crackers-shadow;
+    @apply border-crackers-mid bg-crackers-mid text-black hover:bg-crackers-shadow;
 }
 
 .btn-secondary {
-    @apply border-crackers-border bg-crackers-surface text-crackers-shadow hover:border-crackers-mid/40 hover:bg-crackers-highlight;
+    @apply border-crackers-border bg-crackers-surface text-black hover:bg-crackers-shadow;
 }
 
 .btn-accent {
-    @apply border-crackers-accent bg-crackers-accent text-white hover:bg-crackers-shadow;
+    @apply border-crackers-accent bg-crackers-accent text-black hover:bg-crackers-shadow;
 }
 
 .btn-ghost {
@@ -244,7 +248,7 @@ body {
 /* ── Data display ─────────────────────────────────────── */
 
 .data-card {
-    @apply rounded border border-crackers-border bg-crackers-surface p-4;
+    @apply rounded border border-crackers-border bg-crackers-surface-neutral p-4;
 }
 
 .data-stack {
@@ -253,7 +257,7 @@ body {
 
 .data-card-header {
     font-family: var(--font-display);
-    @apply mb-3 border-b border-crackers-border pb-2 text-base font-medium text-crackers-shadow;
+    @apply mb-3 border-b border-crackers-border pb-2 text-base font-medium text-black;
 }
 
 .data-row {
@@ -261,7 +265,7 @@ body {
 }
 
 .data-row-label {
-    @apply shrink-0 text-crackers-muted;
+    @apply shrink-0 text-black;
 }
 
 .data-row-value {
@@ -274,7 +278,7 @@ body {
 
 .stat-banner strong {
     font-family: var(--font-display);
-    @apply text-crackers-mid;
+    @apply text-crackers-strong;
 }
 
 .empty-state {
@@ -351,7 +355,7 @@ body {
 }
 
 .login-card {
-    @apply w-full max-w-md rounded-lg border border-crackers-border bg-crackers-surface p-8 md:p-10;
+    @apply w-full max-w-md rounded-lg border border-crackers-border bg-crackers-surface-neutral p-8 md:p-10;
     box-shadow: 0 4px 24px rgb(26 15 13 / 8%);
 }
 

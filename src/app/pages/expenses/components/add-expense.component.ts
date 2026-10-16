@@ -32,7 +32,9 @@ const minLengthAfterTrim = (minLength: number) => {
     imports: [ButtonComponent, Dialog, InputTextModule, ReactiveFormsModule, InputNumberModule],
     selector: 'app-add-expense',
     template: `
-        <app-button [width]="'w-auto'" (buttonClicked)="visible = true">Add New Expense</app-button>
+        <app-button variant="accent" [width]="'w-auto'" (buttonClicked)="visible = true"
+            >Add New Expense</app-button
+        >
         <p-dialog
             [formGroup]="addExpense"
             header="Add New Expense"

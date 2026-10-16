@@ -1,36 +1,26 @@
 import { definePreset } from '@primeuix/themes';
 import Aura from '@primeuix/themes/aura';
 
-/**
- * Crackers brand
- * mid      = #7f1d1d  → primary
- * error    = #b91c1c
- * highlight= #faf6f0
- * surface  = #ffffff
- * border   = #e8dfd4
- * muted    = #6b5c52
- * shadow   = #1a0f0d
- */
 export const crackersPreset = definePreset(Aura, {
     semantic: {
         primary: {
-            50: '{red.50}',
-            100: '{red.100}',
-            200: '{red.200}',
-            300: '{red.300}',
-            400: '{red.400}',
-            500: '{red.500}', // #ef4444 – good default
-            600: '{red.600}', // #dc2626 – slightly stronger
-            700: '{red.700}', // #b91c1c – your old error
-            800: '{red.800}',
-            900: '{red.900}', // #7f1d1d – your old mid (now only for darkest states)
-            950: '{red.950}',
+            50: '{orange.50}',
+            100: '{orange.100}',
+            200: '{orange.200}',
+            300: '{orange.300}',
+            400: '{orange.400}',
+            500: '{orange.500}',
+            600: '{orange.600}',
+            700: '{orange.700}',
+            800: '{orange.800}',
+            900: '{orange.900}',
+            950: '{orange.950}',
         },
 
         colorScheme: {
             light: {
                 primary: {
-                    color: '{primary.500}', // main UI red (lighter)
+                    color: '{primary.500}',
                     inverseColor: '#ffffff',
                     hoverColor: '{primary.600}',
                     activeColor: '{primary.700}',
