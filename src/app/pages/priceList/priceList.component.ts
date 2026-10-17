@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, ChangeDetectionStrategy } from '@angular/core';
 import { SpinnerComponent } from '../../components/spinner.component';
 import { PriceListTableComponent } from './components/priceListTable.component';
 import { PriceListService } from '../../services/priceList.service';
@@ -10,6 +10,7 @@ import { PriceListcard } from './components/priceListCard.component';
     selector: 'app-price-list',
     templateUrl: './priceList.component.html',
     imports: [PriceListTableComponent, SpinnerComponent, TabsModule, PriceListcard],
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [],
 })
 export default class PriceListComponent {

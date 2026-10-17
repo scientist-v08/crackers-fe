@@ -69,16 +69,25 @@ export class BillingService {
             );
     }
 
+    public roundToTwo(num: number): number {
+        return Math.round((num + Number.EPSILON) * 100) / 100;
+    }
+
     public billComparison(allItems: ItemsInterface[], percent: number): BillComparisonInterface {
-        const discount = `${100 - percent * 100}% off`;
-        const total = allItems.reduce((total: number, item: ItemsInterface) => {
-            const baseAmount = item.mrpOrNet * item.quantity;
-            if (!item.item.startsWith('Other/Gift Box:')) {
-                return total + Math.floor(baseAmount * percent);
-            } else {
-                return total + baseAmount;
-            }
+        const discount = `${100 - Math.round(percent * 100)}% off`;
+        const total = allItems.reduce((acc: number, item: ItemsInterface) => {
+            const isGiftBox = item.item.startsWith('Other/Gift Box:');
+            const company = isGiftBox ? 'Other/Gift Box' : 'Standard';
+            // Reuse the exact same subTotalCalculation method!
+            const itemSubtotal = this.subTotalCalculation(
+                company,
+                percent,
+                item.quantity,
+                item.mrpOrNet,
+            );
+            return this.roundToTwo(acc + itemSubtotal);
         }, 0);
+
         return {
             discount: discount,
             total: total,
@@ -106,13 +115,15 @@ export class BillingService {
         discount: number,
         obtainedDiscount: number,
     ): ItemsInterface {
+        const cleanMRP = Number(MRP) || 0;
+        const cleanQty = Number(quantity) || 0;
         return {
             slNo: slNo,
             item: `${company}: ${category}`,
-            mrpOrNet: MRP ?? 0,
-            quantity: quantity ?? 0,
+            mrpOrNet: cleanMRP,
+            quantity: cleanQty,
             discount: company !== 'Other/Gift Box' ? `${discount}%` : 'NA',
-            subTotal: this.subTotalCalculation(company, obtainedDiscount, quantity, MRP),
+            subTotal: this.subTotalCalculation(company, obtainedDiscount, cleanQty, cleanMRP),
         };
     }
 
@@ -122,15 +133,11 @@ export class BillingService {
         quantity: number | null,
         mrpOrNet: number | null,
     ): number {
-        if (company) {
-            if (company !== 'Other/Gift Box') {
-                const subtotal = Math.floor((mrpOrNet as number) * (quantity as number) * discount);
-                return subtotal ?? 0;
-            } else {
-                const subtotal = (mrpOrNet as number) * (quantity as number);
-                return subtotal ?? 0;
-            }
+        if (!company || !quantity || !mrpOrNet) {
+            return 0;
         }
-        return 0;
+        const rawTotal =
+            company !== 'Other/Gift Box' ? mrpOrNet * quantity * discount : mrpOrNet * quantity;
+        return this.roundToTwo(rawTotal);
     }
 }

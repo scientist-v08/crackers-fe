@@ -1,10 +1,11 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
 import { ButtonFullWidth } from './button-full-width.component';
 
 @Component({
     selector: 'app-grand-total',
     standalone: true,
     imports: [ButtonFullWidth],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
             <div class="text-center lg:text-left">

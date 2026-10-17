@@ -1,4 +1,11 @@
-import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import {
+    Component,
+    inject,
+    OnDestroy,
+    OnInit,
+    signal,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { Subject, takeUntil, tap } from 'rxjs';
 import { ExpensesService } from '../../services/expenses.service';
 import { ExpenseInterface, ExpenseResponseInterface } from '../../interfaces/expenses.interface';
@@ -14,6 +21,7 @@ import { ExpensesTableComponent } from './components/expenses-table.component';
     standalone: true,
     imports: [Toast, SpinnerComponent, AddExpenseComponent, ExpensesTableComponent],
     templateUrl: './expenses.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [MessageService],
 })
 export default class ExpensesComponent implements OnInit, OnDestroy {

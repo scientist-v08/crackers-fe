@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { TabsModule } from 'primeng/tabs';
 import { InventoryService } from '../../services/inventory.service';
 import {
@@ -17,6 +17,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
     selector: 'app-inventory',
     standalone: true,
     imports: [TabsModule, ItemsComponent],
+    changeDetection: ChangeDetectionStrategy.Eager,
     templateUrl: './inventory.component.html',
 })
 export default class InventoryComponent {

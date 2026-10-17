@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     standalone: true,
     imports: [],
     selector: 'app-not-found',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="page-shell">
             <div class="page-container page-stack">

@@ -1,4 +1,4 @@
-import { Component, computed, input, signal } from '@angular/core';
+import { Component, computed, input, signal, ChangeDetectionStrategy } from '@angular/core';
 import { List } from '../../../interfaces/priceList.interface';
 
 @Component({
@@ -26,6 +26,7 @@ import { List } from '../../../interfaces/priceList.interface';
             </div>
         }
     `,
+    changeDetection: ChangeDetectionStrategy.Eager,
     host: {
         class: 'data-stack md:hidden',
     },

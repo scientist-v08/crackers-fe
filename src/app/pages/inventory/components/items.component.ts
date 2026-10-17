@@ -1,5 +1,13 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject, OnDestroy, OnInit, output, signal } from '@angular/core';
+import {
+    Component,
+    inject,
+    OnDestroy,
+    OnInit,
+    output,
+    signal,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
@@ -118,6 +126,7 @@ import * as InventorySelectors from '../../../store/inventory.selectors';
                                 @if (inventoryState() !== 'Unpacked') {
                                     <div class="section-actions">
                                         <app-complete
+                                            class="w-full"
                                             [itemToBeCompleted]="item"
                                             (toaster)="changeState($event)"
                                             (toasterForPartial)="
@@ -143,6 +152,7 @@ import * as InventorySelectors from '../../../store/inventory.selectors';
         </div>
         <p-toast position="bottom-right" key="br" />
     `,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [MessageService],
 })
 export class ItemsComponent implements OnInit, OnDestroy {

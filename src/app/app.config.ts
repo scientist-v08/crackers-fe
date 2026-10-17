@@ -1,4 +1,4 @@
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideHttpClient, withInterceptors, withXhr } from '@angular/common/http';
 import { ApplicationConfig, provideZonelessChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { providePrimeNG } from 'primeng/config';
@@ -11,7 +11,7 @@ import { crackersPreset } from './prime-ng.preset';
 export const appConfig: ApplicationConfig = {
     providers: [
         provideZonelessChangeDetection(),
-        provideHttpClient(withInterceptors([AuthInterceptor])),
+        provideHttpClient(withXhr(), withInterceptors([AuthInterceptor])),
         provideRouter(appRoutes),
         provideStore(),
         provideState(inventoryFeature),

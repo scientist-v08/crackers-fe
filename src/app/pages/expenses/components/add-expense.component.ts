@@ -1,4 +1,11 @@
-import { Component, inject, OnDestroy, output, signal } from '@angular/core';
+import {
+    Component,
+    inject,
+    OnDestroy,
+    output,
+    signal,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { ButtonComponent } from '../../inventory/components/button.component';
 import { Dialog } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
@@ -14,6 +21,7 @@ import { AddExpenseInterface, AddExpenseSuccess } from '../../../interfaces/expe
 import { ExpensesService } from '../../../services/expenses.service';
 import { Subject, takeUntil } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ButtonFullWidth } from '../../../components/button-full-width.component';
 
 const minLengthAfterTrim = (minLength: number) => {
     return (control: AbstractControl): ValidationErrors | null => {
@@ -29,11 +37,19 @@ const minLengthAfterTrim = (minLength: number) => {
 
 @Component({
     standalone: true,
-    imports: [ButtonComponent, Dialog, InputTextModule, ReactiveFormsModule, InputNumberModule],
+    imports: [
+        ButtonComponent,
+        Dialog,
+        InputTextModule,
+        ReactiveFormsModule,
+        InputNumberModule,
+        ButtonFullWidth,
+    ],
     selector: 'app-add-expense',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
-        <app-button variant="accent" [width]="'w-auto'" (buttonClicked)="visible = true"
-            >Add New Expense</app-button
+        <app-button-full-width variant="accent" (buttonClicked)="visible = true"
+            >Add New Expense</app-button-full-width
         >
         <p-dialog
             [formGroup]="addExpense"

@@ -1,9 +1,10 @@
-import { Component, computed, input, output } from '@angular/core';
+import { Component, computed, input, output, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     selector: 'app-button',
     standalone: true,
     imports: [],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <button
             [class]="buttonClass()"

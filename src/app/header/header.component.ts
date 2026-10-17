@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, output } from '@angular/core';
+import { Component, computed, inject, input, output, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { HeaderRouterInterface } from '../interfaces/header-router.interface';
 import { MenubarModule } from 'primeng/menubar';
@@ -9,6 +9,7 @@ import { MenuItem } from 'primeng/api';
     selector: 'app-header',
     standalone: true,
     imports: [RouterLink, RouterLinkActive, MenubarModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <!-- Mobile navigation -->
         <p-menubar [model]="items()">
