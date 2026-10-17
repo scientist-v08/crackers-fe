@@ -1,4 +1,4 @@
-import { Component, inject, input, output } from '@angular/core';
+import { Component, inject, input, output, ChangeDetectionStrategy } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { InventoryItem } from '../../../interfaces/inventory.interface';
 import { InventoryService } from '../../../services/inventory.service';
@@ -14,6 +14,7 @@ import * as InventorySelectors from '../../../store/inventory.selectors';
 @Component({
     selector: 'app-inventory-items-table',
     imports: [TableModule, CompleteComponent],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-table [value]="allItems()" dataKey="ID" styleClass="p-datatable-sm">
             <ng-template #header>

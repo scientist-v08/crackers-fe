@@ -1,4 +1,13 @@
-import { Component, computed, inject, input, OnInit, output, signal } from '@angular/core';
+import {
+    Component,
+    computed,
+    inject,
+    input,
+    OnInit,
+    output,
+    signal,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { InventoryService } from '../../../services/inventory.service';
 import { ButtonComponent } from './button.component';
 import {
@@ -26,6 +35,7 @@ import * as InventorySelectors from '../../../store/inventory.selectors';
     standalone: true,
     imports: [ButtonComponent, Dialog, ReactiveFormsModule, InputNumberModule],
     selector: 'app-complete',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="section-actions--items section-actions--between">
             <app-button variant="accent" (buttonClicked)="complete()"

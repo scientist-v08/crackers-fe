@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { BillComparisonInterface } from '../interfaces/billComparison.interface';
 import { ButtonComponent } from './button.component';
@@ -7,6 +7,7 @@ import { ButtonComponent } from './button.component';
     selector: 'app-bill-comparison',
     standalone: true,
     imports: [ButtonComponent, ReactiveFormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="section-header">
             <h2 class="section-title">Price Comparison</h2>

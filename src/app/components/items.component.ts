@@ -1,4 +1,4 @@
-import { Component, inject, input, output, signal } from '@angular/core';
+import { Component, inject, input, output, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { ItemsInterface } from '../interfaces/items.interface';
 import { BillItemsActionButton } from './bill-item-action-button.component';
@@ -7,6 +7,7 @@ import { BillItemsActionButton } from './bill-item-action-button.component';
     selector: 'app-items',
     standalone: true,
     imports: [ReactiveFormsModule, BillItemsActionButton],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="data-card-header">Item #{{ item().slNo }}</div>
 

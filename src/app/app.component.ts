@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { LoginService } from './services/login.service';
 import { HeaderComponent } from './header/header.component';
@@ -7,6 +7,7 @@ import { HeaderComponent } from './header/header.component';
     standalone: true,
     imports: [RouterOutlet, HeaderComponent],
     selector: 'app-root',
+    changeDetection: ChangeDetectionStrategy.Eager,
     templateUrl: './app.component.html',
 })
 export class AppComponent implements OnInit {

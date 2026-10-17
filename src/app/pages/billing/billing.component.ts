@@ -7,6 +7,7 @@ import {
     OnDestroy,
     signal,
     viewChild,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
@@ -49,6 +50,7 @@ import { ButtonFullWidth } from '../../components/button-full-width.component';
         ButtonFullWidth,
     ],
     templateUrl: './billing.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [MessageService],
 })
 export default class BillingComponent implements AfterViewChecked, OnDestroy {
@@ -137,9 +139,10 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
     }
 
     calculateTotal(): void {
-        this.totalCost.set(this.items().reduce((sum, item) => sum + item.subTotal, 0));
-        const discount = Number(this.billingForm.controls.discount.getRawValue()) ?? 0.2;
-        this.finalizedBill(discount);
+        const rawSum = this.items().reduce((sum, item) => sum + item.subTotal, 0);
+        this.totalCost.set(this.#billingService.roundToTwo(rawSum));
+        // const discount = Number(this.billingForm.controls.discount.getRawValue()) ?? 0.2;
+        // this.finalizedBill(discount);
         if (!this.showTotal()) {
             this.showTotal.set(true);
         }

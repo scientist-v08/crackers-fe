@@ -1,4 +1,12 @@
-import { Component, inject, OnDestroy, OnInit, output, signal } from '@angular/core';
+import {
+    Component,
+    inject,
+    OnDestroy,
+    OnInit,
+    output,
+    signal,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { ButtonComponent } from './button.component';
 import { Dialog } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
@@ -14,8 +22,9 @@ import { HttpErrorResponse } from '@angular/common/http';
     standalone: true,
     imports: [ButtonComponent, Dialog, InputTextModule, ReactiveFormsModule, InputNumberModule],
     selector: 'app-add-item',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
-        <app-button variant="accent" [width]="'w-auto'" (buttonClicked)="visible = true"
+        <app-button variant="accent" [width]="'w-80 md:w-auto'" (buttonClicked)="visible = true"
             >Add New Item</app-button
         >
         <p-dialog

@@ -234,15 +234,15 @@ body {
 }
 
 .btn-primary {
-    @apply border-crackers-mid bg-crackers-mid text-black hover:bg-crackers-shadow;
+    @apply border-crackers-mid bg-crackers-mid text-white hover:bg-crackers-shadow;
 }
 
 .btn-secondary {
-    @apply border-crackers-border bg-crackers-surface text-black hover:bg-crackers-shadow;
+    @apply border-crackers-border bg-crackers-surface text-black hover:bg-crackers-shadow hover:text-white;
 }
 
 .btn-accent {
-    @apply border-crackers-accent bg-crackers-accent text-black hover:bg-crackers-shadow;
+    @apply border-crackers-accent bg-crackers-accent text-black hover:bg-crackers-shadow hover:text-white;
 }
 
 .btn-ghost {
@@ -256,7 +256,7 @@ body {
 /* ── Data display ─────────────────────────────────────── */
 
 .data-card {
-    @apply rounded border border-crackers-border bg-crackers-surface-neutral p-4;
+    @apply rounded border border-crackers-border bg-crackers-surface-neutral p-4 w-80;
 }
 
 .data-stack {

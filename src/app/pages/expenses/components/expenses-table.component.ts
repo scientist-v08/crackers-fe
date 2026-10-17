@@ -1,10 +1,11 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { ExpenseInterface } from '../../../interfaces/expenses.interface';
 
 @Component({
     selector: 'app-expenses-table',
     imports: [TableModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-table [value]="expenses()" dataKey="ID" styleClass="p-datatable-sm">
             <ng-template #header>

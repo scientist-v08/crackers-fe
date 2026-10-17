@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
 import { ItemsInterface } from '../interfaces/items.interface';
 import { TableModule } from 'primeng/table';
 import { InputTextModule } from 'primeng/inputtext';
@@ -8,6 +8,7 @@ import { ButtonComponent } from './button.component';
 @Component({
     selector: 'app-items-table',
     imports: [TableModule, InputTextModule, FormsModule, ButtonComponent],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-table [value]="items()" dataKey="slNo" styleClass="p-datatable-sm">
             <ng-template #header>

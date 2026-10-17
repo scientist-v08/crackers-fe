@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     selector: 'app-spinner',
@@ -22,6 +22,7 @@ import { Component } from '@angular/core';
             <span class="text-sm text-crackers-muted">Loading…</span>
         </div>
     `,
+    changeDetection: ChangeDetectionStrategy.Eager,
     styles: [
         `
             .spinner_aj0A {

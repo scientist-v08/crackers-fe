@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { List } from '../../../interfaces/priceList.interface';
 
@@ -20,6 +20,7 @@ import { List } from '../../../interfaces/priceList.interface';
             </ng-template>
         </p-table>
     `,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [TableModule],
 })
 export class PriceListTableComponent {
