@@ -166,6 +166,34 @@ export const crackersPreset = definePreset(Aura, {
                 borderRadius: '{content.border.radius}',
                 borderWidth: '1px',
             },
+            colorScheme: {
+                light: {
+                    // Example: make success use your primary
+                    success: {
+                        background: 'color-mix(in srgb, {primary.50}, transparent 5%)',
+                        borderColor: '{primary.200}',
+                        color: '{primary.600}',
+                        detailColor: '{surface.700}',
+                        shadow: '0px 4px 8px 0px color-mix(in srgb, {primary.500}, transparent 96%)',
+                        closeButton: {
+                            hoverBackground: '{primary.100}',
+                            focusRing: {
+                                color: '{primary.600}',
+                                shadow: 'none',
+                            },
+                        },
+                    },
+
+                    // Secondary / contrast usually already use surface – force them if needed
+                    secondary: {
+                        background: '{surface.100}',
+                        borderColor: '{surface.200}',
+                        color: '{surface.600}',
+                        detailColor: '{surface.700}',
+                        // ...
+                    },
+                },
+            },
         },
 
         menubar: {
