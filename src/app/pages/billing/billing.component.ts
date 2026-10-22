@@ -129,7 +129,7 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
                 severity: 'success',
                 summary: 'Success',
                 detail: 'Item added successfully',
-                key: 'tl',
+                key: 'tc',
                 life: 3000,
             });
             this.calculateTotal();
