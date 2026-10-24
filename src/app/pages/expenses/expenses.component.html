@@ -22,7 +22,7 @@
                     <div class="data-stack md:hidden">
                         @for (item of allExpenses(); track item.id; let i = $index) {
                             <div class="data-card">
-                                <div class="data-card-header">Expense #{{ i }}</div>
+                                <div class="data-card-header">Expense #{{ i + 1 }}</div>
                                 <div class="data-row">
                                     <span class="data-row-label">Reason for expense</span>
                                     <span class="data-row-value">{{ item.reasonForExpense }}</span>
