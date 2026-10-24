@@ -17,6 +17,10 @@
     --color-crackers-error: #b91c1c;
     --color-crackers-success: #166534;
     --color-crackers-strong: oklch(55.3% 0.195 38.402);
+    --color-crackers-rose-50: #fff1f2;
+    --color-crackers-rose-200: oklch(89.9% 0.061 343.231);
+    --color-crackers-rose-700: oklch(52.5% 0.223 3.958);
+    --color-crackers-rose-900: oklch(40.8% 0.153 2.432);
 
     --spacing-field: 2.75rem;
     --spacing-stack: 1rem;
@@ -136,7 +140,7 @@ body {
 .form-control,
 .form-input,
 .form-select {
-    @apply w-full rounded border border-crackers-border bg-crackers-highlight px-4 text-base leading-normal text-crackers-shadow outline-none transition-colors;
+    @apply w-full rounded border border-crackers-rose-200 bg-crackers-rose-50 px-4 text-base leading-normal text-crackers-rose-900 outline-none transition-colors;
     min-height: var(--spacing-field);
 }
 
@@ -161,7 +165,8 @@ body {
 .form-control:focus,
 .form-input:focus,
 .form-select:focus {
-    @apply border-crackers-mid ring-2 ring-crackers-mid/15;
+    border-color: var(--color-orange-700);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-orange-700), transparent 85%);
 }
 
 .form-control-row {
