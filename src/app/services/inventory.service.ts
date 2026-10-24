@@ -26,12 +26,12 @@ export class InventoryService {
     ): Observable<InventoryResponseInterface> {
         const url =
             this.#Url +
-            `get/inventory?pageNumber=${pageNumber}&pageSize=${pageSize}&sortBy=id&order=desc&title=${title}&state=${state}`;
+            `admin/inventory?pageNumber=${pageNumber}&pageSize=${pageSize}&sortBy=id&order=desc&title=${title}&state=${state}`;
         return this.#http.get<InventoryResponseInterface>(url);
     }
 
     addNewItemToInventory(reqBody: NewInventoryItem): Observable<SuccessInterface> {
-        const url = this.#Url + 'post/inventory';
+        const url = this.#Url + 'admin/inventory';
         return this.#http.post<SuccessInterface>(url, reqBody);
     }
 
@@ -45,7 +45,7 @@ export class InventoryService {
             PricePerCarton: req.PricePerCarton,
             State: req.State,
         };
-        const url = this.#Url + 'post/updateInventory';
+        const url = this.#Url + 'admin/updateInventory';
         return this.#http.post<UpdateInventorySuccessInterface>(url, updatesReqBody);
     }
 }

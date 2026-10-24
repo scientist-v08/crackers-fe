@@ -50,7 +50,7 @@ export const crackersPreset = definePreset(Aura, {
                     disabledBackground: '{surface.100}',
                     filledBackground: '{surface.50}',
                     filledHoverBackground: '{surface.100}',
-                    filledFocusBackground: '{surface.0}',
+                    filledFocusBackground: '{surface.50}',
                     borderColor: '{surface.200}',
                     hoverBorderColor: '{primary.700}',
                     focusBorderColor: '{primary.700}',
@@ -73,7 +73,7 @@ export const crackersPreset = definePreset(Aura, {
                     hoverMutedColor: '{surface.600}',
                 },
                 content: {
-                    background: '{surface.0}',
+                    background: '{surface.50}',
                     hoverBackground: '{surface.50}',
                     borderColor: '{surface.200}',
                     color: '{surface.900}',

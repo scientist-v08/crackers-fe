@@ -9,7 +9,7 @@ export class PriceListService {
 
     readonly priceListResource = httpResource<ProductList>(
         () => ({
-            url: `${this.url}get/price-list`,
+            url: `${this.url}all/price-list`,
             method: 'GET',
         }),
         {

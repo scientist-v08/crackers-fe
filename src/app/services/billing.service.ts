@@ -12,7 +12,7 @@ export class BillingService {
     url = environment.baseUrl;
 
     public generateBill(req: BillDetailsInterface): Observable<BillResponseInterface> {
-        const billUrl = this.url + 'billing';
+        const billUrl = this.url + 'all/billing/preview';
         return this.#http
             .post<Blob>(billUrl, req, {
                 observe: 'response',
