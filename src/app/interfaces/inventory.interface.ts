@@ -7,25 +7,22 @@ export interface InventoryResponseInterface {
 }
 
 export interface InventoryItem {
-    ID: number;
-    CreatedAt: string;
-    UpdatedAt: string;
-    DeletedAt: any;
-    BrandOrCompany: string;
-    State: string;
-    Item: string;
-    NumOfBoxes: number;
-    NumOfCartons: number;
-    PricePerCarton: number;
-    SubTotal: number;
+    id: number;
+    brandOrCompany: string;
+    state: string;
+    item: string;
+    numOfBoxes: number;
+    numOfCartons: number;
+    pricePerCarton: number;
+    subTotal: number;
 }
 
 export interface NewInventoryItem {
     brandOrCompany: string;
     state: string;
     item: string;
-    numberOfBoxes: number;
-    numberOfCartons: number;
+    numOfBoxes: number;
+    numOfCartons: number;
     pricePerCarton: number;
     subtotal: number;
 }

@@ -116,7 +116,7 @@ export class CompleteComponent implements OnInit {
 
     private dynamicValidatorForForm(): void {
         this.partialNumberForm.controls.number.addValidators([
-            Validators.max(this.itemToBeCompleted().NumOfCartons),
+            Validators.max(this.itemToBeCompleted().numOfCartons),
         ]);
     }
 
@@ -156,7 +156,7 @@ export class CompleteComponent implements OnInit {
             this.visible = false;
             const partialItem: InventoryItem = {
                 ...this.itemToBeCompleted(),
-                NumOfCartons: this.partialNumberForm.controls.number.getRawValue() ?? 0,
+                numOfCartons: this.partialNumberForm.controls.number.getRawValue() ?? 0,
             };
             this.#inventoryService
                 .updateInventoryItem(partialItem)
@@ -166,8 +166,8 @@ export class CompleteComponent implements OnInit {
                         this.toasterForPartial.emit({
                             type: 'success',
                             message: val.message,
-                            id: partialItem.ID,
-                            numOfCartons: partialItem.NumOfCartons,
+                            id: partialItem.id,
+                            numOfCartons: partialItem.numOfCartons,
                         });
                     },
                     error: (err: HttpErrorResponse) => {

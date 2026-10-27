@@ -69,18 +69,18 @@ export const inventoryFeature = createFeature({
         })),
         on(InventoryActions.partialUpdateItem, (state, { id, numOfCartons }) => {
             const updatedItems = state.items.map((item) => {
-                if (item.ID === id) {
-                    const newNumOfCartons = item.NumOfCartons - numOfCartons;
+                if (item.id === id) {
+                    const newNumOfCartons = item.numOfCartons - numOfCartons;
                     return {
                         ...item,
                         NumOfCartons: newNumOfCartons,
-                        SubTotal: newNumOfCartons * item.PricePerCarton,
+                        SubTotal: newNumOfCartons * item.pricePerCarton,
                     };
                 }
                 return item;
             });
 
-            const newTotal = updatedItems.reduce((acc, curr) => acc + curr.SubTotal, 0);
+            const newTotal = updatedItems.reduce((acc, curr) => acc + curr.subTotal, 0);
 
             return {
                 ...state,
@@ -89,8 +89,8 @@ export const inventoryFeature = createFeature({
             };
         }),
         on(InventoryActions.removeItem, (state, { id }) => {
-            const updatedItems = state.items.filter((item) => item.ID !== id);
-            const newTotal = updatedItems.reduce((acc, curr) => acc + curr.SubTotal, 0);
+            const updatedItems = state.items.filter((item) => item.id !== id);
+            const newTotal = updatedItems.reduce((acc, curr) => acc + curr.subTotal, 0);
             return {
                 ...state,
                 items: updatedItems,

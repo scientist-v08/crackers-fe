@@ -216,8 +216,8 @@ export class AddItemComponent implements OnInit, OnDestroy {
                 brandOrCompany: this.addNewForm.controls.brandOrCompany.getRawValue() ?? '',
                 state: InventoryStateOrdered,
                 item: this.addNewForm.controls.item.getRawValue() ?? '',
-                numberOfBoxes: this.addNewForm.controls.numberOfBoxes.getRawValue() ?? 0,
-                numberOfCartons: this.addNewForm.controls.numberOfCartons.getRawValue() ?? 0,
+                numOfBoxes: this.addNewForm.controls.numberOfBoxes.getRawValue() ?? 0,
+                numOfCartons: this.addNewForm.controls.numberOfCartons.getRawValue() ?? 0,
                 pricePerCarton: this.addNewForm.controls.pricePerCarton.getRawValue() ?? 0,
                 subtotal: this.addNewForm.controls.subTotal.getRawValue() ?? 0,
             };

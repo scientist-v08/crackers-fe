@@ -85,7 +85,7 @@ export class ItemsTableComponent {
         this.toEdit.emit({
             slNo: item.slNo,
             item: item.item,
-            mrpOrNet: item.mrpOrNet,
+            mrpOrNet: Number(item.mrpOrNet),
             quantity: item.quantity,
             discount: item.discount,
             subTotal: item.subTotal,
@@ -97,7 +97,7 @@ export class ItemsTableComponent {
             slNo: item.slNo,
             item: item.item,
             mrpOrNet: item.mrpOrNet,
-            quantity: item.quantity,
+            quantity: Number(item.quantity),
             discount: item.discount,
             subTotal: item.subTotal,
         });
