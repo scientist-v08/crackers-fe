@@ -31,11 +31,11 @@ import * as InventorySelectors from '../../../store/inventory.selectors';
             </ng-template>
             <ng-template #body let-item>
                 <tr>
-                    <td>{{ item.BrandOrCompany }}: {{ item.Item }}</td>
-                    <td>{{ item.NumOfBoxes }}</td>
-                    <td>{{ item.NumOfCartons }}</td>
-                    <td>₹{{ item.PricePerCarton }}</td>
-                    <td>₹{{ item.SubTotal }}</td>
+                    <td>{{ item.brandOrCompany }}: {{ item.item }}</td>
+                    <td>{{ item.numOfBoxes }}</td>
+                    <td>{{ item.numOfCartons }}</td>
+                    <td>₹{{ item.pricePerCarton }}</td>
+                    <td>₹{{ item.subTotal }}</td>
                     @if (inventoryState() !== 'Unpacked') {
                         <td>
                             <app-complete

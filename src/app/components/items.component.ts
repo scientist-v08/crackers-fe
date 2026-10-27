@@ -97,8 +97,8 @@ export class ItemsClass {
             this.toEdit.emit({
                 slNo: this.item().slNo,
                 item: this.item().item,
-                mrpOrNet: this.itemForm.controls.mrpOrNet.getRawValue() ?? 0,
-                quantity: this.itemForm.controls.quantity.getRawValue() ?? 0,
+                mrpOrNet: Number(this.itemForm.controls.mrpOrNet.getRawValue()) ?? 0,
+                quantity: Number(this.itemForm.controls.quantity.getRawValue()) ?? 0,
                 discount: this.item().discount,
                 subTotal: this.item().subTotal,
             });

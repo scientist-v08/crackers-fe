@@ -102,26 +102,26 @@ import * as InventorySelectors from '../../../store/inventory.selectors';
                         (partialSuccessMessageService)="partialSuccessMessageService($event)"
                     />
                     <div class="data-stack md:hidden">
-                        @for (item of allItems(); track item.ID) {
+                        @for (item of allItems(); track item.id) {
                             <div class="data-card">
                                 <div class="data-card-header">
-                                    {{ item.BrandOrCompany }}: {{ item.Item }}
+                                    {{ item.brandOrCompany }}: {{ item.item }}
                                 </div>
                                 <div class="data-row">
                                     <span class="data-row-label">Boxes per carton</span>
-                                    <span class="data-row-value">{{ item.NumOfBoxes }}</span>
+                                    <span class="data-row-value">{{ item.numOfBoxes }}</span>
                                 </div>
                                 <div class="data-row">
                                     <span class="data-row-label">Number of cartons</span>
-                                    <span class="data-row-value">{{ item.NumOfCartons }}</span>
+                                    <span class="data-row-value">{{ item.numOfCartons }}</span>
                                 </div>
                                 <div class="data-row">
                                     <span class="data-row-label">Price per carton</span>
-                                    <span class="data-row-value">₹{{ item.PricePerCarton }}</span>
+                                    <span class="data-row-value">₹{{ item.pricePerCarton }}</span>
                                 </div>
                                 <div class="data-row">
                                     <span class="data-row-label">Subtotal</span>
-                                    <span class="data-row-value">₹{{ item.SubTotal }}</span>
+                                    <span class="data-row-value">₹{{ item.subTotal }}</span>
                                 </div>
                                 @if (inventoryState() !== 'Unpacked') {
                                     <div class="section-actions">
@@ -150,7 +150,7 @@ import * as InventorySelectors from '../../../store/inventory.selectors';
                 <app-spinner class="flex items-center justify-center py-12" />
             }
         </div>
-        <p-toast position="bottom-right" key="br" />
+        <p-toast position="top-center" key="br" />
     `,
     changeDetection: ChangeDetectionStrategy.Eager,
     providers: [MessageService],
@@ -269,22 +269,25 @@ export class ItemsComponent implements OnInit, OnDestroy {
             key: 'br',
             life: 3000,
         });
+
         if (event.type === 'success') {
             this.allItems.update((items) => {
-                const updatedItems = items.map((itemToUpdate) => {
-                    if (itemToUpdate.ID === event.id) {
-                        const newNumOfCartons = itemToUpdate.NumOfCartons - event.numOfCartons;
+                const updatedItems = items.map((item) => {
+                    if (item.id === event.id) {
+                        const newNumOfCartons = item.numOfCartons - event.numOfCartons;
+
                         return {
-                            ...itemToUpdate,
-                            NumOfCartons: newNumOfCartons,
-                            SubTotal: newNumOfCartons * itemToUpdate.PricePerCarton,
+                            ...item,
+                            numOfCartons: newNumOfCartons,
+                            subTotal: newNumOfCartons * item.pricePerCarton,
                         };
                     }
-                    return itemToUpdate;
+
+                    return item;
                 });
 
-                // Calculate new total after update
-                const newTotal = updatedItems.reduce((acc, curr) => acc + curr.SubTotal, 0);
+                const newTotal = updatedItems.reduce((acc, curr) => acc + curr.subTotal, 0);
+
                 this.total.set(newTotal);
                 this.#store.dispatch(InventoryActions.setTotal({ amt: newTotal }));
 

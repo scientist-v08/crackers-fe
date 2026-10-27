@@ -237,7 +237,7 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
                 severity: 'error',
                 summary: 'Error',
                 detail: 'The customer mobile number is to be entered',
-                key: 'br',
+                key: 'tc',
                 life: 3000,
             });
             return;
@@ -274,7 +274,7 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
                         severity: 'error',
                         summary: 'Error',
                         detail: 'Unable to process the request',
-                        key: 'br',
+                        key: 'tc',
                         life: 3000,
                     });
                 },
@@ -292,7 +292,7 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
                 severity: 'error',
                 summary: 'Error',
                 detail: 'The customer mobile number is to be entered',
-                key: 'br',
+                key: 'tc',
                 life: 3000,
             });
             return;
@@ -329,7 +329,7 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
                         severity: 'error',
                         summary: 'Error',
                         detail: err.statusText,
-                        key: 'br',
+                        key: 'tc',
                         life: 3000,
                     });
                 },

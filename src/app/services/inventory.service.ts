@@ -37,13 +37,13 @@ export class InventoryService {
 
     updateInventoryItem(req: InventoryItem): Observable<UpdateInventorySuccessInterface> {
         const updatesReqBody = {
-            ID: req.ID,
-            BrandOrCompany: req.BrandOrCompany,
-            Item: req.Item,
-            NumOfBoxes: req.NumOfBoxes,
-            NumOfCartons: req.NumOfCartons,
-            PricePerCarton: req.PricePerCarton,
-            State: req.State,
+            id: req.id,
+            brandOrCompany: req.brandOrCompany,
+            item: req.item,
+            numOfBoxes: req.numOfBoxes,
+            numOfCartons: req.numOfCartons,
+            pricePerCarton: req.pricePerCarton,
+            state: req.state,
         };
         const url = this.#Url + 'admin/updateInventory';
         return this.#http.post<UpdateInventorySuccessInterface>(url, updatesReqBody);
