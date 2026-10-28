@@ -26,6 +26,9 @@ import { ButtonFullWidth } from './button-full-width.component';
                 <app-button-full-width variant="secondary" (buttonClicked)="comparePrices.emit()">
                     Compare Prices
                 </app-button-full-width>
+                <app-button-full-width variant="secondary" (buttonClicked)="saveBill.emit()">
+                    Save Bill
+                </app-button-full-width>
                 <app-button-full-width variant="secondary" (buttonClicked)="newBill.emit()"
                     >New Bill</app-button-full-width
                 >
@@ -37,6 +40,7 @@ export class GrandTotalComponent {
     grandTotal = input.required<number>();
     finalizedAmt = input.required<number>();
     generateBill = output<void>();
+    saveBill = output<void>();
     previewBill = output<void>();
     comparePrices = output<void>();
     newBill = output<void>();

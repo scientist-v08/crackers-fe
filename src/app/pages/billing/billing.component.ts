@@ -34,6 +34,14 @@ import { ItemsInterface } from '../../interfaces/items.interface';
 import { BillingService } from '../../services/billing.service';
 import { ItemsTableComponent } from '../../components/items-table.component';
 import { ButtonFullWidth } from '../../components/button-full-width.component';
+import { SavedBillsComponent } from './saved-bills/saved-bills.component';
+import {
+    SavedTempBillResponseInterface,
+    TempBillDetailsInterface,
+    TempBillResponseInterface,
+} from '../../interfaces/temp.interface';
+import { minLengthAfterTrim } from '../expenses/components/add-expense.component';
+import { ButtonComponent } from '../inventory/components/button.component';
 
 @Component({
     selector: 'app-billing',
@@ -48,6 +56,8 @@ import { ButtonFullWidth } from '../../components/button-full-width.component';
         Toast,
         ItemsTableComponent,
         ButtonFullWidth,
+        SavedBillsComponent,
+        ButtonComponent,
     ],
     templateUrl: './billing.component.html',
     changeDetection: ChangeDetectionStrategy.Eager,
@@ -66,7 +76,12 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
         MRP: this.#fb.control(null, [Validators.required]),
         quantity: this.#fb.control(null, [Validators.required]),
     });
+    addComments = this.#fb.group({
+        comment: this.#fb.control('', [Validators.required, minLengthAfterTrim(5)]),
+    });
     visible = false;
+    saveBillComments = false;
+    validCommentForm = signal<boolean>(false);
     discountDropDownOptions = signal<DiscountDropdownInterface[]>(discountDropDownOptions);
     companyDropdown = signal<DropdownInterface[]>(companyDropdown);
     categoryDropdown = signal<DropdownInterface[]>(categoryDropdown);
@@ -86,6 +101,7 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
     });
     billId = '';
     billComparison = signal<BillComparisonInterface[]>([]);
+    showSavedBills = signal<boolean>(false);
     showComparisons = signal<boolean>(false);
     unsubscribe$ = new Subject<void>();
 
@@ -270,6 +286,7 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
                     window.open(whatsappTab, '_blank');
                 },
                 error: () => {
+                    this.visible = false;
                     this.#messageService.add({
                         severity: 'error',
                         summary: 'Error',
@@ -398,6 +415,185 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
     otherFinalized(amt: number): void {
         this.showComparisons.set(false);
         this.otherAmt.set(amt);
+    }
+
+    saveBill(): void {
+        if (this.addComments.valid) {
+            this.saveBillComments = false;
+            this.validCommentForm.set(false);
+            const mobileControl = this.billingForm.get('number');
+            const discountControl = this.billingForm.get('discount');
+            const customerName = this.billingForm.controls.name.getRawValue() ?? '';
+            const commentControl = this.addComments.get('comment');
+
+            const mobileNumber = (mobileControl?.value ?? '').toString().trim();
+            const usedDiscount = (discountControl?.value ?? '').toString().trim();
+            const comment = (commentControl?.value ?? '').toString().trim();
+
+            const requestBody: TempBillDetailsInterface = {
+                user: customerName,
+                mobile: mobileNumber,
+                grandTotal: this.totalCost(),
+                finalizedAmt: this.otherAmt(),
+                comments: comment,
+                discount: usedDiscount,
+                tempBillItems: this.items().map((item) => ({
+                    mrpOrNet: item.mrpOrNet,
+                    item: item.item,
+                    quantity: item.quantity,
+                    discount: item.discount,
+                    subTotal: item.subTotal,
+                })),
+            };
+
+            this.#billingService
+                .saveTempBill(requestBody)
+                .pipe(
+                    tap(() => (this.visible = true)),
+                    takeUntil(this.unsubscribe$),
+                )
+                .subscribe({
+                    next: (res: BillResponseInterface) => {
+                        this.visible = false;
+                        this.#billingService.savedBillsResource.reload();
+                        this.addComments.reset();
+                        this.addComments.markAsUntouched();
+                        this.addComments.markAsPristine();
+                        this.#messageService.add({
+                            severity: 'success',
+                            summary: 'Success',
+                            detail: 'Bill saved for later',
+                            key: 'tc',
+                            life: 3000,
+                        });
+                        const number = this.billingForm.controls.number.getRawValue()?.trim();
+                        this.newBill();
+                        if (number) {
+                            const blobUrl = window.URL.createObjectURL(res.file);
+                            const a = document.createElement('a');
+                            a.href = blobUrl;
+                            a.download = res.filename;
+                            a.click();
+                            window.URL.revokeObjectURL(blobUrl);
+                            const whatsappTab = 'https://wa.me/91' + number;
+                            window.open(whatsappTab, '_blank');
+                        }
+                    },
+                    error: (err) => {
+                        this.visible = false;
+                        this.#messageService.add({
+                            severity: 'error',
+                            summary: 'Error',
+                            detail:
+                                err.error?.message ??
+                                err.statusText ??
+                                'Failed to save temporary bill',
+                            key: 'tc',
+                            life: 3000,
+                        });
+                    },
+                });
+        } else {
+            this.#messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Add comment to save bill',
+                key: 'tc',
+                life: 3000,
+            });
+        }
+    }
+
+    import(eid: number): void {
+        this.showSavedBills.set(false);
+        this.#billingService
+            .getSavedBill(eid)
+            .pipe(
+                tap(() => (this.visible = true)),
+                takeUntil(this.unsubscribe$),
+            )
+            .subscribe({
+                next: (res: SavedTempBillResponseInterface) => {
+                    this.visible = false;
+                    this.#billingService.savedBillsResource.reload();
+                    // Update only the relevant reactive form controls.
+                    this.billingForm.patchValue({
+                        number: res.mobile,
+                        name: res.user,
+                    });
+
+                    // Clear existing items before importing the saved ones.
+                    this.items.set([]);
+
+                    // Map the saved items to the existing ItemsInterface.
+                    this.items.set(
+                        res.items.map((item, index) => ({
+                            slNo: index + 1,
+                            item: item.item,
+                            mrpOrNet: item.mrpOrNet,
+                            quantity: item.quantity,
+                            discount: item.discount,
+                            subTotal: item.subTotal,
+                        })),
+                    );
+
+                    this.showItems.set(true);
+                    this.calculateTotal();
+
+                    this.#messageService.add({
+                        severity: 'success',
+                        summary: 'Success',
+                        detail: 'Saved bill imported successfully',
+                        key: 'tc',
+                        life: 3000,
+                    });
+                },
+                error: (err) => {
+                    this.visible = false;
+                    this.#messageService.add({
+                        severity: 'error',
+                        summary: 'Error',
+                        detail:
+                            err.error?.message ?? err.statusText ?? 'Failed to import saved bill',
+                        key: 'tc',
+                        life: 3000,
+                    });
+                },
+            });
+    }
+
+    delete(eid: number): void {
+        this.showSavedBills.set(false);
+        this.#billingService
+            .deleteSavedBill(eid)
+            .pipe(
+                tap(() => (this.visible = true)),
+                takeUntil(this.unsubscribe$),
+            )
+            .subscribe({
+                next: () => {
+                    this.visible = false;
+                    this.#billingService.savedBillsResource.reload();
+                    this.#messageService.add({
+                        severity: 'success',
+                        summary: 'Success',
+                        detail: 'Saved bill deleted successfully',
+                        key: 'tc',
+                        life: 3000,
+                    });
+                },
+                error: (err) => {
+                    this.visible = false;
+                    this.#messageService.add({
+                        severity: 'error',
+                        summary: 'Error',
+                        detail:
+                            err.error?.message ?? err.statusText ?? 'Failed to delete saved bill',
+                        key: 'tc',
+                        life: 3000,
+                    });
+                },
+            });
     }
 
     ngOnDestroy(): void {

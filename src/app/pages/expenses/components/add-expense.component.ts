@@ -23,7 +23,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ButtonFullWidth } from '../../../components/button-full-width.component';
 
-const minLengthAfterTrim = (minLength: number) => {
+export const minLengthAfterTrim = (minLength: number) => {
     return (control: AbstractControl): ValidationErrors | null => {
         if (!control.value) return null;
 
