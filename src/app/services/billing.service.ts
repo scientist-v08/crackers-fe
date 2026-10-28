@@ -1,10 +1,16 @@
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, httpResource, HttpResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { BillDetailsInterface, BillResponseInterface } from '../interfaces/billDetails.interface';
 import { map, Observable } from 'rxjs';
 import { ItemsInterface } from '../interfaces/items.interface';
 import { BillComparisonInterface } from '../interfaces/billComparison.interface';
+import {
+    GetAllSavedBills,
+    SavedTempBillResponseInterface,
+    TempBillDetailsInterface,
+    TempBillResponseInterface,
+} from '../interfaces/temp.interface';
 
 @Injectable({ providedIn: 'root' })
 export class BillingService {
@@ -139,5 +145,52 @@ export class BillingService {
         const rawTotal =
             company !== 'Other/Gift Box' ? mrpOrNet * quantity * discount : mrpOrNet * quantity;
         return this.roundToTwo(rawTotal);
+    }
+
+    readonly savedBillsResource = httpResource<GetAllSavedBills[]>(
+        () => ({
+            url: `${this.url}all/comments-and-amounts`,
+            method: 'GET',
+        }),
+        {
+            defaultValue: [],
+        },
+    );
+
+    saveTempBill(req: TempBillDetailsInterface): Observable<BillResponseInterface> {
+        const billUrl = this.url + 'all/save-temp';
+        return this.#http
+            .post<Blob>(billUrl, req, {
+                observe: 'response',
+                responseType: 'blob' as 'json',
+            })
+            .pipe(
+                map((res) => {
+                    let filename = 'bill_preview.pdf';
+                    const contentDisposition = res.headers.get('Content-Disposition');
+                    if (contentDisposition) {
+                        const match = contentDisposition.match(/filename="?(.+?)"?$/i);
+                        if (match?.[1]) {
+                            filename = match[1];
+                        }
+                    }
+                    return {
+                        file: res.body!,
+                        filename,
+                    };
+                }),
+            );
+    }
+
+    getSavedBill(id: number): Observable<SavedTempBillResponseInterface> {
+        const billUrl = this.url + 'all/get-saved';
+        const reqBdy = { id: id };
+        return this.#http.post<SavedTempBillResponseInterface>(billUrl, reqBdy);
+    }
+
+    deleteSavedBill(id: number) {
+        const billUrl = this.url + 'all/delete-saved';
+
+        return this.#http.post<void>(billUrl, { id });
     }
 }

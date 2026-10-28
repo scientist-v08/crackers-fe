@@ -88,11 +88,11 @@ body {
 
 .section-title {
     font-family: var(--font-display);
-    @apply text-xl font-medium leading-tight text-crackers-shadow;
+    @apply text-center text-xl font-medium leading-tight text-crackers-shadow md:text-left;
 }
 
 .section-description {
-    @apply text-sm leading-relaxed text-crackers-muted;
+    @apply text-center text-sm leading-relaxed text-crackers-muted md:text-left;
 }
 
 .card-body {
