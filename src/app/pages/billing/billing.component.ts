@@ -374,18 +374,18 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
                             key: 'tc',
                             life: 3000,
                         });
-                        //const number = this.billingForm.controls.number.getRawValue()?.trim();
+                        const number = this.billingForm.controls.number.getRawValue()?.trim() ?? '';
                         this.newBill();
-                        //if (number) {
+                        if (number?.length > 9) {
                             const blobUrl = window.URL.createObjectURL(res.file);
                             const a = document.createElement('a');
                             a.href = blobUrl;
                             a.download = res.filename;
                             a.click();
                             window.URL.revokeObjectURL(blobUrl);
-                            //const whatsappTab = 'https://wa.me/91' + number;
-                            //window.open(whatsappTab, '_blank');
-                        //}
+                            const whatsappTab = 'https://wa.me/91' + number;
+                            window.open(whatsappTab, '_blank');
+                        }
                     },
                     error: (err) => {
                         this.visible = false;
