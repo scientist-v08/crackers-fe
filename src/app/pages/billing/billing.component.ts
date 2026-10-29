@@ -298,99 +298,7 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
             });
     }
 
-    previewBill(): void {
-        const mobileControl = this.billingForm.get('number');
-        const discountControl = this.billingForm.get('discount');
-        const mobileNumber = (mobileControl?.value ?? '').toString().trim();
-        const usedDiscount = (discountControl?.value ?? '').toString().trim();
-
-        if (!mobileNumber || !/^\d{10}$/.test(mobileNumber)) {
-            this.#messageService.add({
-                severity: 'error',
-                summary: 'Error',
-                detail: 'The customer mobile number is to be entered',
-                key: 'tc',
-                life: 3000,
-            });
-            return;
-        }
-        const requestBody: BillDetailsInterface = {
-            user: 'NA',
-            mobile: mobileNumber,
-            grandTotal: this.totalCost(),
-            billItems: this.items(),
-            discount: usedDiscount,
-            finalizedAmt: this.otherAmt(),
-        };
-        this.#billingService
-            .generatePreviewBill(requestBody)
-            .pipe(
-                tap(() => (this.visible = true)),
-                takeUntil(this.unsubscribe$),
-            )
-            .subscribe({
-                next: (res: BillResponseInterface) => {
-                    this.visible = false;
-                    const blobUrl = window.URL.createObjectURL(res.file);
-                    const a = document.createElement('a');
-                    a.href = blobUrl;
-                    a.download = res.filename;
-                    a.click();
-                    window.URL.revokeObjectURL(blobUrl);
-                    const whatsappTab =
-                        'https://wa.me/91' + (this.billingForm.controls.number.getRawValue() ?? '');
-                    window.open(whatsappTab, '_blank');
-                },
-                error: (err) => {
-                    this.#messageService.add({
-                        severity: 'error',
-                        summary: 'Error',
-                        detail: err.statusText,
-                        key: 'tc',
-                        life: 3000,
-                    });
-                },
-            });
-        /*this.#billingService
-            .generatePreviewBill(requestBody)
-            .pipe(
-                tap(() => (this.visible = true)),
-                finalize(() => (this.visible = false)),
-                takeUntil(this.unsubscribe$),
-            )
-            .subscribe({
-                next: (res: HttpResponse<Blob>) => {
-                    const blob = res.body!;
-                    const contentDisposition = res.headers.get('Content-Disposition') || '';
-                    const filenameMatch = contentDisposition.match(/filename="?([^"]+)"?/);
-                    const filename = filenameMatch ? filenameMatch[1] : 'bill.pdf';
-
-                    // Create download
-                    const blobUrl = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = blobUrl;
-                    a.download = filename;
-                    a.click();
-                    window.URL.revokeObjectURL(blobUrl);
-
-                    // Open WhatsApp
-                    const number = this.billingForm.controls.number.getRawValue() ?? '';
-                    const whatsappTab = 'https://wa.me/91' + number;
-                    window.open(whatsappTab, '_blank');
-                },
-                error: async (err: HttpErrorResponse) => {
-                    const errorText = await err.error.text();
-                    const errorJson = JSON.parse(errorText);
-                    this.#messageService.add({
-                        severity: 'error',
-                        summary: 'Error',
-                        detail: errorJson.message,
-                        key: 'br',
-                        life: 3000,
-                    });
-                },
-            });*/
-    }
+    previewBill(): void {}
 
     comparePrices(): void {
         const discountRates = this.allDiscounts();
@@ -466,18 +374,18 @@ export default class BillingComponent implements AfterViewChecked, OnDestroy {
                             key: 'tc',
                             life: 3000,
                         });
-                        const number = this.billingForm.controls.number.getRawValue()?.trim();
+                        //const number = this.billingForm.controls.number.getRawValue()?.trim();
                         this.newBill();
-                        if (number) {
+                        //if (number) {
                             const blobUrl = window.URL.createObjectURL(res.file);
                             const a = document.createElement('a');
                             a.href = blobUrl;
                             a.download = res.filename;
                             a.click();
                             window.URL.revokeObjectURL(blobUrl);
-                            const whatsappTab = 'https://wa.me/91' + number;
-                            window.open(whatsappTab, '_blank');
-                        }
+                            //const whatsappTab = 'https://wa.me/91' + number;
+                            //window.open(whatsappTab, '_blank');
+                        //}
                     },
                     error: (err) => {
                         this.visible = false;
