@@ -132,7 +132,9 @@ export const crackersPreset = definePreset(Aura, {
                 background: '{surface.50}',
                 color: '{text.muted.color}',
                 borderColor: '{content.border.color}',
-                padding: '1rem',
+                sm: {
+                    padding: '1.5rem 0.5rem',
+                },
             },
             bodyCell: {
                 borderColor: '{content.border.color}',
